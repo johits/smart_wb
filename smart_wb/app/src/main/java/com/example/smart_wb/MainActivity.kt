@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 /**
  * copyright 2021/05/29
+ * 아무거나
  * */
 class MainActivity : AppCompatActivity() {
 
