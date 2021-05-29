@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/img_btm_profile" />
+            android:src="@drawable/timer" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/img_btm_friends" />
+            android:src="@drawable/calendar" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/img_btm_search" />
+            android:src="@drawable/chart" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/img_btm_chat" />
+            android:src="@drawable/item" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,6 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/img_btm_setting" />
+            android:src="@drawable/setting" />
     </RelativeLayout>
 </LinearLayout>
