@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 /**
  * Main Activity
  * Created by hanmo on 2018. 10. 2..
+ * 안녕하세요 친구들
  */
 
 class MainActivity : AppCompatActivity() {
