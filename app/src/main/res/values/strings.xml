@@ -2,4 +2,9 @@
     <string name="app_name">smart_wb</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_menu_item3">스크린타임</string>
+    <string name="bottom_menu_item1">달력</string>
+    <string name="bottom_menu_item2">그래프</string>
+    <string name="bottom_menu_item4">아이템</string>
+    <string name="bottom_menu_item5">설정</string>
 </resources>
