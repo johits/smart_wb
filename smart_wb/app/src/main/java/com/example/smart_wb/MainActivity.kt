@@ -5,6 +5,7 @@ import android.os.Bundle
 /**
  * copyright 2021/05/29
  * 아무거나
+ * 프레그먼트
  * */
 class MainActivity : AppCompatActivity() {
 
