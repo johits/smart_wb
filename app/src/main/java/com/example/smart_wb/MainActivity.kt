@@ -5,8 +5,6 @@ import android.os.Bundle
 
 //2020-05-29
 //
-//
-//야마
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
