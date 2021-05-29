@@ -1,0 +1,2 @@
+rootProject.name='smart_wb'
+include ':app'
