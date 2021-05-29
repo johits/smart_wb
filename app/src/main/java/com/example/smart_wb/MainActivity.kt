@@ -5,6 +5,8 @@ import android.os.Bundle
 
 //2020-05-29
 //야마수정
+//야마수정
+//야마수정
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
