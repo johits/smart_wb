@@ -2,59 +2,32 @@ package com.example.smart_wb
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.FragmentManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.view.View
+import android.widget.RelativeLayout
+import kotlinx.android.synthetic.main.activity_main.*
 
-/**
- * 2020-05-29 yama 메인액티비티
- * */
-
+//2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드)
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //초기 바텀네비게이션 세팅
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, ScreenTimeFragment())
-            .commit()
 
-        transitonNavigationBottomView(findViewById(R.id.bottomnavigation), supportFragmentManager)
+
+        configureBottomNavigation()
+
     }
+        private fun configureBottomNavigation(){
+            xml_main_viewpaper.adapter = AdapterMainFragment(supportFragmentManager, 5)
+            xml_main_tablayout.setupWithViewPager(xml_main_viewpaper)
 
+            val viewBtmNaviMain : View = this.layoutInflater.inflate(R.layout.bottom_navigation, null, false)
 
-    //프레그먼트 전환
-    fun transitonNavigationBottomView(
-        bottomView: BottomNavigationView,
-        fragmentManager: FragmentManager
-    ) {
-        bottomView.setOnNavigationItemSelectedListener {
-            it.isChecked = true
-            when (it.itemId) {
-                R.id.item_calender -> {
-                    fragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, CalenderFragment()).commit()
-                }
-                R.id.item_chart -> {
-                    fragmentManager.beginTransaction().replace(R.id.frame_layout, ChartFragment())
-                        .commit()
-                }
-                R.id.item_screen_time -> {
-                    fragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, ScreenTimeFragment()).commit()
-                }
-                R.id.item_item -> {
-                    fragmentManager.beginTransaction().replace(R.id.frame_layout, ItemFragment())
-                        .commit()
-                }
-                R.id.item_setting -> {
-                    fragmentManager.beginTransaction().replace(R.id.frame_layout, SettingFragment())
-                        .commit()
-                }
-                else -> Log.d("test", "error") == 0
-            }
-            Log.d("test", "final") == 0
+            xml_main_tablayout.getTabAt(0)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_timer)  as RelativeLayout
+            xml_main_tablayout.getTabAt(1)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_calendar)  as RelativeLayout
+            xml_main_tablayout.getTabAt(2)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_chart)   as RelativeLayout
+            xml_main_tablayout.getTabAt(3)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_item)     as RelativeLayout
+            xml_main_tablayout.getTabAt(4)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_setting)  as RelativeLayout
         }
     }
-}

@@ -6,36 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- 프레임 -->
-
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/xml_main_viewpaper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toTopOf="@+id/bottomnavigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_above="@+id/xml_main_tablayout">
+    </androidx.viewpager.widget.ViewPager>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomnavigation"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/xml_main_tablayout"
+        android:background="#FFFFFF"
+        android:elevation="5dp"
+        app:tabIndicatorColor="#40D39F"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:background="@color/colorWhite"
-        android:paddingStart="18dp"
-        android:paddingLeft="18dp"
-        android:paddingEnd="18dp"
-        android:paddingRight="18dp"
-        app:itemIconSize="48dp"
-        app:labelVisibilityMode="unlabeled"
-        app:itemTextColor="@drawable/bottombar_check"
-        app:itemIconTint="@drawable/bottombar_check"
-        app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_menu" />
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+    </com.google.android.material.tabs.TabLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
