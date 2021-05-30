@@ -9,7 +9,11 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.RelativeLayout
+import com.example.smart_wb.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_main_timer.*
+
+private lateinit var binding: ActivityMainBinding
 
 
 //2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드)
@@ -19,7 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var start = findViewById(R.id.start) as Button
+        binding = ActivityMainBinding.inflate(layoutInflater)
+//        var start = findViewById(R.id.start) as Button
 
         configureBottomNavigation()
 
