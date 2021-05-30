@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item1"
+        android:id="@+id/item_calender"
         android:title="@string/bottom_menu_item1"
         android:icon="@drawable/calendar"
         android:enabled="true"/>
     <item
-        android:id="@+id/item2"
+        android:id="@+id/item_chart"
         android:title="@string/bottom_menu_item2"
         android:icon="@drawable/chart"
         android:enabled="true"/>
     <item
-        android:id="@+id/item3"
+        android:id="@+id/item_screen_time"
         android:title="@string/bottom_menu_item3"
         android:icon="@drawable/time"
         android:enabled="true"/>
     <item
-        android:id="@+id/item4"
+        android:id="@+id/item_item"
         android:title="@string/bottom_menu_item4"
         android:icon="@drawable/item"
         android:enabled="true"/>
     <item
-        android:id="@+id/item5"
+        android:id="@+id/item_setting"
         android:title="@string/bottom_menu_item5"
         android:icon="@drawable/ic_baseline_settings_24"
         android:enabled="true"/>
