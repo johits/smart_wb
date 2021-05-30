@@ -8,7 +8,7 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:id="@+id/xml_btmnv_btn_profile"
+        android:id="@+id/xml_btmnv_btn_timer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -20,7 +20,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/xml_btmnv_btn_friends"
+        android:id="@+id/xml_btmnv_btn_calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -32,7 +32,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/xml_btmnv_btn_search"
+        android:id="@+id/xml_btmnv_btn_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -44,7 +44,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/xml_btmnv_btn_chat"
+        android:id="@+id/xml_btmnv_btn_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
