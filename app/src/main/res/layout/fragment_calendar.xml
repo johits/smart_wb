@@ -3,12 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FragmentCalendar">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="나는야 캘린더" />
+   <androidx.appcompat.widget.LinearLayoutCompat
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
 
+       <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+           android:id="@+id/cv_calendar"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:visibility="visible"
+           app:mcv_selectionColor="#00F"
+           app:mcv_selectionMode="single" />
+
+
+   </androidx.appcompat.widget.LinearLayoutCompat>
 </FrameLayout>

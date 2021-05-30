@@ -36,4 +36,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    //캘린더 라이브러리
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
+
 }
