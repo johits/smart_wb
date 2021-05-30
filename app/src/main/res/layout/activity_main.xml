@@ -17,6 +17,8 @@
         android:paddingRight="18dp"
         app:itemIconSize="48dp"
         app:labelVisibilityMode="unlabeled"
+        app:itemTextColor="@drawable/bottombar_check"
+        app:itemIconTint="@drawable/bottombar_check"
         app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
