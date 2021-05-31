@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
+import kotlinx.android.synthetic.main.fragment_main_timer.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +24,15 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var binding: FragmentMainTimerBinding
+    private lateinit var mContext: Context
+    //뷰바인딩 위한 변수
+    private var _binding: FragmentMainTimerBinding?=null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is MainActivity) {
-
+            mContext = context
         }
     }
 
@@ -40,13 +45,19 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_timer, container, false)
+        _binding = FragmentMainTimerBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        view.start.setOnClickListener {
+            Toast.makeText(mContext,"시작",Toast.LENGTH_LONG).show()
+        }
+        return view
     }
 
     //activity 에서 intent로 데이터 받을 때 사용
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
     }
 
     companion object {
@@ -69,7 +80,18 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
             }
     }
 
+    //온클릭
     override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
+       when(p0?.id) {
+
+       }
+    }
+
+    //프래그먼트는 뷰보다 더 오래살아남는다.
+    //바인딩 클래스는 뷰에 대한 참조를 가지고 있는데
+    //뷰가 제거될 떄 바인딩 클래스의 인스턴스도 같이 정리
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
