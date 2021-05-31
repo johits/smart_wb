@@ -30,6 +30,26 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private var _binding: FragmentMainTimerBinding?=null
     private val binding get() = _binding!!
 
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment FragmentMainTimer.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            FragmentMainTimer().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is MainActivity) {
@@ -54,7 +74,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
             val toast = Toast.makeText(mContext,"시작",Toast.LENGTH_LONG)
             toast.setGravity(Gravity.CENTER, 0,0)
             toast.show()
-            binding.start.text="종료"
+
+//            startActivity()
         }
         return view
     }
@@ -65,25 +86,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentMainTimer.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentMainTimer().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 
     //온클릭
     override fun onClick(p0: View?) {
