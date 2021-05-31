@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_item.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -62,6 +63,11 @@ class FragmentItem : Fragment() {
     }
 
     private fun initRecycler() {
+        val layoutManager = LinearLayoutManager(requireContext())
+        irv.setLayoutManager(layoutManager)
+        irv.layoutManager =
+            LinearLayoutManager(requireContext()).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+
 
         Log.d(TAG, "initRecycler: 작동 Test 1")
         itemAdapter = ItemAdapter(requireContext())
@@ -73,6 +79,8 @@ class FragmentItem : Fragment() {
             //임시 아이템(더미데이터)
             add(ItemData(item = R.drawable.alarm, price = 100, lock = false))
             add(ItemData(item = R.drawable.calendar, price = 200, lock = true))
+            add(ItemData(item = R.drawable.flower, price = 300, lock = false))
+            add(ItemData(item = R.drawable.chart, price = 400, lock = true))
             Log.d(TAG, "initRecycler: 작동 Test 3")
             itemAdapter.datas = datas
             itemAdapter.notifyDataSetChanged()
