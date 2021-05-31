@@ -37,7 +37,7 @@ class ItemAdapter(private val context: Context) : RecyclerView.Adapter<ItemAdapt
         private val itemLock: ImageView = itemView.findViewById(R.id.lock)
 
         fun bind(item: ItemData) {
-            itemitem.setImageURI(item.item)
+            itemitem.setImageResource(item.item)
             itemPrice.text = item.price.toString()
 
             if (item.lock){ //구매한 아이템일 경우 item.lock = true
