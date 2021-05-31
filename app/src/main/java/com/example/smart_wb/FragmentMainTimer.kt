@@ -75,10 +75,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val view = binding.root
 
         view.start.setOnClickListener {
-            //토스트메세지 중앙 띄우기 버튼클릭 테스트용
-//            val toast = Toast.makeText(mContext,"시작",Toast.LENGTH_LONG)
-//            toast.setGravity(Gravity.CENTER, 0,0)
-//            toast.show()
 
             //액티비티에 따라 동작을 달리한다.
             if (context is MainActivity) {
