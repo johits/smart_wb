@@ -1,8 +1,6 @@
 package com.example.smart_wb
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +56,6 @@ class FragmentItem : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "initRecycler: 작동 Test 0")
         initRecycler()
     }
 
@@ -69,11 +66,9 @@ class FragmentItem : Fragment() {
             LinearLayoutManager(requireContext()).also { it.orientation = LinearLayoutManager.HORIZONTAL }
 
 
-        Log.d(TAG, "initRecycler: 작동 Test 1")
         itemAdapter = ItemAdapter(requireContext())
         irv.adapter = itemAdapter
 
-        Log.d(TAG, "initRecycler: 작동 Test 2")
         datas.apply {
 
             //임시 아이템(더미데이터)
@@ -81,7 +76,7 @@ class FragmentItem : Fragment() {
             add(ItemData(item = R.drawable.calendar, price = 200, lock = true))
             add(ItemData(item = R.drawable.flower, price = 300, lock = false))
             add(ItemData(item = R.drawable.chart, price = 400, lock = true))
-            Log.d(TAG, "initRecycler: 작동 Test 3")
+
             itemAdapter.datas = datas
             itemAdapter.notifyDataSetChanged()
 
