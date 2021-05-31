@@ -2,7 +2,9 @@ package com.example.smart_wb
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
+/**
+ * 20/05/31 yama 잠금화면 액티비티
+ * */
 class LockScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
