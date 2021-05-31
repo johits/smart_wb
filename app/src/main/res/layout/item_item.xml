@@ -7,7 +7,7 @@
 
 
     <ImageView
-        android:id="@+id/Item"
+        android:id="@+id/item"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#000000"
