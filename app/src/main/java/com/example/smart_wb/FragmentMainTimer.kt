@@ -3,6 +3,7 @@ package com.example.smart_wb
 import android.content.Context
 import android.os.Bundle
 import android.renderscript.ScriptGroup
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +50,11 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val view = binding.root
 
         view.start.setOnClickListener {
-            Toast.makeText(mContext,"시작",Toast.LENGTH_LONG).show()
+            //토스트메세지 중앙 띄우기
+            val toast = Toast.makeText(mContext,"시작",Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.CENTER, 0,0)
+            toast.show()
+            binding.start.text="종료"
         }
         return view
     }
