@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 //        var start = findViewById(R.id.start) as Button
-
+        // 생성된 뷰를 액티비티에 표시합니다.
+        setContentView(binding.root)
         configureBottomNavigation()
 
     }
