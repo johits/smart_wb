@@ -1,6 +1,7 @@
 package com.example.smart_wb
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.renderscript.ScriptGroup
 import android.view.Gravity
@@ -26,8 +27,9 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private var param2: String? = null
 
     private lateinit var mContext: Context
+
     //뷰바인딩 위한 변수
-    private var _binding: FragmentMainTimerBinding?=null
+    private var _binding: FragmentMainTimerBinding? = null
     private val binding get() = _binding!!
 
 
@@ -50,9 +52,12 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                 }
             }
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is MainActivity) {
+            mContext = context
+        } else if (context is LockScreenActivity) {
             mContext = context
         }
     }
@@ -70,12 +75,22 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val view = binding.root
 
         view.start.setOnClickListener {
-            //토스트메세지 중앙 띄우기
-            val toast = Toast.makeText(mContext,"시작",Toast.LENGTH_LONG)
-            toast.setGravity(Gravity.CENTER, 0,0)
-            toast.show()
+            //토스트메세지 중앙 띄우기 버튼클릭 테스트용
+//            val toast = Toast.makeText(mContext,"시작",Toast.LENGTH_LONG)
+//            toast.setGravity(Gravity.CENTER, 0,0)
+//            toast.show()
 
-//            startActivity()
+            //액티비티에 따라 동작을 달리한다.
+            if (context is MainActivity) {
+                val intent = Intent(mContext, LockScreenActivity::class.java)
+                intent.putExtra("flag", true)
+                startActivity(intent)
+            } else if (context is LockScreenActivity) {
+//                토스트메세지 중앙 띄우기 버튼클릭 테스트용
+                val toast = Toast.makeText(mContext, "시작", Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
+            }
         }
         return view
     }
@@ -89,9 +104,9 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     //온클릭
     override fun onClick(p0: View?) {
-       when(p0?.id) {
+        when (p0?.id) {
 
-       }
+        }
     }
 
     //프래그먼트는 뷰보다 더 오래살아남는다.
