@@ -3,13 +3,12 @@ package com.example.smart_wb
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
 
@@ -65,7 +64,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     //view를 구성
@@ -95,14 +93,12 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     //activity 에서 intent로 데이터 받을 때 사용
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
 
 
     //온클릭
     override fun onClick(p0: View?) {
         when (p0?.id) {
-
         }
     }
 
