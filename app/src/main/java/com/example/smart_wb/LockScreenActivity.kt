@@ -1,7 +1,7 @@
 package com.example.smart_wb
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 /**
  * 20/05/31 yama 잠금화면 액티비티
  * */
