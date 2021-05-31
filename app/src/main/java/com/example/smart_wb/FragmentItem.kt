@@ -1,6 +1,8 @@
 package com.example.smart_wb
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,27 +41,11 @@ class FragmentItem : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
 
-            initRecycler()
         }
     }
 
 
-    private fun initRecycler() {
-        itemAdapter = ItemAdapter(requireContext())
-        irv.adapter = itemAdapter
 
-
-        datas.apply {
-
-            //임시 아이템(더미데이터)
-            add(ItemData(item = R.drawable.alarm, price = 100, lock = false))
-            add(ItemData(item = R.drawable.calendar, price = 200, lock = true))
-
-            itemAdapter.datas = datas
-            itemAdapter.notifyDataSetChanged()
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +55,30 @@ class FragmentItem : Fragment() {
         return inflater.inflate(R.layout.fragment_item, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "initRecycler: 작동 Test 0")
+        initRecycler()
+    }
+
+    private fun initRecycler() {
+
+        Log.d(TAG, "initRecycler: 작동 Test 1")
+        itemAdapter = ItemAdapter(requireContext())
+        irv.adapter = itemAdapter
+
+        Log.d(TAG, "initRecycler: 작동 Test 2")
+        datas.apply {
+
+            //임시 아이템(더미데이터)
+            add(ItemData(item = R.drawable.alarm, price = 100, lock = false))
+            add(ItemData(item = R.drawable.calendar, price = 200, lock = true))
+            Log.d(TAG, "initRecycler: 작동 Test 3")
+            itemAdapter.datas = datas
+            itemAdapter.notifyDataSetChanged()
+
+        }
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

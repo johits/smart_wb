@@ -1,6 +1,8 @@
 package com.example.smart_wb
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,16 +34,17 @@ class ItemAdapter(private val context: Context) : RecyclerView.Adapter<ItemAdapt
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val itemitem: ImageView = itemView.findViewById(R.id.item)
+        private val itemItem: ImageView = itemView.findViewById(R.id.item)
         private val itemPrice: TextView = itemView.findViewById(R.id.price)
         private val itemLock: ImageView = itemView.findViewById(R.id.lock)
 
         fun bind(item: ItemData) {
-            itemitem.setImageResource(item.item)
+            itemItem.setImageResource(item.item)
             itemPrice.text = item.price.toString()
 
             if (item.lock){ //구매한 아이템일 경우 item.lock = true
                 itemLock.visibility = View.INVISIBLE
+                Log.d(TAG, "bind: 받아온 item.lock 값:"+item.lock)
             }
 
         }
