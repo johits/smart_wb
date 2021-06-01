@@ -48,7 +48,6 @@ class DrawService : Service() {
         params.gravity = Gravity.LEFT or Gravity.TOP
         mView = inflate.inflate(R.layout.activity_lock_screen, null)
 
-
         wm!!.addView(mView, params)
     }
 
