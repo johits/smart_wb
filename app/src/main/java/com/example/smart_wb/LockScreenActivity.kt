@@ -19,21 +19,6 @@ class LockScreenActivity : AppCompatActivity() {
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
         startService(Intent(this,DrawService::class.java))
 
-
-//        if(start.text.toString().equals("종료")){
-//            val intent = Intent(this, MainActivity::class.java)
-//            stopService(Intent(this, DrawService::class.java))
-//            startActivity(intent)
-//        }
-
-//        end.setText("종료")
-//        end.setOnClickListener{
-//            Log.d(TAG, "종료 버튼 눌림")
-//
-//                val intent = Intent(applicationContext, MainActivity::class.java)
-//                stopService(Intent(applicationContext, DrawService::class.java))
-//                startActivity(intent)
-//        }
     }
 
     override fun onBackPressed() {
