@@ -43,14 +43,6 @@ class MainActivity : AppCompatActivity() {
             xml_main_tablayout.getTabAt(4)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_setting)  as RelativeLayout
         }
 
-
-
-    override fun onBackPressed() {
-        if (xml_main_viewpaper.currentItem == 0) {
-            // 사용자가 첫 번째 페이지에서 뒤로가기 버튼을 누를 경우
-            Log.d(TAG, "뒤로가기 방지")
-        }
-    }
 }
 
 

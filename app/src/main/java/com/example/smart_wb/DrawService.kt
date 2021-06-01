@@ -4,9 +4,12 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.os.Handler
 import android.os.IBinder
+import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.TextView
 
 /**2021-06-01
 joker
@@ -18,17 +21,19 @@ class DrawService : Service() {
     var wm: WindowManager? = null
     var mView: View? = null
 
+
     override fun onBind(p0: Intent?): IBinder {
         throw UnsupportedOperationException("Not yet")
     }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
+
         return Service.START_STICKY
     }
 
 
-    fun callEvent(){
-
+    fun callEvent() {
 
         val inflate =
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -46,16 +51,17 @@ class DrawService : Service() {
             )
 
         params.gravity = Gravity.LEFT or Gravity.TOP
-        mView = inflate.inflate(R.layout.fragment_main_timer, null)
+        mView = inflate.inflate(R.layout.activity_lock_screen, null)
 
-        val bt = mView!!.findViewById<View>(R.id.start) as Button
+        val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
-        bt.setOnClickListener{
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                stopService(Intent(applicationContext, DrawService::class.java))
-                startActivity(intent)
+        bt.setOnClickListener {
+
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            stopService(Intent(applicationContext, DrawService::class.java))
+            startActivity(intent)
         }
         wm!!.addView(mView, params)
     }
@@ -70,4 +76,6 @@ class DrawService : Service() {
             wm = null
         }
     }
+
+
 }
