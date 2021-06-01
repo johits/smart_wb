@@ -48,7 +48,7 @@ class DrawService : Service() {
             )
 
         params.gravity = Gravity.LEFT or Gravity.TOP
-        mView = inflate.inflate(R.layout.fragment_main_timer, null)
+        mView = inflate.inflate(R.layout.activity_lock_screen, null)
 
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
