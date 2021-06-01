@@ -18,8 +18,8 @@ class LockScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 //        stop.visibility = View.GONE
-        watch.visibility = View.GONE
-        stop.visibility =View.GONE
+        tvWatch.visibility = View.GONE
+        btStop.visibility =View.GONE
         //초기 바텀네비게이션 세팅
 //        supportFragmentManager.beginTransaction().replace(R.id.frame, FragmentCalendar()).commit()
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")

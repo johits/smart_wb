@@ -17,10 +17,12 @@ joker
 
 
 class DrawService : Service() {
-
+    private val TAG = "DrawService"
     var wm: WindowManager? = null
     var mView: View? = null
 
+    var handler: Handler? = null
+    var flag : Boolean= true
 
     override fun onBind(p0: Intent?): IBinder {
         throw UnsupportedOperationException("Not yet")
@@ -28,7 +30,9 @@ class DrawService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
-
+        handler = Handler()
+        var thread = StartTimer()
+        handler?.post(thread)
         return Service.START_STICKY
     }
 
@@ -56,7 +60,7 @@ class DrawService : Service() {
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
-
+            Log.d(TAG, "종료버튼 클릭")
             val intent = Intent(applicationContext, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -74,8 +78,19 @@ class DrawService : Service() {
                 mView = null
             }
             wm = null
+            flag=false
         }
     }
 
+    //타이머쓰레드 이너클래스
+    inner class StartTimer : Thread() {
+        override fun run() {
+            if(flag){
+                val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+                watch.text = System.currentTimeMillis().toString()
+                handler?.postDelayed(this, 1000)
+            }
+        }
+    }
 
 }
