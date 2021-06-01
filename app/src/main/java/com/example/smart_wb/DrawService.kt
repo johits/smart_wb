@@ -46,15 +46,9 @@ class DrawService : Service() {
             )
 
         params.gravity = Gravity.LEFT or Gravity.TOP
-        mView = inflate.inflate(R.layout.fragment_main_timer, null)
+        mView = inflate.inflate(R.layout.activity_lock_screen, null)
 
-        val bt = mView!!.findViewById<View>(R.id.start) as Button
-        bt.setText("종료")
-        bt.setOnClickListener{
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                stopService(Intent(applicationContext, DrawService::class.java))
-                startActivity(intent)
-        }
+
         wm!!.addView(mView, params)
     }
 
