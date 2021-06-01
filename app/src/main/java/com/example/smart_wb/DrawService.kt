@@ -54,6 +54,7 @@ class DrawService : Service() {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 stopService(Intent(applicationContext, DrawService::class.java))
                 startActivity(intent)
+
         }
         wm!!.addView(mView, params)
     }
