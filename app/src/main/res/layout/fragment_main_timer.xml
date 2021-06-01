@@ -13,35 +13,56 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/ti"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:src="@drawable/timer_image"
-            app:layout_constraintBottom_toTopOf="@+id/time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:text="00:00"
-            android:textColor="#000000"
-            android:textSize="50sp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/start"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.462">
+
+            <NumberPicker
+                android:id="@+id/np_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text=":"
+                android:textSize="18sp" />
+
+            <NumberPicker
+                android:id="@+id/np_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text=":"
+                android:textSize="18sp" />
+
+            <NumberPicker
+                android:id="@+id/np_sec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <Button
             android:id="@+id/start"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="48dp"
+            android:layout_marginBottom="232dp"
             android:background="@drawable/rb"
             android:text="시작"
             app:layout_constraintBottom_toBottomOf="parent"
