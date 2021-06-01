@@ -8,6 +8,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+        <!-- 액티비티 이동 시 애니메이션 제거-->
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
 </resources>
