@@ -74,7 +74,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val view = binding.root
 
         view.start.setOnClickListener {
-
             //액티비티에 따라 동작을 달리한다.
             if (context is MainActivity) {
                 val intent = Intent(mContext, LockScreenActivity::class.java)
@@ -85,6 +84,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                 val toast = Toast.makeText(mContext, "시작", Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.CENTER, 0, 0)
                 toast.show()
+                view.start.setText("종료")
             }
         }
         return view
@@ -109,4 +109,5 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         super.onDestroyView()
         _binding = null
     }
+
 }
