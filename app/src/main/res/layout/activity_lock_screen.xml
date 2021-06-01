@@ -7,7 +7,7 @@
     tools:context=".LockScreenActivity">
 
     <TextView
-        android:id="@+id/watch"
+        android:id="@+id/tvWatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00:00"
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.289" />
 
     <Button
-        android:id="@+id/stop"
+        android:id="@+id/btStop"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="232dp"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/watch" />
+        app:layout_constraintTop_toBottomOf="@+id/tvWatch" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
