@@ -34,15 +34,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentMainTimer.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             FragmentMainTimer().apply {
@@ -72,6 +63,15 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     ): View? {
         _binding = FragmentMainTimerBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        //numberPicker 최소,최대값 지정
+        binding.npHour.minValue = 0
+        binding.npHour.maxValue = 23
+        binding.npMin.minValue = 0
+        binding.npMin.maxValue = 59
+        binding.npSec.minValue = 0
+        binding.npSec.maxValue = 59
+
 
         view.start.setOnClickListener {
             //액티비티에 따라 동작을 달리한다.
