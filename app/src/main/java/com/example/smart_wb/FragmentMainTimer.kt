@@ -58,6 +58,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     }
 
     //view를 구성
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -72,8 +73,14 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         binding.npSec.minValue = 0
         binding.npSec.maxValue = 59
 
+//노티피 초기화
+
+
         var settingTime = 0
         view.start.setOnClickListener {
+                val intent = Intent(mContext, LockScreenActivity::class.java)
+                intent.putExtra("flag", true)
+                startActivity(intent)
             //액티비티에 따라 동작을 달리한다.
             if (context is MainActivity) {
                 settingTime = binding.npHour.value*3600+ binding.npMin.value*60+binding.npSec.value

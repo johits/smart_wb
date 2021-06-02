@@ -1,17 +1,23 @@
 package com.example.smart_wb
 
 import android.content.ComponentName
+import android.app.NotificationManager
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
+import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smart_wb.DrawService.Companion.MSG_REGISTER_CLIENT
 import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.android.synthetic.main.activity_lock_screen.view.*
+
 
 /**
  * 20/05/31 yama 잠금화면 액티비티
@@ -27,6 +33,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     private var settingTime = 0
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
@@ -43,10 +50,22 @@ class LockScreenActivity : AppCompatActivity() {
         btStop.visibility = View.GONE
         //초기 바텀네비게이션 세팅
 
+
+
+
+        //노티피 초기화
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        //방해금지모드작동
+        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+
+
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 //        startService(Intent(this,DrawService::class.java))
         setStartService()
 
+        startService(Intent(this,DrawService::class.java))
+        finish()
     }
 
     override fun onBackPressed() {

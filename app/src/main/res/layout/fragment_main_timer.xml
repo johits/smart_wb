@@ -62,7 +62,7 @@
             android:id="@+id/start"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="232dp"
+            android:layout_marginBottom="48dp"
             android:background="@drawable/rb"
             android:text="시작"
             app:layout_constraintBottom_toBottomOf="parent"

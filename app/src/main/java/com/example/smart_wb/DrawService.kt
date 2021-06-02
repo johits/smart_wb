@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.*
 import android.util.Log
+import android.os.Build
+import android.os.IBinder
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
@@ -14,6 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timer
 
+import androidx.annotation.RequiresApi
 
 /**2021-06-01
 joker
@@ -45,6 +48,7 @@ class DrawService : Service() {
         return mMessenger.binder
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
         handler = Handler()
@@ -54,7 +58,8 @@ class DrawService : Service() {
     }
 
 
-    fun callEvent() {
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun callEvent(){
 
         val inflate =
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -99,6 +104,20 @@ class DrawService : Service() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         stopService(Intent(applicationContext, DrawService::class.java))
         startActivity(intent)
+        bt.setOnClickListener{
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            stopService(Intent(applicationContext, DrawService::class.java))
+
+
+            //노티피 초기화
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            //방해금지모드 해제
+            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+
+            startActivity(intent)
+        }
+        wm!!.addView(mView, params)
     }
 
     override fun onDestroy() {
