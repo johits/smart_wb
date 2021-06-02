@@ -17,7 +17,9 @@ import kotlin.concurrent.timer
 
 /**2021-06-01
 joker
-다른 앱 위에 표시되는 앱 권한 받기*/
+다른 앱 위에 표시되는 앱 권한 받기
+ 타이머 동작
+ */
 
 
 class DrawService : Service() {
@@ -82,7 +84,7 @@ class DrawService : Service() {
         wm!!.addView(mView, params)
     }
 
-    //서비스 종료
+    //액티비티 호출 및 서비스 종료 위한 메세지 보냄
     fun drawServiceStop(result:Boolean){
         try {
             val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
@@ -118,7 +120,9 @@ class DrawService : Service() {
             if(settingTime>=0){
                     val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
                 if(settingTime==0){
-                    watch.text = "00:00"
+//                    val btStop = mView!!.findViewById<View>(R.id.btStop) as Button
+//                    btStop.visibility
+//                    watch.text = "00:00"
                     handler?.postDelayed(this,500)
                 }else{
                     watch.text = calTime(settingTime)
@@ -153,9 +157,9 @@ class DrawService : Service() {
         } else {
 //            Log.d("tag", "시간0")
             if (min < 10 && sec < 10) {
-                result = "${min}:0${sec}"
+                result = "0${min}:0${sec}"
             }else if(min<10&&sec>10){
-                result = "${min}:${sec}"
+                result = "0${min}:${sec}"
             }else if(min>10&&sec<10){
                 result = "${min}:0${sec}"
             }else{
@@ -172,11 +176,11 @@ class DrawService : Service() {
         settingTime= msg.obj as Int
         when (msg.what) {
             MSG_REGISTER_CLIENT -> mClient = msg.replyTo // activity로부터 가져온
-
         }
         false
     })
 
+    //activity에 메세지 보냄
     private fun sendMsgToActivity(sendValue: Boolean) {
         try {
             val bundle = Bundle()

@@ -70,6 +70,7 @@ class LockScreenActivity : AppCompatActivity() {
         stopService(Intent(this@LockScreenActivity, DrawService::class.java))
     }
 
+    //액티비티 서비스 연결
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
             mServiceMessenger = Messenger(iBinder)
@@ -95,6 +96,7 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
                 if(message.equals("finish")){
+                    setStopService()
                     finish()
                 }
             }
