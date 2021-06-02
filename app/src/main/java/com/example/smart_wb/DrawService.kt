@@ -4,14 +4,13 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
-import android.os.Handler
-import android.os.IBinder
-import android.os.Messenger
+import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import java.text.SimpleDateFormat
+
 
 /**2021-06-01
 joker
@@ -73,6 +72,7 @@ class DrawService : Service() {
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
+            sendMsgToActivity(1234);
             Log.d(TAG, "종료버튼 클릭")
             val intent = Intent(applicationContext, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
@@ -109,11 +109,23 @@ class DrawService : Service() {
 
 //     activity로부터 binding 된 Messenger
     private val mMessenger = Messenger(Handler { msg ->
-        Log.w("test", "ControlService - message what : " + msg.what + " , msg.obj " + msg.obj)
+        Log.d("tag", " message what : " + msg.what + " , msg.obj " + msg.obj)
         when (msg.what) {
             MSG_REGISTER_CLIENT -> mClient = msg.replyTo // activity로부터 가져온
         }
         false
     })
+
+    private fun sendMsgToActivity(sendValue: Int) {
+        try {
+            val bundle = Bundle()
+            bundle.putInt("fromService", sendValue)
+            bundle.putString("test", "abcdefg")
+            val msg: Message = Message.obtain(null, MSG_SEND_TO_ACTIVITY)
+            msg.setData(bundle)
+            mClient!!.send(msg) // msg 보내기
+        } catch (e: RemoteException) {
+        }
+    }
 
 }

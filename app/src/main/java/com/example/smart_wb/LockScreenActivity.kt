@@ -12,28 +12,32 @@ import com.example.smart_wb.DrawService.Companion.MSG_REGISTER_CLIENT
 import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.android.synthetic.main.activity_lock_screen.view.*
+
 /**
  * 20/05/31 yama 잠금화면 액티비티
  * */
 class LockScreenActivity : AppCompatActivity() {
-    companion object{
-        const val TAG ="LockScreenActivity"
+    companion object {
+        const val TAG = "LockScreenActivity"
     }
+
     //서비스에 데이터 보내기 위한 변수
     private var mServiceMessenger: Messenger? = null
-    private var mIsBound = true
+    private var mIsBound = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
         tvWatch.visibility = View.GONE
-        btStop.visibility =View.GONE
+        btStop.visibility = View.GONE
         //초기 바텀네비게이션 세팅
 
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
-        startService(Intent(this,DrawService::class.java))
+//        startService(Intent(this,DrawService::class.java))
+        setStartService()
         sendMessageToService("하이리하이")
+
     }
 
     override fun onBackPressed() {
@@ -41,14 +45,14 @@ class LockScreenActivity : AppCompatActivity() {
         Log.d(TAG, "onBackPressed: 뒤로가기 버튼 제어")
     }
 
-//     서비스 시작 및 Messenger 전달
+    //     서비스 시작 및 Messenger 전달
     private fun setStartService() {
         startService(Intent(this@LockScreenActivity, DrawService::class.java))
         bindService(Intent(this, DrawService::class.java), mConnection, BIND_AUTO_CREATE)
         mIsBound = true
     }
 
-//     서비스 정지
+    //     서비스 정지
     private fun setStopService() {
         if (mIsBound) {
             unbindService(mConnection)
@@ -59,9 +63,9 @@ class LockScreenActivity : AppCompatActivity() {
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-            Log.d("test", "onServiceConnected")
             mServiceMessenger = Messenger(iBinder)
             try {
+                Log.d(TAG, "onServiceConnected")
                 val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT)
                 msg.replyTo = mMessenger
                 mServiceMessenger!!.send(msg)
@@ -85,12 +89,14 @@ class LockScreenActivity : AppCompatActivity() {
         }
         false
     })
+
     /** Service 로 메시지를 보냄  */
     private fun sendMessageToService(str: String) {
         if (mIsBound) {
+            Log.d(TAG, "sendMessageToService: "+mServiceMessenger)
             if (mServiceMessenger != null) {
                 try {
-                    Log.d(TAG, "메시지보냄"+str)
+                    Log.d(TAG, "메시지보냄" + str)
                     val msg = Message.obtain(null, DrawService.MSG_SEND_TO_SERVICE, str)
                     msg.replyTo = mMessenger
                     mServiceMessenger!!.send(msg)
