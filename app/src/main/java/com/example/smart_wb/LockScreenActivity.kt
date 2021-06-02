@@ -17,6 +17,8 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.RemoteInput
 import com.example.smart_wb.DrawService.Companion.MSG_REGISTER_CLIENT
 import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
@@ -56,8 +58,33 @@ class LockScreenActivity : AppCompatActivity() {
         }
 
         tvWatch.visibility = View.GONE
-        btStop.visibility = View.GONE
-        createNotificationChannel(channelID,"success","success alarm")
+//        createNotificationChannel(channelID,"success","success alarm")
+        btStop.setOnClickListener {
+            Log.d(TAG, "버튼")
+            //showNotification()
+            createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                false, "smart_wb", "App notification channel") // 1
+            val notificationId = 22
+            val channelId = "$packageName-${getString(R.string.app_name)}" // 2
+            val title = "Android Developer"
+            val content = "Notifications in Android P"
+
+            val intent = Intent(baseContext, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            val pendingIntent = PendingIntent.getActivity(baseContext, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT)    // 3
+
+            val builder = NotificationCompat.Builder(this, channelId)  // 4
+            builder.setSmallIcon(android.R.drawable.ic_dialog_info)    // 5
+            builder.setContentTitle(title)    // 6
+            builder.setContentText(content)    // 7
+            builder.priority = NotificationCompat.PRIORITY_DEFAULT    // 8
+            builder.setAutoCancel(true)   // 9
+            builder.setContentIntent(pendingIntent)   // 10
+
+            val notificationManager = NotificationManagerCompat.from(this)
+            notificationManager.notify(notificationId, builder.build())    // 11
+        }
         //노티피 초기화
 //        val notificationManager =
 //            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -65,7 +92,7 @@ class LockScreenActivity : AppCompatActivity() {
 //        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 
-        setStartService()
+//        setStartService()
     }
 
     override fun onBackPressed() {
@@ -141,20 +168,32 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //노티피케이션 채널 생성
-    private fun createNotificationChannel(id: String, name: String, channelDescription: String) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+//    private fun createNotificationChannel(id: String, name: String, channelDescription: String) {
+//        // Create the NotificationChannel, but only on API 26+ because
+//        // the NotificationChannel class is new and not in the support library
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            //중요도
+//            val importance = NotificationManager.IMPORTANCE_HIGH
+//            //채널 생성
+//            val channel = NotificationChannel(id, name, importance).apply {
+//                description = channelDescription
+//            }
+//
+//            notificationManager?.createNotificationChannel(channel)
+//        } else {
+//
+//        }
+//    }
+    private fun createNotificationChannel(context: Context, importance: Int, showBadge: Boolean,
+                                          name: String, description: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //중요도
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            //채널 생성
-            val channel = NotificationChannel(id, name, importance).apply {
-                description = channelDescription
-            }
+            val channelId = "${context.packageName}-$name"
+            val channel = NotificationChannel(channelId, name, importance)
+            channel.description = description
+            channel.setShowBadge(showBadge)
 
-            notificationManager?.createNotificationChannel(channel)
-        } else {
-
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -177,45 +216,45 @@ class LockScreenActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         //알림의 탭 작업 설정(Reply 용)--------------------------------------------------------------
-//        val replyResultIntent = Intent(this, ReplyActivity::class.java)
-//        val replyPendingIntent: PendingIntent = PendingIntent.getActivity(
-//            this,
-//            0,
-//            replyResultIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-//        //바로 답장 작업 추가(reply action)
-//        val remoteInput: RemoteInput = RemoteInput.Builder(KEY_REPLY).run {
-//            setLabel("Insert you name here") //텍스트 입력 힌트
-//            build()
-//        }
-//
-//        val replyAction: NotificationCompat.Action = NotificationCompat.Action.Builder(
-//            0, //icon
-//            "REPLY", //title
-//            replyPendingIntent
-//        ).addRemoteInput(remoteInput)
-//            .build()
-//        //작업 버튼 추가(action button 1)-----------------------------------------------------------
-//        val intent2 = Intent(this, DetailsActivity::class.java)
-//        val pendingIntent2: PendingIntent = PendingIntent.getActivity(
-//            this,
-//            0, //request code
-//            intent2,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-//        val action2: NotificationCompat.Action =
-//            NotificationCompat.Action.Builder(0, "Details", pendingIntent2).build()
-//        // 작업 버튼 추가(action button 2)
-//        val intent3 = Intent(this, SettingActivity::class.java)
-//        val pendingIntent3: PendingIntent = PendingIntent.getActivity(
-//            this,
-//            0,
-//            intent3,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-//        val action3: NotificationCompat.Action =
-//            NotificationCompat.Action.Builder(0, "Settings", pendingIntent3).build()
+        val replyResultIntent = Intent(this, MainActivity::class.java)
+        val replyPendingIntent: PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            replyResultIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        //바로 답장 작업 추가(reply action)
+        val remoteInput: RemoteInput = RemoteInput.Builder(KEY_REPLY).run {
+            setLabel("Insert you name here") //텍스트 입력 힌트
+            build()
+        }
+
+        val replyAction: NotificationCompat.Action = NotificationCompat.Action.Builder(
+            0, //icon
+            "REPLY", //title
+            replyPendingIntent
+        ).addRemoteInput(remoteInput)
+            .build()
+        //작업 버튼 추가(action button 1)-----------------------------------------------------------
+        val intent2 = Intent(this, MainActivity::class.java)
+        val pendingIntent2: PendingIntent = PendingIntent.getActivity(
+            this,
+            0, //request code
+            intent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val action2: NotificationCompat.Action =
+            NotificationCompat.Action.Builder(0, "Details", pendingIntent2).build()
+        // 작업 버튼 추가(action button 2)
+        val intent3 = Intent(this, MainActivity::class.java)
+        val pendingIntent3: PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent3,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val action3: NotificationCompat.Action =
+            NotificationCompat.Action.Builder(0, "Settings", pendingIntent3).build()
 
         //노티피케이션 생성 -------------------------------------------------------------------------
         val notification: Notification = NotificationCompat.Builder(this@LockScreenActivity, channelID)
