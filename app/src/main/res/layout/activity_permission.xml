@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="앱을 사용하기 전에 권한을 허용해 주세요.\n\n
-&lt;다른 앱 위에 표시되는 앱 권한&gt;\n앱 사용시 반드시 필요한 권한입니다."
+&lt;다른 앱 위에 표시되는 앱 권한&gt;\n허용하셔야 다음 화면으로 이동 가능합니다."
         android:gravity="center"
         />
     <Button

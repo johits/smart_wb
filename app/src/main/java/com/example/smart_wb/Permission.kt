@@ -47,7 +47,7 @@ class Permission : AppCompatActivity() {
                 }
 
             } else {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, Permission2::class.java))
                 Log.d("Permission.kt", "이미 권한 허용한 사용자 FragmentMainTimer로 이동")
                 finish()
             }
@@ -74,8 +74,8 @@ class Permission : AppCompatActivity() {
                 finish()
             } else {
                 Log.d("Permission.kt", "퍼미션 동의 얻었을 경우")
-                startActivity(Intent(this, MainActivity::class.java))
-                Log.d("Permission.kt", "FragmentMainTimer로 이동")
+                startActivity(Intent(this, Permission2::class.java))
+                Log.d("Permission.kt", "Permission2로 이동")
                 finish()
             }
         }
