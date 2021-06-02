@@ -76,15 +76,27 @@ class DrawService : Service() {
         bt.setText("종료")
         bt.setOnClickListener {
             settingTime=-1
-            sendMsgToActivity(1234);
             Log.d(TAG, "종료버튼 클릭")
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            stopService(Intent(applicationContext, DrawService::class.java))
-            startActivity(intent)
+            drawServiceStop(false)
         }
         wm!!.addView(mView, params)
+    }
+
+    //서비스 종료
+    fun drawServiceStop(result:Boolean){
+        try {
+            val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+            watch.visibility = View.GONE
+            val btStop = mView!!.findViewById<View>(R.id.btStop) as Button
+            btStop.visibility = View.GONE
+        }catch (e:KotlinNullPointerException){
+        }
+        sendMsgToActivity(result);
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        stopService(Intent(applicationContext, DrawService::class.java))
+        startActivity(intent)
     }
 
     override fun onDestroy() {
@@ -115,9 +127,8 @@ class DrawService : Service() {
                     settingTime--
                     Log.d(TAG, "settingTime:" + settingTime)
             }else{
-                val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
-//                watch.text="성공"
                 Log.d(TAG, "타이머종료")
+                drawServiceStop(true)
             }
         }
     }
@@ -142,9 +153,9 @@ class DrawService : Service() {
         } else {
 //            Log.d("tag", "시간0")
             if (min < 10 && sec < 10) {
-                result = "0${min}:0${sec}"
+                result = "${min}:0${sec}"
             }else if(min<10&&sec>10){
-                result = "0${min}:${sec}"
+                result = "${min}:${sec}"
             }else if(min>10&&sec<10){
                 result = "${min}:0${sec}"
             }else{
@@ -166,11 +177,11 @@ class DrawService : Service() {
         false
     })
 
-    private fun sendMsgToActivity(sendValue: Int) {
+    private fun sendMsgToActivity(sendValue: Boolean) {
         try {
             val bundle = Bundle()
-            bundle.putInt("fromService", sendValue)
-            bundle.putString("result", "finish")
+            bundle.putBoolean("result", sendValue)
+            bundle.putString("message", "finish")
             val msg: Message = Message.obtain(null, MSG_SEND_TO_ACTIVITY)
             msg.setData(bundle)
             mClient!!.send(msg) // msg 보내기

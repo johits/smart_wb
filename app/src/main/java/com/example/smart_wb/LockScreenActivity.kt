@@ -90,11 +90,11 @@ class LockScreenActivity : AppCompatActivity() {
         Log.i("test", "act : what " + msg.what)
         when (msg.what) {
             DrawService.MSG_SEND_TO_ACTIVITY -> {
-                val value1 = msg.data.getInt("fromService")
-                val value2 = msg.data.getString("result")
-                Log.d(TAG, "act : value1 $value1")
-                Log.d(TAG, "act : value2 $value2")
-                if(value2.equals("finish")){
+                val result = msg.data.getBoolean("result")
+                val message = msg.data.getString("message")
+                Log.d(TAG, " result : $result")
+                Log.d(TAG, " message : $message")
+                if(message.equals("finish")){
                     finish()
                 }
             }
