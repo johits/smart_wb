@@ -49,9 +49,11 @@ class Permission : AppCompatActivity() {
             } else {
                 startActivity(Intent(this, MainActivity::class.java))
                 Log.d("Permission.kt", "이미 권한 허용한 사용자 FragmentMainTimer로 이동")
+                finish()
             }
         } else { //마시멜로우 이하일 경우 권한 자동 부여됨
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
 
         }
 

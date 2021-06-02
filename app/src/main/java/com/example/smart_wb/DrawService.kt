@@ -55,8 +55,6 @@ class DrawService : Service() {
             val intent = Intent(applicationContext, MainActivity::class.java)
             stopService(Intent(applicationContext, DrawService::class.java))
             startActivity(intent)
-            System.runFinalization() ////현재 작업중인 쓰레드가 다 종료되면, 종료
-            System.exit(0) // 현재 액티비티를 종료
         }
         wm!!.addView(mView, params)
     }
