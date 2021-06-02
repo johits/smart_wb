@@ -2,10 +2,12 @@ package com.example.smart_wb
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
@@ -56,6 +58,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     }
 
     //view를 구성
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -69,6 +72,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         binding.npMin.maxValue = 59
         binding.npSec.minValue = 0
         binding.npSec.maxValue = 59
+
+//노티피 초기화
 
 
         view.start.setOnClickListener {
