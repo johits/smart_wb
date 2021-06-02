@@ -3,11 +3,9 @@ package com.example.smart_wb
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
@@ -74,18 +72,9 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
 
         view.start.setOnClickListener {
-            //액티비티에 따라 동작을 달리한다.
-            if (context is MainActivity) {
                 val intent = Intent(mContext, LockScreenActivity::class.java)
                 intent.putExtra("flag", true)
                 startActivity(intent)
-            } else if (context is LockScreenActivity) {
-//                토스트메세지 중앙 띄우기 버튼클릭 테스트용
-                val toast = Toast.makeText(mContext, "시작", Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.CENTER, 0, 0)
-                toast.show()
-                view.start.setText("종료")
-            }
         }
         return view
     }

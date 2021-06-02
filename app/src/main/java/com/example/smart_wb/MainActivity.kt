@@ -1,17 +1,13 @@
 package com.example.smart_wb
 
 import android.content.ContentValues.TAG
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import android.view.WindowManager
-import android.widget.Button
 import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.smart_wb.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main_timer.*
 
 private lateinit var binding: ActivityMainBinding
 
@@ -22,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Log.d(TAG, "onCreate: 메인으로넘어옴")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 //        var start = findViewById(R.id.start) as Button

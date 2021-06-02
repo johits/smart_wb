@@ -49,9 +49,11 @@ class Permission : AppCompatActivity() {
             } else {
                 startActivity(Intent(this, MainActivity::class.java))
                 Log.d("Permission.kt", "이미 권한 허용한 사용자 FragmentMainTimer로 이동")
+                finish()
             }
         } else { //마시멜로우 이하일 경우 권한 자동 부여됨
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
 
         }
 
@@ -69,10 +71,12 @@ class Permission : AppCompatActivity() {
                 // TODO 동의를 얻지 못했을 경우의 처리
                 Log.d("퍼미션", "퍼미션 동의 못 얻었을 경우")
                 startActivity(Intent(this, Permission::class.java))
+                finish()
             } else {
                 Log.d("Permission.kt", "퍼미션 동의 얻었을 경우")
                 startActivity(Intent(this, MainActivity::class.java))
                 Log.d("Permission.kt", "FragmentMainTimer로 이동")
+                finish()
             }
         }
     }

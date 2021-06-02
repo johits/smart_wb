@@ -18,13 +18,9 @@ class LockScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lock_screen)
 
 
-
-        tvWatch.visibility = View.GONE
-        btStop.visibility =View.GONE
-
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
         startService(Intent(this,DrawService::class.java))
-
+        finish()
     }
 
     override fun onBackPressed() {
