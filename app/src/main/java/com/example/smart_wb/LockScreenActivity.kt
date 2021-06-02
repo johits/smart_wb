@@ -25,13 +25,18 @@ class LockScreenActivity : AppCompatActivity() {
     private var mServiceMessenger: Messenger? = null
     private var mIsBound = false
 
+    private var settingTime = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
-        if(intent.hasExtra("flag")){
-            var flag = intent.getStringExtra("flag")?.toInt()
-            Log.d(TAG, "onCreate: "+flag)
+        if(intent.hasExtra("settingTime")){
+             var time = intent.getStringExtra("settingTime")?.toInt()
+            Log.d(TAG, "onCreate: "+time)
+            if (time != null) {
+                settingTime = time
+            }
         }
 
         tvWatch.visibility = View.GONE
@@ -70,7 +75,7 @@ class LockScreenActivity : AppCompatActivity() {
             mServiceMessenger = Messenger(iBinder)
             try {
                 Log.d(TAG, "onServiceConnected")
-                val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT,"리하이")
+                val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT,settingTime)
                 msg.replyTo = mMessenger
                 mServiceMessenger!!.send(msg)
             } catch (e: RemoteException) {

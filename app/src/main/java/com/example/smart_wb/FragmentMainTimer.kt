@@ -81,7 +81,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                     toastCenter(R.string.toast_time_set_blank_warning)
                 }else{
                     val intent = Intent(mContext, LockScreenActivity::class.java)
-                    intent.putExtra("flag", settingTime.toString())
+                    intent.putExtra("settingTime", settingTime.toString())
                     startActivity(intent)
                 }
             }
