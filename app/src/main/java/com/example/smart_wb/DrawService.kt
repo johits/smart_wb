@@ -1,12 +1,15 @@
 package com.example.smart_wb
 
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.IBinder
 import android.view.*
 import android.widget.Button
+import androidx.annotation.RequiresApi
 
 /**2021-06-01
 joker
@@ -30,6 +33,7 @@ class DrawService : Service() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun callEvent(){
 
         val inflate =
@@ -54,6 +58,14 @@ class DrawService : Service() {
         bt.setOnClickListener{
             val intent = Intent(applicationContext, MainActivity::class.java)
             stopService(Intent(applicationContext, DrawService::class.java))
+
+
+            //노티피 초기화
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            //방해금지모드 해제
+            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+
             startActivity(intent)
         }
         wm!!.addView(mView, params)
