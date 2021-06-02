@@ -6,10 +6,12 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Handler
 import android.os.IBinder
+import android.os.Messenger
 import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import java.text.SimpleDateFormat
 
 /**2021-06-01
 joker
@@ -17,6 +19,15 @@ joker
 
 
 class DrawService : Service() {
+
+    companion object {
+        const val MSG_REGISTER_CLIENT = 1
+        const val MSG_UNREGISTER_CLIENT =3
+        const val MSG_SEND_TO_SERVICE = 3
+        const val MSG_SEND_TO_ACTIVITY = 4
+    }
+    private var mClient: Messenger? = null //activity 에서 가져온 메신저
+
     private val TAG = "DrawService"
     var wm: WindowManager? = null
     var mView: View? = null
@@ -25,14 +36,15 @@ class DrawService : Service() {
     var flag : Boolean= true
 
     override fun onBind(p0: Intent?): IBinder {
-        throw UnsupportedOperationException("Not yet")
+//        throw UnsupportedOperationException("Not yet")
+        return mMessenger.binder
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
-        handler = Handler()
-        var thread = StartTimer()
-        handler?.post(thread)
+//        handler = Handler()
+//        var thread = StartTimer()
+//        handler?.post(thread)
         return Service.START_STICKY
     }
 
@@ -56,7 +68,8 @@ class DrawService : Service() {
 
         params.gravity = Gravity.LEFT or Gravity.TOP
         mView = inflate.inflate(R.layout.activity_lock_screen, null)
-
+        val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+        watch.text = mClient.toString()
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
@@ -86,11 +99,21 @@ class DrawService : Service() {
     inner class StartTimer : Thread() {
         override fun run() {
             if(flag){
+               val time = SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
-                watch.text = System.currentTimeMillis().toString()
+                watch.text = time
                 handler?.postDelayed(this, 1000)
             }
         }
     }
+
+//     activity로부터 binding 된 Messenger
+    private val mMessenger = Messenger(Handler { msg ->
+        Log.w("test", "ControlService - message what : " + msg.what + " , msg.obj " + msg.obj)
+        when (msg.what) {
+            MSG_REGISTER_CLIENT -> mClient = msg.replyTo // activity로부터 가져온
+        }
+        false
+    })
 
 }
