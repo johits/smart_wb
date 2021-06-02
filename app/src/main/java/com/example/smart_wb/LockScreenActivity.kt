@@ -36,7 +36,6 @@ class LockScreenActivity : AppCompatActivity() {
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 //        startService(Intent(this,DrawService::class.java))
         setStartService()
-        sendMessageToService("하이리하이")
 
     }
 
@@ -66,7 +65,7 @@ class LockScreenActivity : AppCompatActivity() {
             mServiceMessenger = Messenger(iBinder)
             try {
                 Log.d(TAG, "onServiceConnected")
-                val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT)
+                val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT,"리하이")
                 msg.replyTo = mMessenger
                 mServiceMessenger!!.send(msg)
             } catch (e: RemoteException) {
@@ -93,7 +92,7 @@ class LockScreenActivity : AppCompatActivity() {
     /** Service 로 메시지를 보냄  */
     private fun sendMessageToService(str: String) {
         if (mIsBound) {
-            Log.d(TAG, "sendMessageToService: "+mServiceMessenger)
+            Log.d(TAG, "sendMessageToService: " + mServiceMessenger)
             if (mServiceMessenger != null) {
                 try {
                     Log.d(TAG, "메시지보냄" + str)

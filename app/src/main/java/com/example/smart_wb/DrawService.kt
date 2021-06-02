@@ -67,8 +67,7 @@ class DrawService : Service() {
 
         params.gravity = Gravity.LEFT or Gravity.TOP
         mView = inflate.inflate(R.layout.activity_lock_screen, null)
-        val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
-        watch.text = mClient.toString()
+
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
@@ -110,8 +109,11 @@ class DrawService : Service() {
 //     activity로부터 binding 된 Messenger
     private val mMessenger = Messenger(Handler { msg ->
         Log.d("tag", " message what : " + msg.what + " , msg.obj " + msg.obj)
+        val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+        watch.text = msg.obj.toString()
         when (msg.what) {
             MSG_REGISTER_CLIENT -> mClient = msg.replyTo // activity로부터 가져온
+
         }
         false
     })
