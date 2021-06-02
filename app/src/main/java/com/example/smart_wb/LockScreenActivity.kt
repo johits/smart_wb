@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
-import kotlinx.android.synthetic.main.activity_lock_screen.view.*
+
 /**
  * 20/05/31 yama 잠금화면 액티비티
  * */
@@ -17,6 +16,8 @@ class LockScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
+
+
 
         tvWatch.visibility = View.GONE
         btStop.visibility =View.GONE
