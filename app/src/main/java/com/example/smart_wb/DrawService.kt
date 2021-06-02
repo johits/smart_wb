@@ -33,7 +33,6 @@ class DrawService : Service() {
         const val MSG_SEND_TO_SERVICE = 3
         const val MSG_SEND_TO_ACTIVITY = 4
     }
-
     private var mClient: Messenger? = null //activity 에서 가져온 메신저
 
     private val TAG = "DrawService"
@@ -42,8 +41,8 @@ class DrawService : Service() {
 
     var handler: Handler? = null
     var thread: Thread? = null
-
     var settingTime = 0
+
     override fun onBind(p0: Intent?): IBinder {
 //        throw UnsupportedOperationException("Not yet")
         return mMessenger.binder
