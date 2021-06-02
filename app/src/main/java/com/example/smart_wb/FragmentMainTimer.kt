@@ -75,9 +75,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         binding.npSec.minValue = 0
         binding.npSec.maxValue = 59
 
-//노티피 초기화
-
-
         var settingTime = 0
         view.start.setOnClickListener {
                 val intent = Intent(mContext, LockScreenActivity::class.java)

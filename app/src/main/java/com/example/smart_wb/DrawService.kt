@@ -100,17 +100,17 @@ class DrawService : Service() {
             btStop.visibility = View.GONE
         } catch (e: KotlinNullPointerException) {
         }
+        //노티피 초기화
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        //방해금지모드 해제
+        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
         sendMsgToActivity(result);
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         stopService(Intent(applicationContext, DrawService::class.java))
         startActivity(intent)
-        //노티피 초기화
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        //방해금지모드 해제
-        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
     }
 
 
@@ -177,7 +177,6 @@ class DrawService : Service() {
                 result = "${min}:${sec}"
             }
         }
-
         return result
     }
 

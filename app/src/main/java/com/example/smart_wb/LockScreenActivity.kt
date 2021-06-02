@@ -48,24 +48,15 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvWatch.visibility = View.GONE
         btStop.visibility = View.GONE
-        //초기 바텀네비게이션 세팅
-
-
-
 
         //노티피 초기화
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         //방해금지모드작동
         notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-
-
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
-//        startService(Intent(this,DrawService::class.java))
-        setStartService()
 
-        startService(Intent(this,DrawService::class.java))
-        finish()
+        setStartService()
     }
 
     override fun onBackPressed() {
