@@ -26,6 +26,7 @@ class DrawService : Service() {
         throw UnsupportedOperationException("Not yet")
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
 
