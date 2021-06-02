@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
-import kotlinx.android.synthetic.main.activity_lock_screen.view.*
 /**
  * 20/05/31 yama 잠금화면 액티비티
  * */
@@ -17,11 +15,10 @@ class LockScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
-//        stop.visibility = View.GONE
+
         tvWatch.visibility = View.GONE
         btStop.visibility =View.GONE
-        //초기 바텀네비게이션 세팅
-//        supportFragmentManager.beginTransaction().replace(R.id.frame, FragmentCalendar()).commit()
+
 
         tvWatch.visibility = View.GONE
         btStop.visibility =View.GONE
