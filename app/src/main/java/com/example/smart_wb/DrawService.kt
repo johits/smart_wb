@@ -105,18 +105,18 @@ class DrawService : Service() {
         override fun run() {
             if(settingTime>=0){
                     val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
-
                 if(settingTime==0){
-
+                    watch.text = "00:00"
+                    handler?.postDelayed(this,500)
                 }else{
                     watch.text = calTime(settingTime)
-                }
                     handler?.postDelayed(this, 1000)
+                }
                     settingTime--
                     Log.d(TAG, "settingTime:" + settingTime)
             }else{
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
-                watch.text="성공"
+//                watch.text="성공"
                 Log.d(TAG, "타이머종료")
             }
         }
