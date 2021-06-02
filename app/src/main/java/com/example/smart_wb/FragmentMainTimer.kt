@@ -19,7 +19,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- * 21/05/31 yama 스크린타임 작업중
+ * 21/05/31 yama 스크린타임 타이머 시간 설정하는 프래그먼트
  */
 class FragmentMainTimer : Fragment(), View.OnClickListener {
     // TODO: Rename and change types of parameters
@@ -72,19 +72,18 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         binding.npSec.minValue = 0
         binding.npSec.maxValue = 59
 
-
+        var settingTime = 0
         view.start.setOnClickListener {
             //액티비티에 따라 동작을 달리한다.
             if (context is MainActivity) {
-                val intent = Intent(mContext, LockScreenActivity::class.java)
-                intent.putExtra("flag", true)
-                startActivity(intent)
-            } else if (context is LockScreenActivity) {
-//                토스트메세지 중앙 띄우기 버튼클릭 테스트용
-                val toast = Toast.makeText(mContext, "시작", Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.CENTER, 0, 0)
-                toast.show()
-                view.start.setText("종료")
+                settingTime = binding.npHour.value*3600+ binding.npMin.value*60+binding.npSec.value
+                if(settingTime==0){
+                    toastCenter(R.string.toast_time_set_blank_warning)
+                }else{
+                    val intent = Intent(mContext, LockScreenActivity::class.java)
+                    intent.putExtra("flag", settingTime.toString())
+                    startActivity(intent)
+                }
             }
         }
         return view
@@ -110,4 +109,10 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         _binding = null
     }
 
+    //토스트 메세지 화면 중앙
+    fun toastCenter(message: Int){
+        val toast = Toast.makeText(mContext,message,Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER,Gravity.CENTER_HORIZONTAL,Gravity.CENTER_VERTICAL)
+        toast.show()
+    }
 }

@@ -29,6 +29,11 @@ class LockScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
+        if(intent.hasExtra("flag")){
+            var flag = intent.getStringExtra("flag")?.toInt()
+            Log.d(TAG, "onCreate: "+flag)
+        }
+
         tvWatch.visibility = View.GONE
         btStop.visibility = View.GONE
         //초기 바텀네비게이션 세팅
@@ -75,7 +80,7 @@ class LockScreenActivity : AppCompatActivity() {
         override fun onServiceDisconnected(componentName: ComponentName) {}
     }
 
-    /** Service 로 부터 message를 받음  */
+//     Service 로 부터 message를 받음
     private val mMessenger = Messenger(Handler { msg ->
         Log.i("test", "act : what " + msg.what)
         when (msg.what) {
@@ -89,7 +94,7 @@ class LockScreenActivity : AppCompatActivity() {
         false
     })
 
-    /** Service 로 메시지를 보냄  */
+//     Service 로 메시지를 보냄
     private fun sendMessageToService(str: String) {
         if (mIsBound) {
             Log.d(TAG, "sendMessageToService: " + mServiceMessenger)
@@ -107,3 +112,5 @@ class LockScreenActivity : AppCompatActivity() {
 
 
 }
+
+
