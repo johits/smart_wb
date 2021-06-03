@@ -75,16 +75,18 @@ class FragmentSetting : Fragment() {
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용
             var listener = DialogInterface.OnClickListener { p0, p1 ->
-//                var alert = p0 as AlertDialog
 
                 if(v1.bell1.isChecked){
                     audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL // 벨소리 모드로 변경
+                    tss.text = "벨소리"
                     Toast.makeText(context,"벨소리로 변경되었습니다.",Toast.LENGTH_SHORT).show()
                 }else if(v1.bell2.isChecked){
                     audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE // 진동 모드로 변경
+                    tss.text = "진동"
                     Toast.makeText(context,"진동으로 변경되었습니다.",Toast.LENGTH_SHORT).show()
                 }else if(v1.bell3.isChecked){
                     audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT // 무음 모드로 변경
+                    tss.text = "무음"
                     Toast.makeText(context,"무음으로 변경되었습니다.",Toast.LENGTH_SHORT).show()
                 }
 
