@@ -104,12 +104,11 @@ class DrawService : Service() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         //방해금지모드 해제
         notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
-        sendMsgToActivity(result);
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        sendMsgToActivity(result);//액티비티에 메세지보내기
+
         stopService(Intent(applicationContext, DrawService::class.java))
-        startActivity(intent)
+
     }
 
 
@@ -132,6 +131,7 @@ class DrawService : Service() {
             if (settingTime >= 0) {
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
                 if (settingTime == 0) {
+                    watch.text="00:00"
                     handler?.postDelayed(this, 500)
                 } else {
                     watch.text = calTime(settingTime)
@@ -168,6 +168,8 @@ class DrawService : Service() {
 //            Log.d("tag", "시간0")
             if (min < 10 && sec < 10) {
                 result = "0${min}:0${sec}"
+            }else if(min < 10 && sec ==10){
+                result = "0${min}:${sec}"
             } else if (min < 10 && sec > 10) {
                 result = "0${min}:${sec}"
             } else if (min > 10 && sec < 10) {
