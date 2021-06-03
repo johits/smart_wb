@@ -82,7 +82,7 @@ class DrawService : Service() {
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
-            settingTime = -1
+            settingTime = -2
             Log.d(TAG, "종료버튼 클릭")
             drawServiceStop(false)
         }
