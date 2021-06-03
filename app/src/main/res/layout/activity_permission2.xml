@@ -12,19 +12,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:textColor="#000000"
         android:text="방해모드 권한"
         android:textSize="30dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#000000"
         android:text="허용하셔야 다음 화면으로 이동 가능합니다."
         android:gravity="center"
         />
+
     <Button
         android:id="@+id/pbt2"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:background="@drawable/bt"
+        android:paddingHorizontal="30dp"
+        android:textColor="#ffffff"
         android:text="권한 허용하러 가기"/>
 
 

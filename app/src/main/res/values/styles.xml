@@ -10,6 +10,8 @@
         <item name="android:windowFullscreen">true</item>
         <!-- 액티비티 이동 시 애니메이션 제거-->
         <item name="android:windowAnimationStyle">@null</item>
-    </style>
+        <!-- 기본 폰트 레시피 코리아체 적용-->
+        <item name="android:fontFamily">@font/recipe</item>
 
+    </style>
 </resources>
