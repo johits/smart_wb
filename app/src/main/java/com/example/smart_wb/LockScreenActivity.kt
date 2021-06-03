@@ -54,10 +54,10 @@ class LockScreenActivity : AppCompatActivity() {
         btStop.visibility = View.GONE
 
         //노티피 초기화
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        //방해금지모드작동
-        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+//        val notificationManager =
+//            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//        //방해금지모드작동
+//        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 
         setStartService()
@@ -86,6 +86,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     //액티비티 서비스 연결
     private val mConnection: ServiceConnection = object : ServiceConnection {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
             mServiceMessenger = Messenger(iBinder)
             try {
@@ -124,6 +125,7 @@ class LockScreenActivity : AppCompatActivity() {
     })
 
     //     Service 로 메시지를 보냄
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessageToService(str: String) {
         if (mIsBound) {
             Log.d(TAG, "sendMessageToService: " + mServiceMessenger)
@@ -144,7 +146,7 @@ class LockScreenActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = names
             val descriptionText = channelDescription
-            val importance = NotificationManager.IMPORTANCE_HIGH //이상이여야 헤드업 알림 나온다.
+            val importance = NotificationManager.IMPORTANCE_HIGH //high 이상이여야 헤드업 알림 나온다.
             val mChannel = NotificationChannel(id, name, importance)
             mChannel.description = descriptionText
 
@@ -161,7 +163,7 @@ class LockScreenActivity : AppCompatActivity() {
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
-//            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
