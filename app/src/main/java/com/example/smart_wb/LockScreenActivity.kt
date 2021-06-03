@@ -6,7 +6,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.media.RingtoneManager
 import android.os.*
+import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -14,10 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import kotlinx.android.synthetic.main.activity_lock_screen.*
+import kotlinx.android.synthetic.main.activity_lock_screen.view.*
 
 
 /**
  * 20/05/31 yama 잠금화면 액티비티
+ * 서비스에서 성공 메세지 받으면 노티피케이션 발생
  * */
 class LockScreenActivity : AppCompatActivity() {
     companion object {
@@ -82,6 +86,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     //액티비티 서비스 연결
     private val mConnection: ServiceConnection = object : ServiceConnection {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
             mServiceMessenger = Messenger(iBinder)
             try {
@@ -97,6 +102,7 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //     Service 로 부터 message를 받음
+    @RequiresApi(Build.VERSION_CODES.O)
     private val mMessenger = Messenger(Handler { msg ->
         Log.i("test", "act : what " + msg.what)
         when (msg.what) {
@@ -105,8 +111,8 @@ class LockScreenActivity : AppCompatActivity() {
                 val message = msg.data.getString("message")
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
-
-                if (result) { //스크린타임 성공시
+                if (result) { //스크린타임 성공시 노티활성화
+                    getDisplayWakeUp()
                     showNotification()
                 } else {//스크린타임 실패시
 
@@ -119,6 +125,7 @@ class LockScreenActivity : AppCompatActivity() {
     })
 
     //     Service 로 메시지를 보냄
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessageToService(str: String) {
         if (mIsBound) {
             Log.d(TAG, "sendMessageToService: " + mServiceMessenger)
@@ -139,7 +146,7 @@ class LockScreenActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = names
             val descriptionText = channelDescription
-            val importance = NotificationManager.IMPORTANCE_HIGH //이상이여야 헤드업 알림 나온다.
+            val importance = NotificationManager.IMPORTANCE_HIGH //high 이상이여야 헤드업 알림 나온다.
             val mChannel = NotificationChannel(id, name, importance)
             mChannel.description = descriptionText
 
@@ -149,19 +156,44 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //노티피케이션 발생
+    @RequiresApi(Build.VERSION_CODES.O)
     fun showNotification() {
-
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
+            .setAutoCancel(true)
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
         createNotificationChannel(CHANNEL_ID, channel_name, getString(R.string.app_name))
 
         val notificationManager = NotificationManagerCompat.from(this)
-        notificationManager.notify(notificationId, builder.build())    // 11
+        notificationManager.notify(notificationId, builder.build())
+
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator;
+//        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
+//        vibrator.vibrate(vibrationEffect);
+
+        vibrator.vibrate(VibrationEffect.createOneShot(5000, 255))
+
+
+    }
+
+    //화면 기상
+    fun getDisplayWakeUp() {
+        try {
+            val pm = getSystemService(POWER_SERVICE) as PowerManager
+            val wakelock = pm.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                "My:Tag"
+            )
+            wakelock.acquire() //화면 기상
+            wakelock.release() //WakeLock 자원 해제
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 

@@ -151,7 +151,7 @@ class DrawService : Service() {
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
         val sec = Math.floorMod(setTime, 3600) % 60
-
+//        result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
         if (hour > 0) {
             if (min < 10 && sec < 10) {
                 result = "${hour}:0${min}:0${sec}"
