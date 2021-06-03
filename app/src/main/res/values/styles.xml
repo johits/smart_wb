@@ -5,9 +5,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--상태바 보여짐 처리-->
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+
+        <item name="windowNoTitle">true</item>
         <!-- 액티비티 이동 시 애니메이션 제거-->
         <item name="android:windowAnimationStyle">@null</item>
         <!-- 기본 폰트 레시피 코리아체 적용-->

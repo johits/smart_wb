@@ -1,5 +1,6 @@
 package com.example.smart_wb
 
+import android.app.NotificationChannel
 import android.content.ComponentName
 import android.app.NotificationManager
 import android.content.ContentValues.TAG
@@ -13,6 +14,8 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.smart_wb.DrawService.Companion.MSG_REGISTER_CLIENT
 import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
@@ -25,6 +28,9 @@ import kotlinx.android.synthetic.main.activity_lock_screen.view.*
 class LockScreenActivity : AppCompatActivity() {
     companion object {
         const val TAG = "LockScreenActivity"
+        const val channel_name: String = "smart_wb_channel"
+        const val CHANNEL_ID: String = "com.example.smart_wb"
+        const val notificationId: Int = 1001
     }
 
     //서비스에 데이터 보내기 위한 변수
@@ -38,9 +44,9 @@ class LockScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
-        if(intent.hasExtra("settingTime")){
-             var time = intent.getStringExtra("settingTime")?.toInt()
-            Log.d(TAG, "onCreate: "+time)
+        if (intent.hasExtra("settingTime")) {
+            var time = intent.getStringExtra("settingTime")?.toInt()
+            Log.d(TAG, "onCreate: " + time)
             if (time != null) {
                 settingTime = time
             }
@@ -86,7 +92,7 @@ class LockScreenActivity : AppCompatActivity() {
             mServiceMessenger = Messenger(iBinder)
             try {
                 Log.d(TAG, "onServiceConnected")
-                val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT,settingTime)
+                val msg = Message.obtain(null, DrawService.MSG_REGISTER_CLIENT, settingTime)
                 msg.replyTo = mMessenger
                 mServiceMessenger!!.send(msg)
             } catch (e: RemoteException) {
@@ -96,7 +102,7 @@ class LockScreenActivity : AppCompatActivity() {
         override fun onServiceDisconnected(componentName: ComponentName) {}
     }
 
-//     Service 로 부터 message를 받음
+    //     Service 로 부터 message를 받음
     private val mMessenger = Messenger(Handler { msg ->
         Log.i("test", "act : what " + msg.what)
         when (msg.what) {
@@ -105,16 +111,20 @@ class LockScreenActivity : AppCompatActivity() {
                 val message = msg.data.getString("message")
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
-                if(message.equals("finish")){
-                    setStopService()
-                    finish()
+
+                if (result) { //스크린타임 성공시
+                    showNotification()
+                } else {//스크린타임 실패시
+
                 }
+                setStopService()
+                finish()
             }
         }
         false
     })
 
-//     Service 로 메시지를 보냄
+    //     Service 로 메시지를 보냄
     private fun sendMessageToService(str: String) {
         if (mIsBound) {
             Log.d(TAG, "sendMessageToService: " + mServiceMessenger)
@@ -130,7 +140,35 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
+    //노티피케이션 채널 생성
+    private fun createNotificationChannel(id: String, names: String, channelDescription: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = names
+            val descriptionText = channelDescription
+            val importance = NotificationManager.IMPORTANCE_HIGH //이상이여야 헤드업 알림 나온다.
+            val mChannel = NotificationChannel(id, name, importance)
+            mChannel.description = descriptionText
 
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
+    }
+
+    //노티피케이션 발생
+    fun showNotification() {
+
+        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(getString(R.string.screen_time_success_noti_title))
+            .setContentText(getString(R.string.screen_time_success_noti_text))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
+
+        createNotificationChannel(CHANNEL_ID, channel_name, getString(R.string.app_name))
+
+        val notificationManager = NotificationManagerCompat.from(this)
+        notificationManager.notify(notificationId, builder.build())    // 11
+    }
 }
 
 
