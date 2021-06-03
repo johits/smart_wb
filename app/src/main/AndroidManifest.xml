@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!--    방해모드 금지 권한-->
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <!-- 전화 권한-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +30,14 @@
         </activity>
 
         <service android:name=".DrawService" />
+
+        <!-- 전화 관련 리시버-->
+        <receiver android:name=".CallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.BATTERY_LOW"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

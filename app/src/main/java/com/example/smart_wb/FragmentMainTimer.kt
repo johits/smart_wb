@@ -35,6 +35,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
 
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -57,6 +58,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     //view를 구성
