@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_setting.*
-import kotlinx.android.synthetic.main.timer_dialog.*
+import kotlinx.android.synthetic.main.timer_dialog.view.*
 
 
 /**2021-06-02
@@ -75,29 +75,19 @@ class FragmentSetting : Fragment() {
 
             // p0에 해당 AlertDialog가 들어온다. findViewById를 통해 view를 가져와서 사용
             var listener = DialogInterface.OnClickListener { p0, p1 ->
-                var alert = p0 as AlertDialog
+//                var alert = p0 as AlertDialog
 
-                when(checkedId) {
-                    R.id.bell1 -> r1Result.text = "오늘 저녁은? ${rb1.text}!"
-                    R.id.bell2 -> r1Result.text = "오늘 저녁은? ${rb2.text}!"
-                    R.id.bell3 -> r1Result.text = "오늘 저녁은? ${rb3.text}!"
-                }
-
-                val bell_result : String
-                bell_result =  ${edit1?.text}
-                bell1.isChecked = ${?.text}
-                if(bell1.isChecked){
+                if(v1.bell1.isChecked){
+                    audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL // 벨소리 모드로 변경
                     Toast.makeText(context,"벨소리로 변경되었습니다.",Toast.LENGTH_SHORT).show()
-                }else if(bell2.isChecked){
+                }else if(v1.bell2.isChecked){
+                    audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE // 진동 모드로 변경
                     Toast.makeText(context,"진동으로 변경되었습니다.",Toast.LENGTH_SHORT).show()
-                }else if(bell3.isChecked){
+                }else if(v1.bell3.isChecked){
+                    audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT // 무음 모드로 변경
                     Toast.makeText(context,"무음으로 변경되었습니다.",Toast.LENGTH_SHORT).show()
                 }
-//                var edit1: EditText? = alert.findViewById<EditText>(R.id.editText)
-//                var edit2: EditText? = alert.findViewById<EditText>(R.id.editText2)
-//
-//                tv1.text = "${edit1?.text}"
-//                tv1.append("${edit2?.text}")
+
             }
 
             builder.setPositiveButton("확인", listener)
