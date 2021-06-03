@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--상태창 보임-->
+        <!--상태바 보여짐 처리-->
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
 

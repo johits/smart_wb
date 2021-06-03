@@ -54,9 +54,6 @@ class Permission2 : AppCompatActivity() {
         // if user granted access else ask for permission
         if (notificationManager.isNotificationPolicyAccessGranted) {
             Log.d(TAG, "onActivityResult: 권한 허락했으면")
-            val audioManager =
-                applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
