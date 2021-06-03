@@ -54,10 +54,10 @@ class LockScreenActivity : AppCompatActivity() {
         btStop.visibility = View.GONE
 
         //노티피 초기화
-//        val notificationManager =
-//            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        //방해금지모드작동
-//        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        //방해금지모드작동
+        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 
         setStartService()
@@ -158,11 +158,11 @@ class LockScreenActivity : AppCompatActivity() {
     //노티피케이션 발생
     @RequiresApi(Build.VERSION_CODES.O)
     fun showNotification() {
-        var vibrate = longArrayOf(1000,1000,1000,1000)
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
+            .setAutoCancel(true)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
