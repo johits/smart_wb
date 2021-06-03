@@ -6,7 +6,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.media.RingtoneManager
 import android.os.*
+import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -99,6 +101,7 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //     Service 로 부터 message를 받음
+    @RequiresApi(Build.VERSION_CODES.O)
     private val mMessenger = Messenger(Handler { msg ->
         Log.i("test", "act : what " + msg.what)
         when (msg.what) {
@@ -151,36 +154,41 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //노티피케이션 발생
+    @RequiresApi(Build.VERSION_CODES.O)
     fun showNotification() {
-
+        var vibrate = longArrayOf(1000,1000,1000,1000)
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
+//            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
         createNotificationChannel(CHANNEL_ID, channel_name, getString(R.string.app_name))
 
         val notificationManager = NotificationManagerCompat.from(this)
-        notificationManager.notify(notificationId, builder.build())    // 11
+        notificationManager.notify(notificationId, builder.build())
+
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator;
+//        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
+//        vibrator.vibrate(vibrationEffect);
+
+        vibrator.vibrate(VibrationEffect.createOneShot(5000, 255))
+
+
     }
 
     //화면 기상
     fun getDisplayWakeUp() {
         try {
-            /**
-             * [화면 기상 방법]
-             * 1. 화면 제어 권한 획득 실시 - AndroidManifest.xml : <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-             * 2. PowerManager.WakeLock 사용해 화면 강제 기상 (깨우기) 실시
-             */
             val pm = getSystemService(POWER_SERVICE) as PowerManager
             val wakelock = pm.newWakeLock(
                 PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "My:Tag"
             )
-            wakelock.acquire() //TODO 화면 즉시 기상 실시
-            wakelock.release() //TODO WakeLock 자원 해제
+            wakelock.acquire() //화면 기상
+            wakelock.release() //WakeLock 자원 해제
         } catch (e: Exception) {
             e.printStackTrace()
         }
