@@ -77,15 +77,13 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
         var settingTime = 0
         view.start.setOnClickListener {
-                val intent = Intent(mContext, LockScreenActivity::class.java)
-                intent.putExtra("flag", true)
-                startActivity(intent)
+
             //액티비티에 따라 동작을 달리한다.
             if (context is MainActivity) {
                 settingTime = binding.npHour.value*3600+ binding.npMin.value*60+binding.npSec.value
                 if(settingTime==0){
                     toastCenter(R.string.toast_time_set_blank_warning)
-                }else{
+                }else {
                     val intent = Intent(mContext, LockScreenActivity::class.java)
                     intent.putExtra("settingTime", settingTime.toString())
                     startActivity(intent)

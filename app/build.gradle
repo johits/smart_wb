@@ -27,11 +27,11 @@ android {
     }
 
     // 안드로이드 스튜디오 3.6 ~ 4.0
-    android {
-        viewBinding {
-            enabled true
+        android {
+            viewBinding {
+                enabled true
+            }
         }
-    }
 
 //    // 안드로이드 스튜디오 4.0 이상
 //    android {
