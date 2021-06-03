@@ -6,8 +6,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!--상태창 보임-->
-        <item name="windowActionBar">true</item>
-        <item name="android:windowFullscreen">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
 
         <item name="windowNoTitle">true</item>
         <!-- 액티비티 이동 시 애니메이션 제거-->

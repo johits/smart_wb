@@ -82,7 +82,7 @@ class DrawService : Service() {
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
-            settingTime = -1
+            settingTime = -2
             Log.d(TAG, "종료버튼 클릭")
             drawServiceStop(false)
         }
@@ -139,9 +139,11 @@ class DrawService : Service() {
                 }
                 settingTime--
                 Log.d(TAG, "settingTime:" + settingTime)
-            } else {
-                Log.d(TAG, "타이머종료")
+            } else if(settingTime==-1){
+                Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
+            }else if(settingTime==-2){
+                Log.d(TAG, "스크린타임 강제종료")
             }
         }
     }
@@ -149,7 +151,7 @@ class DrawService : Service() {
     //시간변환기
     @RequiresApi(Build.VERSION_CODES.N)
     private fun calTime(setTime: Int): String? {
-        var result: String?
+        val result: String?
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
         val sec = Math.floorMod(setTime, 3600) % 60
@@ -192,10 +194,11 @@ class DrawService : Service() {
     })
 
     //activity에 메세지 보냄
-    private fun sendMsgToActivity(sendValue: Boolean) {
+    private fun sendMsgToActivity(result: Boolean) {
         try {
+            Log.d(TAG, "결과"+result)
             val bundle = Bundle()
-            bundle.putBoolean("result", sendValue)
+            bundle.putBoolean("result", result)
             bundle.putString("message", "finish")
             val msg: Message = Message.obtain(null, MSG_SEND_TO_ACTIVITY)
             msg.setData(bundle)
