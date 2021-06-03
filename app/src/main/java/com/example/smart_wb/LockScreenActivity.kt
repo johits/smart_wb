@@ -155,15 +155,16 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //노티피케이션 발생
-    fun showNotification(){
+    fun showNotification() {
+
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(R.string.screen_time_success_noti_title.toString())
-            .setContentText(R.string.screen_time_success_noti_text.toString())
+            .setContentTitle(getString(R.string.screen_time_success_noti_title))
+            .setContentText(getString(R.string.screen_time_success_noti_text))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
-        createNotificationChannel(CHANNEL_ID, channel_name, R.string.app_name.toString())
+        createNotificationChannel(CHANNEL_ID, channel_name, getString(R.string.app_name))
 
         val notificationManager = NotificationManagerCompat.from(this)
         notificationManager.notify(notificationId, builder.build())    // 11
