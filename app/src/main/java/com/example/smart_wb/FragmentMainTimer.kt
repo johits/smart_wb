@@ -24,7 +24,7 @@ private const val ARG_PARAM2 = "param2"
  * 21/05/31 yama 스크린타임 타이머 시간 설정하는 프래그먼트
  */
 class FragmentMainTimer : Fragment(), View.OnClickListener {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
 
