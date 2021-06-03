@@ -1,25 +1,19 @@
 package com.example.smart_wb
 
 import android.app.NotificationChannel
-import android.content.ComponentName
 import android.app.NotificationManager
-import android.content.ContentValues.TAG
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
-import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.smart_wb.DrawService.Companion.MSG_REGISTER_CLIENT
-import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
-import kotlinx.android.synthetic.main.activity_lock_screen.view.*
 
 
 /**

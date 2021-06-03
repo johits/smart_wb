@@ -7,15 +7,10 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.*
 import android.util.Log
-import android.os.Build
-import android.os.IBinder
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.concurrent.timer
 
 
 /**2021-06-01
@@ -108,6 +103,7 @@ class DrawService : Service() {
         sendMsgToActivity(result);//액티비티에 메세지보내기
 
         stopService(Intent(applicationContext, DrawService::class.java))
+
 
     }
 
