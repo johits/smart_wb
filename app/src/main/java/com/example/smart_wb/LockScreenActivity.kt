@@ -1,29 +1,25 @@
 package com.example.smart_wb
 
 import android.app.NotificationChannel
-import android.content.ComponentName
 import android.app.NotificationManager
-import android.content.ContentValues.TAG
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
-import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.smart_wb.DrawService.Companion.MSG_REGISTER_CLIENT
-import com.example.smart_wb.databinding.ActivityLockScreenBinding
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.android.synthetic.main.activity_lock_screen.view.*
 
 
 /**
  * 20/05/31 yama 잠금화면 액티비티
+ * 서비스에서 성공 메세지 받으면 노티피케이션 발생
  * */
 class LockScreenActivity : AppCompatActivity() {
     companion object {
@@ -111,8 +107,8 @@ class LockScreenActivity : AppCompatActivity() {
                 val message = msg.data.getString("message")
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
-
-                if (result) { //스크린타임 성공시
+                if (result) { //스크린타임 성공시 노티활성화
+                    getDisplayWakeUp()
                     showNotification()
                 } else {//스크린타임 실패시
 
@@ -168,6 +164,26 @@ class LockScreenActivity : AppCompatActivity() {
 
         val notificationManager = NotificationManagerCompat.from(this)
         notificationManager.notify(notificationId, builder.build())    // 11
+    }
+
+    //화면 기상
+    fun getDisplayWakeUp() {
+        try {
+            /**
+             * [화면 기상 방법]
+             * 1. 화면 제어 권한 획득 실시 - AndroidManifest.xml : <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+             * 2. PowerManager.WakeLock 사용해 화면 강제 기상 (깨우기) 실시
+             */
+            val pm = getSystemService(POWER_SERVICE) as PowerManager
+            val wakelock = pm.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                "My:Tag"
+            )
+            wakelock.acquire() //TODO 화면 즉시 기상 실시
+            wakelock.release() //TODO WakeLock 자원 해제
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 

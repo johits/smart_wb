@@ -11,6 +11,7 @@
         android:id="@+id/tvWatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textFontWeight="100"
         android:text="00:00"
         android:textSize="66sp"
         app:layout_constraintBottom_toBottomOf="parent"
