@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.media.RingtoneManager
 import android.os.*
-import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import kotlinx.android.synthetic.main.activity_lock_screen.*
-import kotlinx.android.synthetic.main.activity_lock_screen.view.*
 
 
 /**
@@ -176,7 +174,7 @@ class LockScreenActivity : AppCompatActivity() {
 //        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
 //        vibrator.vibrate(vibrationEffect);
 
-        vibrator.vibrate(VibrationEffect.createOneShot(5000, 255))
+        vibrator.vibrate(VibrationEffect.createOneShot(1000, 50))
 
 
     }
