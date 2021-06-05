@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:padding="30dp"
     tools:context=".Permission2">
 
     <TextView
@@ -19,9 +20,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:text="허용하셔야 다음 화면으로 이동 가능합니다."
+        android:text="해당 권한은 타이머 작동 시\n방해 모드를 자동 설정하기 위한 권한입니다.\n그 외 다른 용도로 사용되지 않으니 안심하고 허용해주세요.
+\n(해당 권한 허용 후 다음 화면으로 이동 가능합니다.)"
         android:gravity="center"
         />
+
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="250dp"
+        android:background="@drawable/sst"
+        android:src="@drawable/p2"/>
 
     <Button
         android:id="@+id/pbt2"

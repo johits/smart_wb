@@ -27,6 +27,7 @@ class LockScreenActivity : AppCompatActivity() {
         const val channel_name: String = "smart_wb_channel"
         const val CHANNEL_ID: String = "com.example.smart_wb"
         const val notificationId: Int = 1001
+
     }
 
     //서비스에 데이터 보내기 위한 변수
@@ -39,6 +40,8 @@ class LockScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
+
+
 
         if (intent.hasExtra("settingTime")) {
             var time = intent.getStringExtra("settingTime")?.toInt()
