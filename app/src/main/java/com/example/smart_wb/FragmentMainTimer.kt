@@ -58,7 +58,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     //view를 구성
