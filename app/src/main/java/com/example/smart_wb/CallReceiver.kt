@@ -65,26 +65,12 @@ class CallReceiver : BroadcastReceiver() {
                             }
                         }
 
-                    // telephonyManager.acceptRingingCall(); 전화 받기 함수이다.
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//                    telephonyManager.endCall(); 전화 끊기, 거절 함수이다.
-//                }
-                } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                    Log.d("CallReceiver", "통화중")
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d("CallReceiver", "통화종료 혹은 통화벨 종료")
                 }
                 Log.d("CallReceiver", "phone state : $state")
-                //                Log.d("qqq", "phone currentPhonestate : " + currentPhoneState);
             }
         }
     }
 }
-
-
-//TelephonyManager.EXTRA_STATE_IDLE: 통화종료 혹은 통화벨 종료
-//
-//        TelephonyManager.EXTRA_STATE_RINGING: 통화벨 울리는중
-//
-//        TelephonyManager.EXTRA_STATE_OFFHOOK: 통화중
 

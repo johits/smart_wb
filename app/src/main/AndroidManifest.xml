@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <!--최상단 액티비티 정보 가져오기-->
     <uses-permission android:name="andorid.permission.GET_TASKS" />
+    <!-- 부팅시 앱 자동 실행하기-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 
     <application
@@ -37,6 +39,11 @@
         </activity>
 
         <service android:name=".DrawService" />
+        <receiver android:name=".Restart" android:exported="false" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <!-- 전화 관련 리시버-->
         <receiver android:name=".CallReceiver">

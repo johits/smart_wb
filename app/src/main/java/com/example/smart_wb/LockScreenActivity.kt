@@ -182,6 +182,8 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
+
+
     //화면 기상
     fun getDisplayWakeUp() {
         try {
