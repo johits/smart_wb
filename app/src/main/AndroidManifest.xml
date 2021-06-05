@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <!--최상단 액티비티 정보 가져오기-->
+    <uses-permission android:name="andorid.permission.GET_TASKS" />
+
 
     <application
         android:allowBackup="true"
@@ -36,12 +39,12 @@
         <service android:name=".DrawService" />
 
         <!-- 전화 관련 리시버-->
-<!--        <receiver android:name=".CallReceiver">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.PHONE_STATE"/>-->
-<!--                <action android:name="android.intent.action.BATTERY_LOW"/>-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+        <receiver android:name=".CallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.BATTERY_LOW"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

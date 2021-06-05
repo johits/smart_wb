@@ -1,6 +1,7 @@
 package com.example.smart_wb
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -26,6 +27,18 @@ class CallReceiver : BroadcastReceiver() {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
+
+
+        //최상단 액티비티 이름 구하기
+        val AM =
+            context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val Info = AM.getRunningTasks(1)
+        val topActivity = Info[0].topActivity
+        val activityName = topActivity!!.shortClassName.substring(1)
+        Log.d("CallReceiver", "현재 보고 있는 액티비티: $activityName")
+
+
+
         if (intent.action == "android.intent.action.PHONE_STATE") {
             val telephonyManager =
                 context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
@@ -41,14 +54,15 @@ class CallReceiver : BroadcastReceiver() {
                 if (state == TelephonyManager.EXTRA_STATE_RINGING) {
                     val phoneNo =
                         extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                    Log.d("qqq", phoneNo + "currentNumber")
-                    Log.d("qqq", "통화벨 울리는중")
-                    Log.d("Qqq", "onReceive: 현재 내 컨텍스트:"+context)
+                    Log.d("CallReceiver", phoneNo + "currentNumber")
+                    Log.d("CallReceiver", "통화벨 울리는중")
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            telephonyManager.endCall()
-                            Log.d("2", "onReceive: 전화끊기, 거절")
-
+                            if(activityName.equals("LockScreenActivity")){
+                                telephonyManager.endCall()
+                                Log.d("CallReceiver", "전화끊기, 거절")
+                                Log.d("CallReceiver", "보고 있는 액티비티:"+activityName)
+                            }
                         }
 
                     // telephonyManager.acceptRingingCall(); 전화 받기 함수이다.
@@ -56,11 +70,11 @@ class CallReceiver : BroadcastReceiver() {
 //                    telephonyManager.endCall(); 전화 끊기, 거절 함수이다.
 //                }
                 } else if (state == TelephonyManager.EXTRA_STATE_OFFHOOK) {
-                    Log.d("qqq", "통화중")
+                    Log.d("CallReceiver", "통화중")
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
-                    Log.d("qqq", "통화종료 혹은 통화벨 종료")
+                    Log.d("CallReceiver", "통화종료 혹은 통화벨 종료")
                 }
-                Log.d("qqq", "phone state : $state")
+                Log.d("CallReceiver", "phone state : $state")
                 //                Log.d("qqq", "phone currentPhonestate : " + currentPhoneState);
             }
         }
