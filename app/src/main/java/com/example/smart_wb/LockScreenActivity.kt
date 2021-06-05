@@ -177,6 +177,8 @@ class LockScreenActivity : AppCompatActivity() {
 //        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
 //        vibrator.vibrate(vibrationEffect);
 
+
+
         vibrator.vibrate(VibrationEffect.createOneShot(1000, 50))
 
 
