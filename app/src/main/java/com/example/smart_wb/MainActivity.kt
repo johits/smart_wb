@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.smart_wb.databinding.ActivityMainBinding
+
 import kotlinx.android.synthetic.main.activity_main.*
 
 private lateinit var binding: ActivityMainBinding
