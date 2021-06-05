@@ -36,12 +36,12 @@
         <service android:name=".DrawService" />
 
         <!-- 전화 관련 리시버-->
-        <receiver android:name=".CallReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="android.intent.action.BATTERY_LOW"/>
-            </intent-filter>
-        </receiver>
+<!--        <receiver android:name=".CallReceiver">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.PHONE_STATE"/>-->
+<!--                <action android:name="android.intent.action.BATTERY_LOW"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>

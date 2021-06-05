@@ -2,7 +2,10 @@ package com.example.smart_wb
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
@@ -33,17 +36,11 @@ class LockScreenActivity : AppCompatActivity() {
 
     private var settingTime = 0
 
-    //리시버 객체 생성
-    private val br = CallReceiver()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
-
-        //동적 리시버 등록
-        val filter = IntentFilter(Intent.ACTION_LOCALE_CHANGED)
-        registerReceiver(br, filter)
 
 
         if (intent.hasExtra("settingTime")) {
@@ -202,8 +199,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        //리시버 등록해제
-        unregisterReceiver(br)
+
     }
 }
 
