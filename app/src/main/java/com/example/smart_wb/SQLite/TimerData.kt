@@ -1,4 +1,4 @@
-package com.example.smart_wb.SqLite
+package com.example.smart_wb.SQLite
 /**
  * 2021-06-06 yama 타이머 테이블 데이터 클래스
  * */
