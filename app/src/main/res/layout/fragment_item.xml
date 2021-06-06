@@ -45,8 +45,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
+            <Button
+                android:id="@+id/iv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="클릭"
+                app:layout_constraintBottom_toTopOf="@+id/irv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/irv"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="#ffffff"
