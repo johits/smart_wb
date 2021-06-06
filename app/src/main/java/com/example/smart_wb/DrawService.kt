@@ -60,11 +60,20 @@ class DrawService : Service() {
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
+        //oreo 이전 이후 플래그값 구별헤야 한다.
+        val LAYOUT_FLAG: Int
+        LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        } else {
+            WindowManager.LayoutParams.TYPE_PHONE
+        }
+
         val params =
             WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+//                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                LAYOUT_FLAG,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,

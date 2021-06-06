@@ -164,7 +164,7 @@ class LockScreenActivity : AppCompatActivity() {
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
             .setAutoCancel(true)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
@@ -177,7 +177,7 @@ class LockScreenActivity : AppCompatActivity() {
 //        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
 //        vibrator.vibrate(vibrationEffect);
 
-        vibrator.vibrate(VibrationEffect.createOneShot(1000, 50))
+//        vibrator.vibrate(VibrationEffect.createOneShot(1000, 50))
 
 
     }
