@@ -99,31 +99,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                     intent.putExtra("settingTime", settingTime.toString())
                     startActivity(intent)
 
-                    val timeStamp = System.currentTimeMillis()
-                    // 현재 시간을 Date 타입으로 변환
-                    val dateType = Date(timeStamp)
-                    // 날짜, 시간을 가져오고 싶은 형태 선언
-                    val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
-                    val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-                    // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
-                    val date = dateFormatDate.format(dateType)
-                    val time = dateFormatTime.format(dateType)
-//                    Log.d(TAG, "현재날짜" + date)
-//                    Log.d(TAG, "현재시간" + time)
-                    //타이머 데이터 인서트
-                    timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
-                    database = timerDbHelper.writableDatabase
-                    //데이터 삽입
-                    timerDbHelper.insert(date, time, settingTime)
-                    //데이터 불러오기
-                    var arr: ArrayList<TimerData> = timerDbHelper.select()
-
-                    for (data in arr) {
-                        Log.d(
-                            TAG,
-                            "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-                        )
-                    }
+                    //설정시간 데이터 삽입
+                    insertSettingTime(settingTime)
                 }
             }
         }
@@ -155,5 +132,33 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val toast = Toast.makeText(mContext, message, Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL)
         toast.show()
+    }
+
+    //설정시간 데이터 삽입
+    fun insertSettingTime(settingTime:Int){
+        val timeStamp = System.currentTimeMillis()
+        // 현재 시간을 Date 타입으로 변환
+        val dateType = Date(timeStamp)
+        // 날짜, 시간을 가져오고 싶은 형태 선언
+        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
+        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+        val date = dateFormatDate.format(dateType)
+        val time = dateFormatTime.format(dateType)
+
+        //타이머 데이터 인서트
+        timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
+        database = timerDbHelper.writableDatabase
+        //데이터 삽입
+        timerDbHelper.insert(date, time, settingTime)
+        //데이터 불러오기
+        var arr: ArrayList<TimerData> = timerDbHelper.select()
+        //데이터 확인용 로그
+        for (data in arr) {
+            Log.d(
+                TAG,
+                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+            )
+        }
     }
 }
