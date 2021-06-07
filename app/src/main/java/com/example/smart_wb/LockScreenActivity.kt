@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.database.sqlite.SQLiteDatabase
 import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
@@ -14,6 +15,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.smart_wb.SQLite.TimerData
+import com.example.smart_wb.SQLite.TimerDbHelper
+import com.example.smart_wb.Shared.TimerSetShared
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
 
@@ -112,12 +116,19 @@ class LockScreenActivity : AppCompatActivity() {
                 val message = msg.data.getString("message")
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
-                if (result) { //스크린타임 성공시 노티활성화
+                if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp()
                     showNotification()
+                    successUpdate()
                 } else {//스크린타임 실패시
 
                 }
+                //쉐어드 데이터 클리어
+                TimerSetShared.clearTimerSet(this)
+                //쉐어드 저장 확인용 로그
+                Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(this)+" " +
+                        "시작시간:"+TimerSetShared.getTime(this)+" " +
+                        "설정시간:"+TimerSetShared.getSettingTime(this))
                 setStopService()
                 finish()
             }
@@ -182,8 +193,6 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
-
-
     //화면 기상
     fun getDisplayWakeUp() {
         try {
@@ -202,6 +211,27 @@ class LockScreenActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
 
+    }
+
+    //성공시 sqlite timer table 에 success 업데이트
+    fun successUpdate(){
+        var date = TimerSetShared.getDate(this)
+        var time = TimerSetShared.getTime(this)
+
+        var timerDbHelper=TimerDbHelper(this, "timerDb.db", null, 1)
+        var database = timerDbHelper.writableDatabase
+
+        //데이터 삽입
+        timerDbHelper.upDate(date, time)
+     //   데이터 불러오기
+        var arr: ArrayList<TimerData> = timerDbHelper.select()
+       // 데이터 확인용 로그
+        for (data in arr) {
+            Log.d(
+                TAG,
+                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+            )
+        }
     }
 }
 
