@@ -65,9 +65,11 @@ class FragmentItem : Fragment() {
             Log.d(TAG, "bt_value:" + bt_value)
             if (bt_value) {
                 irv.visibility = View.VISIBLE
+                arrow.rotation = 270f
                 bt_value = false
             } else if (bt_value == false) {
                 irv.visibility = View.GONE
+                arrow.rotation = 90f
                 bt_value = true
             }
 

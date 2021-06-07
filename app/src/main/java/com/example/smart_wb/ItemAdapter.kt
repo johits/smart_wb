@@ -1,7 +1,9 @@
 package com.example.smart_wb
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +22,19 @@ joker
 
 
 class ItemAdapter(val context: Context, val datas: ArrayList<ItemData>, val itemClick: (ItemData) -> Unit) : RecyclerView.Adapter<ItemAdapter.Holder>() {
-/* (1) Adapter의 파라미터에 람다식 itemClick을 넣는다. */
+
+
+
+    // Item의 클릭 상태를 저장할 array 객체
+    private val selectedItems = SparseBooleanArray()
+
+    // 직전에 클릭됐던 Item의 position
+    private val prePosition = -1
+    
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_item, parent, false)
         return Holder(view, itemClick)
-        /* (4) Holder의 파라미터가 하나 더 추가됐으므로, 이곳에도 추가해준다. */
     }
 
     override fun getItemCount(): Int = datas.size
@@ -61,6 +70,7 @@ class ItemAdapter(val context: Context, val datas: ArrayList<ItemData>, val item
 
 
 
+    //클릭 리스너
     inner class Holder(itemView: View?, itemClick: (ItemData) -> Unit) : RecyclerView.ViewHolder(
         itemView!!
     ) {
@@ -69,6 +79,9 @@ class ItemAdapter(val context: Context, val datas: ArrayList<ItemData>, val item
         val itemItem = itemView?.findViewById<ImageView>(R.id.item)
         val itemPrice = itemView?.findViewById<TextView>(R.id.price)
         val itemLock = itemView?.findViewById<ImageView>(R.id.lock)
+
+        var cv : Boolean = true //click_value -> cv
+        var bpi = arrayListOf<String>()  //backgrond_preview_item -> bpi
 
 
 
@@ -84,7 +97,34 @@ class ItemAdapter(val context: Context, val datas: ArrayList<ItemData>, val item
 
 
             itemname?.text = item.name
-            itemView.setOnClickListener { itemClick(item) }
+
+//            itemProduct?.setOnClickListener {
+//                Log.d(TAG, "상품 눌림 cv값:"+cv)
+//                if(cv) {
+//                    itemProduct.setBackgroundColor(Color.parseColor("#6B000000"))
+//                    cv = false
+//                    Log.d(TAG, "아이템 적용 cv값:"+cv)
+//                }else if(cv==false){
+//                    itemProduct.setBackgroundColor(Color.parseColor("#FFFFFF"))
+//                    cv = true
+//                    Log.d(TAG, "아이템 적용 취소 cv값:"+cv)
+//                }
+//            }
+            itemView.setOnClickListener { itemClick(item)
+                if(cv) {
+                    itemProduct?.setBackgroundColor(Color.parseColor("#6B000000"))
+                    cv = false
+                    if(item.name.equals("b1")||item.name.equals("b2")){
+                        bpi.add(item.name)
+                    }
+
+                    Log.d(TAG, "아이템 적용 cv값:"+cv)
+                }else if(cv==false){
+                    itemProduct?.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    cv = true
+                    Log.d(TAG, "아이템 적용 취소 cv값:"+cv)
+                }
+            }
 
         }
     }
