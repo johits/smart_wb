@@ -12,7 +12,7 @@
        android:orientation="vertical">
 
        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-           android:id="@+id/cv_calendar"
+           android:id="@+id/calendar"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="horizontal"
