@@ -1,9 +1,7 @@
 package com.example.smart_wb
 
-import android.content.Context
 import android.graphics.Color
 import android.util.Log
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,115 +18,91 @@ joker
 아이템 미리보기(아이템 리사이클러뷰) 어댑터
  */
 
-
-class ItemAdapter(val context: Context, val datas: ArrayList<ItemData>, val itemClick: (ItemData) -> Unit) : RecyclerView.Adapter<ItemAdapter.Holder>() {
-
+class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 
-    // Item의 클릭 상태를 저장할 array 객체
-    private val selectedItems = SparseBooleanArray()
-
-    // 직전에 클릭됐던 Item의 position
-    private val prePosition = -1
-    
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_item, parent, false)
-        return Holder(view, itemClick)
+    // (1) 아이템 레이아웃과 결합
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_item, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = datas.size
-
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder?.bind(datas[position], context)
+    // (2) 리스트 내 아이템 개수
+    override fun getItemCount(): Int {
+        return itemList.size
     }
 
-//    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//        private val itemproduct: ConstraintLayout = itemView.findViewById(R.id.product)
-//        private val itemItem: ImageView = itemView.findViewById(R.id.item)
-//        private val itemPrice: TextView = itemView.findViewById(R.id.price)
-//        private val itemLock: ImageView = itemView.findViewById(R.id.lock)
-//
-//        fun bind(item: ItemData) {
-//            itemItem.setImageResource(item.item)
-//            itemPrice.text = item.price.toString()
-//
-//            if (item.lock){ //구매한 아이템일 경우 item.lock = true
-//                itemLock.visibility = View.INVISIBLE
-//                Log.d(TAG, "bind: 받아온 item.lock 값:"+item.lock)
-//            }
-//
-//            itemproduct.setOnClickListener {
-//                Toast.makeText(context,item.name,Toast.LENGTH_SHORT).show()
-//                if(item.name.equals("bg1")){
-//                }
-//            }
-//
-//
-//        }
-//    }
+
+    // (4) 레이아웃 내 View 연결
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val product: ConstraintLayout = itemView.findViewById(R.id.product)
+        val item: ImageView = itemView.findViewById(R.id.item)
+        val name: TextView = itemView.findViewById(R.id.name)
+        val price: TextView = itemView.findViewById(R.id.price)
+        val lock: ImageView = itemView.findViewById(R.id.lock)
 
 
+//        val itemname = itemView?.findViewById<TextView>(R.id.name)
+//        val itemProduct = itemView?.findViewById<ConstraintLayout>(R.id.product)
+//        val itemItem = itemView?.findViewById<ImageView>(R.id.item)
+//        val itemPrice = itemView?.findViewById<TextView>(R.id.price)
+//        val itemLock = itemView?.findViewById<ImageView>(R.id.lock)
 
-    //클릭 리스너
-    inner class Holder(itemView: View?, itemClick: (ItemData) -> Unit) : RecyclerView.ViewHolder(
-        itemView!!
-    ) {
-        val itemname = itemView?.findViewById<TextView>(R.id.name)
-        val itemProduct = itemView?.findViewById<ConstraintLayout>(R.id.product)
-        val itemItem = itemView?.findViewById<ImageView>(R.id.item)
-        val itemPrice = itemView?.findViewById<TextView>(R.id.price)
-        val itemLock = itemView?.findViewById<ImageView>(R.id.lock)
+    }
 
-        var cv : Boolean = true //click_value -> cv
-        var bpi = arrayListOf<String>()  //backgrond_preview_item -> bpi
+    override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
+        // View에 내용 입력
+        holder.name.text = itemList[position].name
+        holder.price.text = itemList[position].price.toString()
+        holder.item.setImageResource(itemList[position].item)
 
-
-
-        fun bind(item: ItemData, context: Context) {
-
-            itemItem?.setImageResource(item.item)
-            itemPrice?.text = item.price.toString()
-
-            if (item.lock){ //구매한 아이템일 경우 item.lock = true
-                itemLock?.visibility = View.INVISIBLE
-                Log.d(TAG, "bind: 받아온 item.lock 값:"+item.lock)
-            }
+        var bg = itemList[position].bg
+        if (itemList[position].lock){ //구매한 아이템일 경우 item.lock = true
+            holder.lock.visibility = View.INVISIBLE
+            Log.d(TAG, "bind: 받아온 item.lock 값:"+itemList[position].lock)
+        }
 
 
-            itemname?.text = item.name
-
-//            itemProduct?.setOnClickListener {
-//                Log.d(TAG, "상품 눌림 cv값:"+cv)
-//                if(cv) {
-//                    itemProduct.setBackgroundColor(Color.parseColor("#6B000000"))
-//                    cv = false
-//                    Log.d(TAG, "아이템 적용 cv값:"+cv)
-//                }else if(cv==false){
-//                    itemProduct.setBackgroundColor(Color.parseColor("#FFFFFF"))
-//                    cv = true
-//                    Log.d(TAG, "아이템 적용 취소 cv값:"+cv)
-//                }
-//            }
-            itemView.setOnClickListener { itemClick(item)
-                if(cv) {
-                    itemProduct?.setBackgroundColor(Color.parseColor("#6B000000"))
-                    cv = false
-                    if(item.name.equals("b1")||item.name.equals("b2")){
-                        bpi.add(item.name)
-                    }
-
-                    Log.d(TAG, "아이템 적용 cv값:"+cv)
-                }else if(cv==false){
-                    itemProduct?.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    cv = true
-                    Log.d(TAG, "아이템 적용 취소 cv값:"+cv)
+        if (bg==false){
+            Log.d(TAG, "bg1:"+bg)
+            holder.product.setBackgroundColor(Color.parseColor("#000000"))
+        }else{
+            Log.d(TAG, "bg2:"+bg)
+            holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+        }
+        holder.product.setOnClickListener {
+            Log.d(TAG, "bg3:"+bg)
+            for (i in 0 until itemList.size){
+                if(i == position){
+                    itemList[i].bg=true
+                    Log.d(TAG, "position1:"+position+"bg1:"+ itemList[i].bg)
+                }else{
+                    itemList[i].bg=false
+                    Log.d(TAG, "position2:"+position+"bg2:"+ itemList[i].bg)
                 }
             }
+            notifyDataSetChanged()
+        }
 
+
+        // (1) 리스트 내 항목 클릭 시 onClick() 호출
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(it, position)
         }
     }
 
+    // (2) 리스너 인터페이스
+    interface OnItemClickListener {
+        fun onClick(v: View, position: Int)
+    }
 
+    // (3) 외부에서 클릭 시 이벤트 설정
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+
+    // (4) setItemClickListener로 설정한 함수 실행
+    private lateinit var itemClickListener: OnItemClickListener
 
 }
+
