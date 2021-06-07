@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.util.*
 
 /**
@@ -74,6 +73,15 @@ class FragmentCalendar : Fragment() {
             binding.calendar.state().edit()
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
+        }
+        //데코레이션 테스트
+        val calList = ArrayList<CalendarDay>()
+        calList.add(CalendarDay.from(2021, 6, 6))
+        calList.add(CalendarDay.from(2021, 6, 7))
+        calList.add(CalendarDay.from(2021, 6, 3))
+        calList.add(CalendarDay.from(2021, 6, 2))
+        for(calDay in calList){
+            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
         }
         return view
     }
