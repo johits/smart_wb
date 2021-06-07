@@ -153,14 +153,14 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         //데이터 삽입
         timerDbHelper.insert(date, time, settingTime)
         //데이터 불러오기
-        //var arr: ArrayList<TimerData> = timerDbHelper.select()
+        var arr: ArrayList<TimerData> = timerDbHelper.select()
         //데이터 확인용 로그
-//        for (data in arr) {
-//            Log.d(
-//                TAG,
-//                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-//            )
-//        }
+        for (data in arr) {
+            Log.d(
+                TAG,
+                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+            )
+        }
         //설정시간 쉐어드에 저장
         TimerSetShared.setDate(mContext,date)
         TimerSetShared.setTime(mContext,time)
