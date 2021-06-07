@@ -53,8 +53,9 @@ object PointItemShared {
     fun getLock(){
         //TODO
     }
+
     //데이터 초기화
-    fun clearTimerSet(context: Context) {
+    fun clearPointItem(context: Context) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         editor.clear()

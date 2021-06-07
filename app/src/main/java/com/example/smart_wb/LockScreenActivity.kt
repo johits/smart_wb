@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
+import com.example.smart_wb.Shared.PointItemShared
 import com.example.smart_wb.Shared.TimerSetShared
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
@@ -217,6 +218,8 @@ class LockScreenActivity : AppCompatActivity() {
     fun successUpdate(){
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
+        var settingTime = TimerSetShared.getSettingTime(this)
+        var flower = settingTime/600 //꽃 갯수 10분당 1개 받는다.
 
         var timerDbHelper=TimerDbHelper(this, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
@@ -232,6 +235,11 @@ class LockScreenActivity : AppCompatActivity() {
                 "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
             )
         }
+
+        //받은 꽃 쉐어드에 더한다.
+        PointItemShared.sumFlower(this, flower)
+
+        Log.d(TAG, "현재 꽃 갯수"+PointItemShared.getFlower(this))
     }
 }
 
