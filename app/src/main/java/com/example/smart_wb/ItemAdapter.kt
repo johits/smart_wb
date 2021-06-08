@@ -38,6 +38,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val product: ConstraintLayout = itemView.findViewById(R.id.product)
         val item: ImageView = itemView.findViewById(R.id.item)
+        val pointIcon: ImageView = itemView.findViewById(R.id.pointIcon)
         val name: TextView = itemView.findViewById(R.id.name)
         val price: TextView = itemView.findViewById(R.id.price)
         val lock: ImageView = itemView.findViewById(R.id.lock)
@@ -58,13 +59,25 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         holder.price.text = itemList[position].price.toString()
         holder.item.setImageResource(itemList[position].item)
 
+        if(itemList[position].name.equals("reset")){
+            holder.price.visibility = View.INVISIBLE
+            holder.pointIcon.visibility = View.INVISIBLE
+        }
+
         var bg = itemList[position].bg
         var timer = itemList[position].timer
         var type = itemList[position].type
+        var lock = itemList[position].lock
 
-        if (itemList[position].lock){ //구매한 아이템일 경우 item.lock = true
+        Log.d(TAG, "락값:"+lock)
+
+
+
+        if (lock){ //구매한 아이템일 경우 item.lock = true
             holder.lock.visibility = View.INVISIBLE
             Log.d(TAG, "bind: 받아온 item.lock 값:"+itemList[position].lock)
+        }else{
+            holder.lock.visibility = View.VISIBLE
         }
 
 
@@ -85,10 +98,12 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             if(type.equals("bg")) {
                 //선택 하나만 되게
                 for (i in 0 until itemList.size) {
-                    if (i == position) {
-                        itemList[i].bg = true
-                    } else {
-                        itemList[i].bg = false
+                    for (i in 0 until itemList.size) {
+                        if (i == position) {
+                            itemList[i].bg = true
+                        } else {
+                            itemList[i].bg = false
+                        }
                     }
                 }
             }else if(type.equals("timer")){
@@ -112,6 +127,12 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             Log.d(TAG, "onBindViewHolder: 리스너 작동")
             itemClickListener.onClick(it, position)
 
+            if(type.equals("reset")){
+                for (i in 0 until itemList.size) {
+                        itemList[i].bg = false
+                        itemList[i].timer = false
+                }
+            }
             if(type.equals("bg")) {
                 //선택 하나만 되게
                 for (i in 0 until itemList.size) {

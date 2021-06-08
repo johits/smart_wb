@@ -37,6 +37,7 @@ class FragmentItem : Fragment() {
 //    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
     var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -98,7 +99,7 @@ class FragmentItem : Fragment() {
 
         //구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
         irv.addItemDecoration(DividerItemDecoration(requireContext(), 0))
-
+        itemData.add(ItemData(name = "reset", item = R.drawable.reset, price = 0, lock = true, type = "reset"))
         itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false, type = "bg"))
         itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true, type = "bg"))
         itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false, type = "timer"))
@@ -118,15 +119,21 @@ class FragmentItem : Fragment() {
 
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
+                Log.d(TAG, "onClick리스너: "+itemData[position].name)
                 // 클릭 시 이벤트 작성
 //                Toast.makeText(view?.context,
 //                    "${itemData[position].name}\n${itemData[position].number}",
 //                    Toast.LENGTH_SHORT).show()
+                if(itemData[position].name.equals("reset")){
+                    i_back.setImageResource(0)
+                    i_timer.setImageResource(0)
+                }
                 if(itemData[position].name.equals("bg1")){
                 i_back.setImageResource(R.drawable.bg1)
             }else if(itemData[position].name.equals("bg2")){
                 i_back.setImageResource(R.drawable.bg2)
             }
+
             if(itemData[position].name.equals("timer1")){
                 i_timer.setImageResource(R.drawable.timer1)
             }else if(itemData[position].name.equals("timer2")){
