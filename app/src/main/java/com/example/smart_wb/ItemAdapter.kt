@@ -44,13 +44,6 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         val lock: ImageView = itemView.findViewById(R.id.lock)
 
 
-
-//        val itemname = itemView?.findViewById<TextView>(R.id.name)
-//        val itemProduct = itemView?.findViewById<ConstraintLayout>(R.id.product)
-//        val itemItem = itemView?.findViewById<ImageView>(R.id.item)
-//        val itemPrice = itemView?.findViewById<TextView>(R.id.price)
-//        val itemLock = itemView?.findViewById<ImageView>(R.id.lock)
-
     }
 
     override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
