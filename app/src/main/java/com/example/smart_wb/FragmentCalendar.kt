@@ -67,7 +67,7 @@ class FragmentCalendar : Fragment() {
 
 
 
-        binding.calendar.setHeaderTextAppearance(getCurrentDay())
+//        binding.calendar.setHeaderTextAppearance(getCurrentDay())
 //        binding.calendar.state().edit()
 //            .setMaximumDate(
 //                CalendarDay.from(
@@ -98,11 +98,10 @@ class FragmentCalendar : Fragment() {
             }
             val result:String = year+"-"+month+"-"+day
             dataList.clear()
-            Log.d(TAG, "데이터리스트 사이즈"+dataList.size)
             dataList=selectDate(result)
-            Log.d(TAG, "데이터리스트 사이즈"+dataList.size)
             calendarAdapter.replaceList(dataList)
             binding.linear.visibility=View.VISIBLE
+            calculateSum()
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
@@ -112,24 +111,6 @@ class FragmentCalendar : Fragment() {
                 .commit()
             binding.linear.visibility=View.GONE
         }
-        //데코레이션 테스트
-//        val calList = ArrayList<CalendarDay>()
-//        calList.add(CalendarDay.from(2021, 5, 6))
-//        calList.add(CalendarDay.from(2021, 5, 3))
-//        calList.add(CalendarDay.from(2021, 5, 7))
-//        calList.add(CalendarDay.from(2021, 5, 15))
-//        calList.add(CalendarDay.from(2021, 5, 12))
-//        calList.add(CalendarDay.from(2021, 5, 29))
-//        calList.add(CalendarDay.from(2021, 5, 28))
-//        calList.add(CalendarDay.from(2021, 5, 22))
-//        calList.add(CalendarDay.from(2021, 5, 21))
-//
-//        for (calDay in calList) {
-//            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
-//        }
-
-//        screenTimeData()
-
 
         return view
     }
@@ -213,7 +194,7 @@ class FragmentCalendar : Fragment() {
 
     }
 
-    //날짜 클릭시 데이터 가져오기//어댑터 초기화
+    //날짜 클릭시 데이터 가져오기
     fun selectDate(date:String):MutableList<TimerData>{
         Log.d(TAG, "selectDate: ")
         dataList.clear()
@@ -221,14 +202,22 @@ class FragmentCalendar : Fragment() {
         var database = timerDbHelper.writableDatabase
 
         var arr:MutableList<TimerData> = timerDbHelper.select(date)
-        //데이터 확인용 로그
-//        for(data in arr){
-//            Log.d(
-//                TAG,
-//                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-//            )
-//        }
+        val settingTimeSum:String
         return arr;
     }
 
+    //총도전시간,성공시간,꽃 계산기
+    fun calculateSum(){
+        var settingTimeSum=0
+        var successTimeSum=0
+        var flowerSum=0
+        for(data in dataList){
+            settingTimeSum+=data.settingTime
+            if(data.success==1){
+                successTimeSum+=data.settingTime
+                flowerSum+=data.flower
+            }
+        }
+        Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
+    }
 }

@@ -29,6 +29,62 @@
             android:orientation="vertical"
             android:visibility="gone">
 
+            <TableLayout
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:stretchColumns="*">>
+
+                <TableRow
+                    android:background="@drawable/edge_white">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="도전시간 합" />
+                    <TextView
+                        android:id="@+id/tvSettingTimeSum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="20:00" />
+                </TableRow>
+                <TableRow
+                    android:background="@drawable/edge_white">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="성공시간 합" />
+                    <TextView
+                        android:id="@+id/tvSuccessTimeSum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="10:00" />
+                </TableRow>
+                <TableRow
+                    android:background="@drawable/edge_white">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="획득한꽃 합 " />
+                    <TextView
+                        android:id="@+id/tvFlowerSum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="0" />
+                </TableRow>
+            </TableLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
