@@ -22,7 +22,7 @@ class TimerDbHelper
                 "date TEXT," +
                 "time TEXT," +
                 "settingTime INTEGER," +
-                "success INTEGER DEFAULT 0" +
+                "success INTEGER DEFAULT 0," +
                 "flower INTEGER DEFAULT 0);";
 
         db.execSQL(sql)
