@@ -1,5 +1,6 @@
 package com.example.smart_wb
 
+import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ joker
 아이템 미리보기(아이템 리사이클러뷰) 어댑터
  */
 
-class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 
     // (1) 아이템 레이아웃과 결합
@@ -58,36 +59,52 @@ class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemA
         holder.item.setImageResource(itemList[position].item)
 
         var bg = itemList[position].bg
+        var timer = itemList[position].timer
+        var type = itemList[position].type
+
         if (itemList[position].lock){ //구매한 아이템일 경우 item.lock = true
             holder.lock.visibility = View.INVISIBLE
             Log.d(TAG, "bind: 받아온 item.lock 값:"+itemList[position].lock)
         }
 
 
-        if (bg){
-            Log.d(TAG, "bg1:"+bg)
+        if (bg||timer){
+            Log.d(TAG, "bg1:"+bg+"timer1"+timer)
             holder.product.setBackgroundColor(Color.parseColor("#81000000"))
         }else{
-            Log.d(TAG, "bg2:"+bg)
+            Log.d(TAG, "bg2:"+bg+"timer2"+timer)
             holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
         }
 
-        holder.lock.setOnClickListener{
-            Log.d(TAG, "구매하기")
+        holder.lock.setOnClickListener {
+            Log.d(TAG, "구매하기"+position+"아이템 이름"+itemList[position].item)
             itemClickListener.onClick(it, position)
+            val dialog = PayDialog(context)
+            dialog.myDig(itemList[position].item, itemList[position].price.toString())
 
-            //선택 하나만 되게
-            for (i in 0 until itemList.size){
-                if(i == position){
-                    itemList[i].bg=true
-                    Log.d(TAG, "position1:"+position+"bg1:"+ itemList[i].bg)
-                }else{
-                    itemList[i].bg=false
-                    Log.d(TAG, "position2:"+position+"bg2:"+ itemList[i].bg)
+            if(type.equals("bg")) {
+                //선택 하나만 되게
+                for (i in 0 until itemList.size) {
+                    if (i == position) {
+                        itemList[i].bg = true
+                    } else {
+                        itemList[i].bg = false
+                    }
+                }
+            }else if(type.equals("timer")){
+                for (i in 0 until itemList.size) {
+                    if (i == position) {
+                        itemList[i].timer = true
+                    } else {
+                        itemList[i].timer = false
+                    }
                 }
             }
             notifyDataSetChanged()
+
         }
+
+
 
 
         // (1) 리스트 내 항목 클릭 시 onClick() 호출
@@ -95,15 +112,22 @@ class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemA
             Log.d(TAG, "onBindViewHolder: 리스너 작동")
             itemClickListener.onClick(it, position)
 
-
-            //선택 하나만 되게
-            for (i in 0 until itemList.size){
-                if(i == position){
-                    itemList[i].bg=true
-                    Log.d(TAG, "position1:"+position+"bg1:"+ itemList[i].bg)
-                }else{
-                    itemList[i].bg=false
-                    Log.d(TAG, "position2:"+position+"bg2:"+ itemList[i].bg)
+            if(type.equals("bg")) {
+                //선택 하나만 되게
+                for (i in 0 until itemList.size) {
+                    if (i == position) {
+                        itemList[i].bg = true
+                    } else {
+                        itemList[i].bg = false
+                    }
+                }
+            }else if(type.equals("timer")){
+                for (i in 0 until itemList.size) {
+                    if (i == position) {
+                        itemList[i].timer = true
+                    } else {
+                        itemList[i].timer = false
+                    }
                 }
             }
             notifyDataSetChanged()

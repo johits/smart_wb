@@ -5,5 +5,7 @@ data class ItemData(
     val name : String,
     val price : Int,
     val lock : Boolean,
-    var bg : Boolean = false
+    val type : String,
+    var bg : Boolean = false,
+    var timer : Boolean = false
 )

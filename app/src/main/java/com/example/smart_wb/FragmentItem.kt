@@ -1,5 +1,6 @@
 package com.example.smart_wb
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,10 +30,11 @@ class FragmentItem : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var iContext: Context
 
     //아이템 어댑터 및 데이터 연결
     val itemData= arrayListOf<ItemData>()      // 아이템 배열
-    val itemAdapter = ItemAdapter(itemData)     // 어댑터
+//    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
     var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +48,12 @@ class FragmentItem : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            iContext = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,10 +99,10 @@ class FragmentItem : Fragment() {
         //구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
         irv.addItemDecoration(DividerItemDecoration(requireContext(), 0))
 
-        itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false))
-        itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true))
-        itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false))
-        itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true))
+        itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false, type = "bg"))
+        itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true, type = "bg"))
+        itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false, type = "timer"))
+        itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true, type = "timer"))
         
 //        var itemData = arrayListOf<ItemData>(
 //
@@ -106,7 +114,7 @@ class FragmentItem : Fragment() {
 //        )
 
      //Itemadapter 클릭 리스너
-
+        val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
 
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
