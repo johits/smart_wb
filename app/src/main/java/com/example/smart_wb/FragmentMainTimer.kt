@@ -158,7 +158,9 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         for (data in arr) {
             Log.d(
                 TAG,
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+                "id:" + data.id + " date:" + data.date + " " +
+                        "time:" + data.time + " settingTime:" + data.settingTime + "" +
+                        " success:" + data.success+" flower:"+data.flower
             )
         }
         //설정시간 쉐어드에 저장

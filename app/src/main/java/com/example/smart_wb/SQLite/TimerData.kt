@@ -7,5 +7,6 @@ data class TimerData(
     val date:String,
     val time:String,
     val settingTime:Int,//설정시간
-    val success:Int //sqlite boolean 사용x. 성공 1, 실패 0. default 0
+    val success:Int, //sqlite boolean 사용x. 성공 1, 실패 0. default 0
+    val flower:Int //받은 꽃 갯수
 )

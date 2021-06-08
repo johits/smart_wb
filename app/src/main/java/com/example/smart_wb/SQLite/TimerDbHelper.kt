@@ -22,7 +22,8 @@ class TimerDbHelper
                 "date TEXT," +
                 "time TEXT," +
                 "settingTime INTEGER," +
-                "success INTEGER DEFAULT 0);";
+                "success INTEGER DEFAULT 0" +
+                "flower INTEGER DEFAULT 0);";
 
         db.execSQL(sql)
     }
@@ -34,18 +35,18 @@ class TimerDbHelper
         onCreate(db)
     }
 
-    //스크린타임 성공시 success=1 로 업데이트
-    fun upDate(date: String, time: String) {
-        var db: SQLiteDatabase = writableDatabase
-        var sql = "UPDATE timer SET success=1 WHERE date='${date}' and time='${time}';"
+    //스크린타임 성공시 success=1 로 업데이트, 받은꽃 갯수 추가
+    fun upDate(date: String, time: String, flower:Int) {
+        val db: SQLiteDatabase = writableDatabase
+        val sql = "UPDATE timer SET success=1, flower=${flower} WHERE date='${date}' and time='${time}';"
         db.execSQL(sql)
         db.close()
     }
 
     //스크린타임 시작시 데이터 인서트
     fun insert(date: String, time: String, settingTime: Int) {
-        var db: SQLiteDatabase = writableDatabase
-        var sql =
+        val db: SQLiteDatabase = writableDatabase
+        val sql =
             "INSERT INTO timer(date, time, settingTime) VALUES('${date}', '${time}', ${settingTime});"
         db.execSQL(sql)
         db.close()
@@ -53,16 +54,16 @@ class TimerDbHelper
 
     //데이터 삭제 사용할 일 없음?
     fun delete(date: String, time: String) {
-        var db: SQLiteDatabase = writableDatabase
-        var sql = "DELETE FROM timer WHERE date='${date}' and time='${time}';"
+        val db: SQLiteDatabase = writableDatabase
+        val sql = "DELETE FROM timer WHERE date='${date}' and time='${time}';"
         db.execSQL(sql)
         db.close()
     }
 
     //셀렉트 데이터 불러오기
     fun select(): ArrayList<TimerData> {
-        var result = arrayListOf<TimerData>()
-        var db: SQLiteDatabase = writableDatabase
+        val result = arrayListOf<TimerData>()
+        val db: SQLiteDatabase = writableDatabase
 
         var cursor: Cursor = db.rawQuery("SELECT * FROM timer", null)
         while (cursor.moveToNext()) {
@@ -71,8 +72,8 @@ class TimerDbHelper
             val time: String = cursor.getString(2)
             val settingTime: Int = cursor.getInt(3)
             val success: Int = cursor.getInt(4)
-
-            var data: TimerData = TimerData(id, date, time, settingTime, success)
+            val flower:Int =cursor.getInt(5)
+            var data: TimerData = TimerData(id, date, time, settingTime, success, flower)
             result?.add(data)
         }
         db.close()

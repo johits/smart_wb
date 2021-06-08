@@ -225,15 +225,16 @@ class LockScreenActivity : AppCompatActivity() {
         var database = timerDbHelper.writableDatabase
 
         //데이터 삽입
-        timerDbHelper.upDate(date, time)
+        timerDbHelper.upDate(date, time, flower)
      //   데이터 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()
        // 데이터 확인용 로그
         for (data in arr) {
             Log.d(
                 TAG,
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-            )
+                "id:" + data.id + " date:" + data.date + " " +
+                        "time:" + data.time + " settingTime:" + data.settingTime + " " +
+                        "success:" + data.success+" flower:"+ data.flower)
         }
 
         //받은 꽃 쉐어드에 더한다.
