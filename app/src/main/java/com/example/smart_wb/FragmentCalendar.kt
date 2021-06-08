@@ -72,15 +72,22 @@ class FragmentCalendar : Fragment() {
             Toast.makeText(mContext, date.toString(), Toast.LENGTH_SHORT).show()
             Log.d(TAG, " 날짜-" + date + " 셀렉트-" + selected)
             val year:String = date.year.toString()
-            val month:String = date.month.toString()
-            val day:String = date.day.toString()
+            val month:String
+            val day:String
+            if(date.month<10){
+                month="0"+date.month
+            }else{
+                month=date.month.toString()
+            }
+            if(date.day<10){
+                day="0"+date.day
+            }else{
+                day=date.day.toString()
+            }
             val result:String = year+"-"+month+"-"+day
             binding.tvTest.text=result
-//            screenTimeData()
-//            //보여지는 모드 변경 주
-//            binding.calendar.state().edit()
-//                .setCalendarDisplayMode(CalendarMode.WEEKS)
-//                .commit()
+
+            selectDate(result)
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
@@ -140,9 +147,7 @@ class FragmentCalendar : Fragment() {
 
         var timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
-//
-////        //데이터 삽입
-////        timerDbHelper.upDate(date, time)
+
         //   데이터 불러오기
         timerDataList = timerDbHelper.select()
 //
@@ -172,6 +177,22 @@ class FragmentCalendar : Fragment() {
             binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
         }
 
+    }
+
+    //날짜 클릭시 데이터 가져오기
+    fun selectDate(date:String){
+        Log.d(TAG, "selectDate: ")
+        val timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
+        var database = timerDbHelper.writableDatabase
+
+        val arr = timerDbHelper.select(date)
+
+        for(data in arr){
+            Log.d(
+                TAG,
+                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+            )
+        }
     }
 
 }
