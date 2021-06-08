@@ -1,12 +1,15 @@
 package com.example.smart_wb
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smart_wb.LockScreenActivity.Companion.TAG
 import kotlinx.android.synthetic.main.fragment_item.*
 
 
@@ -27,21 +30,31 @@ class FragmentItem : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var iContext: Context
+
     //아이템 어댑터 및 데이터 연결
-    lateinit var itemAdapter: ItemAdapter
-    val datas = mutableListOf<ItemData>()
+    val itemData= arrayListOf<ItemData>()      // 아이템 배열
+//    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
+    var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+            
 
         }
     }
 
-
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            iContext = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,50 +62,93 @@ class FragmentItem : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_item, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
+
+        Log.d(TAG, "bt_value:" + bt_value)
+
+        iv.setOnClickListener {
+            Log.d(TAG, "bt_value:" + bt_value)
+            if (bt_value) {
+                irv.visibility = View.VISIBLE
+                arrow.rotation = 270f
+                bt_value = false
+            } else if (bt_value == false) {
+                irv.visibility = View.GONE
+                arrow.rotation = 90f
+                bt_value = true
+            }
+
+        }
+
     }
+
 
     private fun initRecycler() {
 
         val layoutManager = LinearLayoutManager(requireContext())
         irv.setLayoutManager(layoutManager)
         irv.layoutManager =
-            LinearLayoutManager(requireContext()).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            LinearLayoutManager(requireContext()).also {
+                it.orientation = LinearLayoutManager.HORIZONTAL
+            }
 
         //구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
         irv.addItemDecoration(DividerItemDecoration(requireContext(), 0))
+        itemData.add(ItemData(name = "reset", item = R.drawable.reset, price = 0, lock = true, type = "reset"))
+        itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false, type = "bg"))
+        itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true, type = "bg"))
+        itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false, type = "timer"))
+        itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true, type = "timer"))
+        
+//        var itemData = arrayListOf<ItemData>(
+//
+//            //임시 아이템(더미데이터)
+//            ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false),
+//            ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true),
+//            ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false),
+//            ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true)
+//        )
 
-        itemAdapter = ItemAdapter(requireContext())
+     //Itemadapter 클릭 리스너
+        val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
+
+        itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
+            override fun onClick(v: View, position: Int) {
+                Log.d(TAG, "onClick리스너: "+itemData[position].name)
+                // 클릭 시 이벤트 작성
+//                Toast.makeText(view?.context,
+//                    "${itemData[position].name}\n${itemData[position].number}",
+//                    Toast.LENGTH_SHORT).show()
+                if(itemData[position].name.equals("reset")){
+                    i_back.setImageResource(0)
+                    i_timer.setImageResource(0)
+                }
+                if(itemData[position].name.equals("bg1")){
+                i_back.setImageResource(R.drawable.bg1)
+            }else if(itemData[position].name.equals("bg2")){
+                i_back.setImageResource(R.drawable.bg2)
+            }
+
+            if(itemData[position].name.equals("timer1")){
+                i_timer.setImageResource(R.drawable.timer1)
+            }else if(itemData[position].name.equals("timer2")){
+                i_timer.setImageResource(R.drawable.timer2)
+            }
+            }
+        })
+
+
         irv.adapter = itemAdapter
+        itemAdapter.notifyDataSetChanged()
 
 
-        datas.apply {
-
-            //임시 아이템(더미데이터)
-            add(ItemData(item = R.drawable.alarm, price = 100, lock = false))
-            add(ItemData(item = R.drawable.calendar, price = 200, lock = true))
-            add(ItemData(item = R.drawable.flower, price = 300, lock = false))
-            add(ItemData(item = R.drawable.chart, price = 400, lock = true))
-
-            itemAdapter.datas = datas
-            itemAdapter.notifyDataSetChanged()
-
-        }
     }
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentItem.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             FragmentItem().apply {

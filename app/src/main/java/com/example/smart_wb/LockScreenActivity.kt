@@ -176,7 +176,7 @@ class LockScreenActivity : AppCompatActivity() {
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
             .setAutoCancel(true)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
@@ -193,6 +193,8 @@ class LockScreenActivity : AppCompatActivity() {
 
 
     }
+
+
 
     //화면 기상
     fun getDisplayWakeUp() {

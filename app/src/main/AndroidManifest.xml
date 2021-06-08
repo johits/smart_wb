@@ -39,6 +39,7 @@
         </activity>
 
         <service android:name=".DrawService" />
+        <!-- 부팅 이벤트 받기-->
         <receiver android:name=".Restart" android:exported="false" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
