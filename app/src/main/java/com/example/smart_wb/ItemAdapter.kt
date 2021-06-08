@@ -19,7 +19,7 @@ joker
 아이템 미리보기(아이템 리사이클러뷰) 어댑터
  */
 
-class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData>, var flower:Int): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 
     // (1) 아이템 레이아웃과 결합
@@ -50,12 +50,10 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         // View에 내용 입력
         holder.name.text = itemList[position].name
         holder.price.text = itemList[position].price.toString()
+        Log.d(TAG, "가격세팅:"+itemList[position].price.toString())
         holder.item.setImageResource(itemList[position].item)
 
-        if(itemList[position].name.equals("reset")){
-            holder.price.visibility = View.INVISIBLE
-            holder.pointIcon.visibility = View.INVISIBLE
-        }
+
 
         var bg = itemList[position].bg
         var timer = itemList[position].timer
@@ -64,7 +62,13 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
         Log.d(TAG, "락값:"+lock)
 
-
+        if(itemList[position].name.equals("reset")){
+            holder.price.visibility = View.INVISIBLE
+            holder.pointIcon.visibility = View.INVISIBLE
+        }else{
+            holder.price.visibility = View.VISIBLE
+            holder.pointIcon.visibility = View.VISIBLE
+        }
 
         if (lock){ //구매한 아이템일 경우 item.lock = true
             holder.lock.visibility = View.INVISIBLE
@@ -85,9 +89,24 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         holder.lock.setOnClickListener {
             Log.d(TAG, "구매하기"+position+"아이템 이름"+itemList[position].item)
             itemClickListener.onClick(it, position)
+            //테스트
             val dialog = PayDialog(context)
-            dialog.myDig(itemList[position].item, itemList[position].price.toString())
+                dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
 
+//            //실제코드
+//            if(flower>=itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
+//                val dialog = PayDialog(context)
+//                dialog.myDig(itemList[position].item, itemList[position].price, flower, context)
+//            }else{ //꽃송이가 부족할 경우
+//                val builder = AlertDialog.Builder(context)
+//                builder.setMessage("꽃송이가 부족합니다.")
+//                builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
+//
+//                }
+//                builder.setCancelable(false) //뒷배경 터치 막기
+//                builder.show()
+//
+//            }
             if(type.equals("bg")) {
                 //선택 하나만 되게
                 for (i in 0 until itemList.size) {

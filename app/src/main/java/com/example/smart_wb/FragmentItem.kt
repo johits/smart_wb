@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.LockScreenActivity.Companion.TAG
+import com.example.smart_wb.Shared.PointItemShared
 import kotlinx.android.synthetic.main.fragment_item.*
 
 
@@ -25,6 +26,7 @@ joker
 아이템 리사이클러뷰 연결
 */
 
+@Suppress("UNREACHABLE_CODE")
 class FragmentItem : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -36,7 +38,8 @@ class FragmentItem : Fragment() {
     val itemData= arrayListOf<ItemData>()      // 아이템 배열
 //    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
     var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
-
+    var flower : Int = 0 //쉐어드 꽃 담을 변수
+    var locker : String ?= null //쉐어드 보관함 담을 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,7 @@ class FragmentItem : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-            
+
 
         }
     }
@@ -68,6 +71,13 @@ class FragmentItem : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
+
+        flower = PointItemShared.getFlower(iContext)
+        point.text = flower.toString()
+        locker = PointItemShared.getLocker(iContext)
+        Log.d(TAG, "쉐어드에서 가져온 꽃:"+flower)
+        Log.d(TAG, "쉐어드에서 가져온 보관함:"+locker)
+
 
         Log.d(TAG, "bt_value:" + bt_value)
 
@@ -104,18 +114,11 @@ class FragmentItem : Fragment() {
         itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true, type = "bg"))
         itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false, type = "timer"))
         itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true, type = "timer"))
-        
-//        var itemData = arrayListOf<ItemData>(
-//
-//            //임시 아이템(더미데이터)
-//            ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false),
-//            ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true),
-//            ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false),
-//            ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true)
-//        )
+
+
 
      //Itemadapter 클릭 리스너
-        val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
+        val itemAdapter = ItemAdapter(iContext,itemData,flower)     // 어댑터
 
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
