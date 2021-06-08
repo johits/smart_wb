@@ -1,4 +1,4 @@
-package com.example.smart_wb
+    package com.example.smart_wb
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
+import com.example.smart_wb.Shared.TimerSetShared
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
 import java.text.SimpleDateFormat
@@ -134,7 +135,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         toast.show()
     }
 
-    //설정시간 데이터 삽입
+    //설정시간 sqlite 에 데이터 삽입&쉐어드 저장
     fun insertSettingTime(settingTime:Int){
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
@@ -157,8 +158,18 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         for (data in arr) {
             Log.d(
                 TAG,
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+                "id:" + data.id + " date:" + data.date + " " +
+                        "time:" + data.time + " settingTime:" + data.settingTime + "" +
+                        " success:" + data.success+" flower:"+data.flower
             )
         }
+        //설정시간 쉐어드에 저장
+        TimerSetShared.setDate(mContext,date)
+        TimerSetShared.setTime(mContext,time)
+        TimerSetShared.setSettingTime(mContext,settingTime)
+        //쉐어드 저장 확인용 로그
+        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
+                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
+                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
     }
 }
