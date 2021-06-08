@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10">
+
+    <TextView
+        android:id="@+id/tvStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:00"
+        android:textSize="18sp"
+        android:gravity="left"
+        android:layout_weight="2"/>
+    <TextView
+        android:id="@+id/tvSettingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="23:59:59"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:gravity="left"
+        android:layout_weight="3.5"/>
+    <TextView
+        android:id="@+id/tvSuccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="성공"
+        android:textSize="18sp"
+        android:gravity="left"
+        android:layout_weight="2"/>
+    <TextView
+        android:id="@+id/tvFlower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_weight="2.5"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
