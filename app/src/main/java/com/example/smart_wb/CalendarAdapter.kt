@@ -14,39 +14,41 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_wb.SQLite.TimerData
 
-class CalendarAdapter (private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>(){
+class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
+    var dataList = mutableListOf<TimerData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarAdapter.ViewHolder {
-        TODO("Not yet implemented")
+            val view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false)
+            return ViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: CalendarAdapter.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind(dataList[position])
     }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
-    class ViewHolder(view:View):RecyclerView.ViewHolder(view) {
-        private val tvStartTime : TextView = itemView.findViewById(R.id.tvStartTime)
-        private val tvSettingTime : TextView = itemView.findViewById(R.id.tvSettingTime)
-        private val tvSuccess : TextView = itemView.findViewById(R.id.tvSuccess)
-        private val tvFlower : TextView = itemView.findViewById(R.id.tvFlower)
+    override fun getItemCount(): Int = dataList.size
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val tvStartTime: TextView = itemView.findViewById(R.id.tvStartTime)
+        private val tvSettingTime: TextView = itemView.findViewById(R.id.tvSettingTime)
+        private val tvSuccess: TextView = itemView.findViewById(R.id.tvSuccess)
+        private val tvFlower: TextView = itemView.findViewById(R.id.tvFlower)
 
         @SuppressLint("ResourceAsColor")
         @RequiresApi(Build.VERSION_CODES.N)
-        fun bind(item: TimerData){
+        fun bind(item: TimerData) {
             //성공 0->실패, 1->성공
-            if(item.success==0){
+            if (item.success == 0) {
                 tvSuccess.setText(R.string.calendar_time_fail)
                 tvSuccess.setTextColor(R.color.colorBlue)
-            }else{
+            } else {
                 tvSuccess.setText(R.string.calendar_time_success)
                 tvSuccess.setTextColor(R.color.colorRed)
             }
-            tvStartTime.text=item.time
-            tvSettingTime.text= changeTime(item.settingTime)
-            tvFlower.text=item.flower.toString()
+            tvStartTime.text = item.time
+            tvSettingTime.text = changeTime(item.settingTime)
+            tvFlower.text = item.flower.toString()
         }
 
         //설정시간은 초 -> HH:mm:ss 로 변환
@@ -65,32 +67,5 @@ class CalendarAdapter (private val context: Context) : RecyclerView.Adapter<Cale
         }
     }
 
-
-//        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//
-//            private val txtName: TextView = itemView.findViewById(R.id.tv_rv_name)
-//            private val txtAge: TextView = itemView.findViewById(R.id.tv_rv_age)
-//            private val imgProfile: ImageView = itemView.findViewById(R.id.img_rv_photo)
-//
-//            fun bind(item: ProfileData) {
-//                txtName.text = item.name
-//                txtAge.text = item.age.toString()
-////            Glide.with(itemView).load(item.img).into(imgProfile)
-//
-//            }
-//    (private val context: Context) : RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
-//
-//        var datas = mutableListOf<ProfileData>()
-//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//            val view = LayoutInflater.from(context).inflate(R.layout.item_recycler_ex,parent,false)
-//            return ViewHolder(view)
-//        }
-//
-//        override fun getItemCount(): Int = datas.size
-//
-//        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//            Log.d("tag","onBindViewHolder")
-//            holder.bind(datas[position])
-//        }
-//
 }
+
