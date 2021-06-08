@@ -74,6 +74,7 @@ class FragmentCalendar : Fragment() {
             val year:String = date.year.toString()
             val month:String
             val day:String
+            //ex String 06 과 6 은 다르다
             if(date.month<10){
                 month="0"+date.month
             }else{
@@ -186,7 +187,7 @@ class FragmentCalendar : Fragment() {
         var database = timerDbHelper.writableDatabase
 
         val arr = timerDbHelper.select(date)
-
+        //데이터 확인용 로그
         for(data in arr){
             Log.d(
                 TAG,

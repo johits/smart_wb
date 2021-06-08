@@ -160,30 +160,10 @@ class DrawService : Service() {
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
         val sec = Math.floorMod(setTime, 3600) % 60
-//        result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
         if (hour > 0) {
-            if (min < 10 && sec < 10) {
-                result = "${hour}:0${min}:0${sec}"
-            } else if (min < 10 && sec > 10) {
-                result = "${hour}:0${min}:${sec}"
-            } else if (min > 10 && sec < 10) {
-                result = "${hour}:${min}:0${sec}"
-            } else {
-                result = "${hour}:${min}:${sec}"
-            }
+            result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
         } else {
-//            Log.d("tag", "시간0")
-            if (min < 10 && sec < 10) {
-                result = "0${min}:0${sec}"
-            }else if(min < 10 && sec ==10){
-                result = "0${min}:${sec}"
-            } else if (min < 10 && sec > 10) {
-                result = "0${min}:${sec}"
-            } else if (min > 10 && sec < 10) {
-                result = "${min}:0${sec}"
-            } else {
-                result = "${min}:${sec}"
-            }
+          result="%1$02d:%2$02d".format(min,sec)
         }
         return result
     }
