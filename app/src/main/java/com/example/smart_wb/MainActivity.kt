@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         Log.d(TAG, "onCreate: 메인으로넘어옴")
         binding = ActivityMainBinding.inflate(layoutInflater)
 //        var start = findViewById(R.id.start) as Button
@@ -53,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                 1
             )
         }
+
 
     }
         private fun configureBottomNavigation(){

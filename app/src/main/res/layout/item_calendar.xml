@@ -2,15 +2,17 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:layout_marginTop="4dp">
 
     <TextView
         android:id="@+id/tvStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12:00"
+        android:maxLength="5"
         android:textSize="18sp"
-        android:gravity="left"
+        android:gravity="center"
         android:layout_weight="2"/>
     <TextView
         android:id="@+id/tvSettingTime"
@@ -19,7 +21,7 @@
         android:text="23:59:59"
         android:textSize="18sp"
         android:layout_marginLeft="10dp"
-        android:gravity="left"
+        android:gravity="center"
         android:layout_weight="3.5"/>
     <TextView
         android:id="@+id/tvSuccess"
@@ -27,7 +29,7 @@
         android:layout_height="wrap_content"
         android:text="성공"
         android:textSize="18sp"
-        android:gravity="left"
+        android:gravity="center"
         android:layout_weight="2"/>
     <TextView
         android:id="@+id/tvFlower"

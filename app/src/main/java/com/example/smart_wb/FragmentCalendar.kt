@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
+import kotlinx.android.synthetic.main.fragment_calendar.*
+
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,10 +33,12 @@ class FragmentCalendar : Fragment() {
 
             }
     }
+    lateinit var calendarAdapter: CalendarAdapter
+    var dataList = mutableListOf<TimerData>()
 
     lateinit var timerDataList: ArrayList<TimerData>
 
-    private val TAG = "FragmentCalender"
+    private val TAG = "FragmentCalendar"
     private lateinit var mContext: Context
 
     //뷰바인딩 위한 변수
@@ -57,20 +63,25 @@ class FragmentCalendar : Fragment() {
     ): View? {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
+
+
+
+
         binding.calendar.setHeaderTextAppearance(getCurrentDay())
-        binding.calendar.state().edit()
-            .setMaximumDate(
-                CalendarDay.from(
-                    getCurrentYear(),
-                    getCurrentMonth(),
-                    getCurrentDay()
-                )
-            )
-            .commit()
+//        binding.calendar.state().edit()
+//            .setMaximumDate(
+//                CalendarDay.from(
+//                    getCurrentYear(),
+//                    getCurrentMonth(),
+//                    getCurrentDay()
+//                )
+//            )
+//            .commit()
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
-            Toast.makeText(mContext, date.toString(), Toast.LENGTH_SHORT).show()
-            Log.d(TAG, " 날짜-" + date + " 셀렉트-" + selected)
+            binding.calendar.state().edit()
+                .setCalendarDisplayMode(CalendarMode.WEEKS)
+                .commit()
             val year:String = date.year.toString()
             val month:String
             val day:String
@@ -86,9 +97,12 @@ class FragmentCalendar : Fragment() {
                 day=date.day.toString()
             }
             val result:String = year+"-"+month+"-"+day
-            binding.tvTest.text=result
-
-            selectDate(result)
+            dataList.clear()
+            Log.d(TAG, "데이터리스트 사이즈"+dataList.size)
+            dataList=selectDate(result)
+            Log.d(TAG, "데이터리스트 사이즈"+dataList.size)
+            calendarAdapter.replaceList(dataList)
+            binding.linear.visibility=View.VISIBLE
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
@@ -96,24 +110,26 @@ class FragmentCalendar : Fragment() {
             binding.calendar.state().edit()
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
+            binding.linear.visibility=View.GONE
         }
         //데코레이션 테스트
-        val calList = ArrayList<CalendarDay>()
-        calList.add(CalendarDay.from(2021, 5, 6))
-        calList.add(CalendarDay.from(2021, 5, 3))
-        calList.add(CalendarDay.from(2021, 5, 7))
-        calList.add(CalendarDay.from(2021, 5, 15))
-        calList.add(CalendarDay.from(2021, 5, 12))
-        calList.add(CalendarDay.from(2021, 5, 29))
-        calList.add(CalendarDay.from(2021, 5, 28))
-        calList.add(CalendarDay.from(2021, 5, 22))
-        calList.add(CalendarDay.from(2021, 5, 21))
-
-        for (calDay in calList) {
-            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
-        }
+//        val calList = ArrayList<CalendarDay>()
+//        calList.add(CalendarDay.from(2021, 5, 6))
+//        calList.add(CalendarDay.from(2021, 5, 3))
+//        calList.add(CalendarDay.from(2021, 5, 7))
+//        calList.add(CalendarDay.from(2021, 5, 15))
+//        calList.add(CalendarDay.from(2021, 5, 12))
+//        calList.add(CalendarDay.from(2021, 5, 29))
+//        calList.add(CalendarDay.from(2021, 5, 28))
+//        calList.add(CalendarDay.from(2021, 5, 22))
+//        calList.add(CalendarDay.from(2021, 5, 21))
+//
+//        for (calDay in calList) {
+//            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
+//        }
 
 //        screenTimeData()
+
 
         return view
     }
@@ -121,6 +137,23 @@ class FragmentCalendar : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         screenTimeData()
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycler()
+    }
+
+    private fun initRecycler() {
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.recycler.setLayoutManager(layoutManager)
+        binding.recycler.layoutManager = LinearLayoutManager(requireContext()).also { it.orientation = LinearLayoutManager.VERTICAL }
+
+//        구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
+        binding.recycler.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+
+        calendarAdapter = CalendarAdapter(mContext)
+        binding.recycler.adapter = calendarAdapter
+
     }
 
     //프래그먼트는 뷰보다 더 오래살아남는다.
@@ -180,20 +213,22 @@ class FragmentCalendar : Fragment() {
 
     }
 
-    //날짜 클릭시 데이터 가져오기
-    fun selectDate(date:String){
+    //날짜 클릭시 데이터 가져오기//어댑터 초기화
+    fun selectDate(date:String):MutableList<TimerData>{
         Log.d(TAG, "selectDate: ")
+        dataList.clear()
         val timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
 
-        val arr = timerDbHelper.select(date)
+        var arr:MutableList<TimerData> = timerDbHelper.select(date)
         //데이터 확인용 로그
-        for(data in arr){
-            Log.d(
-                TAG,
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-            )
-        }
+//        for(data in arr){
+//            Log.d(
+//                TAG,
+//                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+//            )
+//        }
+        return arr;
     }
 
 }

@@ -22,13 +22,18 @@ class ItemAdapter(private val context: Context) : RecyclerView.Adapter<ItemAdapt
 
     var datas = mutableListOf<ItemData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        Log.d("tag", "onCreateViewHolder: ")
         val view = LayoutInflater.from(context).inflate(R.layout.item_item,parent,false)
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = datas.size
+    override fun getItemCount(): Int {
+        Log.d("tag", "getItemCount: "+datas.size)
+        return datas.size
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d("tag", "onBindViewHolder: ")
         holder.bind(datas[position])
     }
 
