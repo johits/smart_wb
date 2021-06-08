@@ -120,7 +120,7 @@ class LockScreenActivity : AppCompatActivity() {
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp()
                     showNotification()
-                    successUpdate()
+                    successUpdate() //성공시
                 } else {//스크린타임 실패시
 
                 }

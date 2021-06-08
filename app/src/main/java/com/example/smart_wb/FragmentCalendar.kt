@@ -70,7 +70,12 @@ class FragmentCalendar : Fragment() {
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
             Toast.makeText(mContext, date.toString(), Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "위젯-" + widget + " 날짜-" + date + " 셀렉트-" + selected)
+            Log.d(TAG, " 날짜-" + date + " 셀렉트-" + selected)
+            val year:String = date.year.toString()
+            val month:String = date.month.toString()
+            val day:String = date.day.toString()
+            val result:String = year+"-"+month+"-"+day
+            binding.tvTest.text=result
 //            screenTimeData()
 //            //보여지는 모드 변경 주
 //            binding.calendar.state().edit()

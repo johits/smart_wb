@@ -20,6 +20,13 @@
            app:mcv_selectionColor="#00F"
            app:mcv_selectionMode="single" />
 
+       <TextView
+           android:id="@+id/tv_test"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="50dp"
+           android:text="아바라발"
+           android:textSize="30sp"/>
 
    </androidx.appcompat.widget.LinearLayoutCompat>
 </FrameLayout>
