@@ -20,13 +20,15 @@
             app:mcv_selectionColor="#00F"
             app:mcv_selectionMode="single" />
 
+            <View style="@style/Divider" />
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
+
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -37,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="시작시간"
                     android:textSize="18sp" />
@@ -56,11 +58,13 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:text="성공유무"
+
                     android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="꽃"
@@ -72,10 +76,10 @@
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/item_calendar"
-                android:layout_margin="4dp"/>
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                android:orientation="vertical"-->
+                android:layout_margin="4dp"
+                tools:listitem="@layout/item_calendar" />
+            <!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            <!--                android:orientation="vertical"-->
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -7,37 +7,48 @@
 
     <TextView
         android:id="@+id/tvStartTime"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="12:00"
+        android:textColor="@color/colorBlack"
         android:maxLength="5"
+        android:background="@drawable/edge_white"
         android:textSize="18sp"
         android:gravity="center"
+        android:paddingTop="4dp"
         android:layout_weight="2"/>
     <TextView
         android:id="@+id/tvSettingTime"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:background="@drawable/edge_gray"
         android:text="23:59:59"
+        android:maxLength="5"
         android:textSize="18sp"
-        android:layout_marginLeft="10dp"
         android:gravity="center"
-        android:layout_weight="3.5"/>
+        android:paddingTop="4dp"
+        android:layout_weight="3"/>
     <TextView
         android:id="@+id/tvSuccess"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="성공"
+        android:background="@drawable/edge_white"
         android:textSize="18sp"
+        android:textColor="@color/colorBlack"
         android:gravity="center"
-        android:layout_weight="2"/>
+        android:paddingTop="4dp"
+        android:layout_weight="3"/>
     <TextView
         android:id="@+id/tvFlower"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="0"
         android:textSize="18sp"
         android:gravity="center"
-        android:layout_weight="2.5"/>
+        android:background="@drawable/edge_gray"
+        android:paddingTop="4dp"
+        android:layout_weight="2"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
