@@ -70,6 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvWatch" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#000000"
@@ -115,7 +116,10 @@
                     app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <LinearLayout
                 android:id="@+id/iv"

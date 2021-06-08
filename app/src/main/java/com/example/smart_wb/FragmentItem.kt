@@ -114,7 +114,6 @@ class FragmentItem : Fragment() {
 //                Toast.makeText(view?.context,
 //                    "${itemData[position].name}\n${itemData[position].number}",
 //                    Toast.LENGTH_SHORT).show()
-
                 if(itemData[position].name.equals("bg1")){
                 i_back.setImageResource(R.drawable.bg1)
             }else if(itemData[position].name.equals("bg2")){

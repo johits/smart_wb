@@ -42,6 +42,7 @@ class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemA
         val lock: ImageView = itemView.findViewById(R.id.lock)
 
 
+
 //        val itemname = itemView?.findViewById<TextView>(R.id.name)
 //        val itemProduct = itemView?.findViewById<ConstraintLayout>(R.id.product)
 //        val itemItem = itemView?.findViewById<ImageView>(R.id.item)
@@ -63,15 +64,19 @@ class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemA
         }
 
 
-        if (bg==false){
+        if (bg){
             Log.d(TAG, "bg1:"+bg)
-            holder.product.setBackgroundColor(Color.parseColor("#000000"))
+            holder.product.setBackgroundColor(Color.parseColor("#81000000"))
         }else{
             Log.d(TAG, "bg2:"+bg)
             holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
         }
-        holder.product.setOnClickListener {
-            Log.d(TAG, "bg3:"+bg)
+
+        holder.lock.setOnClickListener{
+            Log.d(TAG, "구매하기")
+            itemClickListener.onClick(it, position)
+
+            //선택 하나만 되게
             for (i in 0 until itemList.size){
                 if(i == position){
                     itemList[i].bg=true
@@ -86,8 +91,22 @@ class ItemAdapter(val itemList: ArrayList<ItemData>): RecyclerView.Adapter<ItemA
 
 
         // (1) 리스트 내 항목 클릭 시 onClick() 호출
-        holder.itemView.setOnClickListener {
+        holder.product.setOnClickListener {
+            Log.d(TAG, "onBindViewHolder: 리스너 작동")
             itemClickListener.onClick(it, position)
+
+
+            //선택 하나만 되게
+            for (i in 0 until itemList.size){
+                if(i == position){
+                    itemList[i].bg=true
+                    Log.d(TAG, "position1:"+position+"bg1:"+ itemList[i].bg)
+                }else{
+                    itemList[i].bg=false
+                    Log.d(TAG, "position2:"+position+"bg2:"+ itemList[i].bg)
+                }
+            }
+            notifyDataSetChanged()
         }
     }
 
