@@ -1,12 +1,14 @@
 package com.example.smart_wb
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -207,6 +209,7 @@ class FragmentCalendar : Fragment() {
     }
 
     //총도전시간,성공시간,꽃 계산기
+    @RequiresApi(Build.VERSION_CODES.N)
     fun calculateSum(){
         var settingTimeSum=0
         var successTimeSum=0
@@ -219,5 +222,19 @@ class FragmentCalendar : Fragment() {
             }
         }
         Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
+        binding.tvSettingTimeSum.text=changeTime(settingTimeSum)
+        binding.tvSuccessTimeSum.text=changeTime(successTimeSum)
+        binding.tvFlowerSum.text=flowerSum.toString()
+    }
+
+    //설정시간은 초 -> HH:mm:ss 로 변환
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun changeTime(settingTime: Int): String {
+        val result: String?
+        val hour = Math.floorDiv(settingTime, 3600)
+        val min = Math.floorMod(settingTime, 3600) / 60
+        result = "%1$02d:%2$02d".format(hour, min)
+
+        return result
     }
 }
