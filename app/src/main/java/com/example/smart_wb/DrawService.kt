@@ -85,8 +85,8 @@ class DrawService : Service() {
         params.gravity = Gravity.LEFT or Gravity.TOP
         mView = inflate.inflate(R.layout.activity_lock_screen, null)
 
-        val l_back = mView!!.findViewById<ImageView>(R.id.l_back) as ImageView
-        val l_timer = mView!!.findViewById<ImageView>(R.id.l_timer) as ImageView
+        val l_back = mView!!.findViewById<View>(R.id.l_back) as ImageView
+        val l_timer = mView!!.findViewById<View>(R.id.l_timer) as ImageView
 
         //쉐어드 불러오기 (배경, 타이머 아이템 적용)
         l_back.setImageResource(PointItemShared.getBg(this))
