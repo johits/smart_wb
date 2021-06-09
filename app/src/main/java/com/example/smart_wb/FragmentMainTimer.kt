@@ -96,6 +96,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                 if (settingTime == 0) {
                     toastCenter(R.string.toast_time_set_blank_warning)
                 } else {
+//                    Log.d(TAG, "onCreateView: ")
                     val intent = Intent(mContext, LockScreenActivity::class.java)
                     intent.putExtra("settingTime", settingTime.toString())
                     startActivity(intent)
@@ -137,6 +138,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     //설정시간 sqlite 에 데이터 삽입&쉐어드 저장
     fun insertSettingTime(settingTime:Int){
+//        Log.d(TAG, "insertSettingTime: ")
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
@@ -155,21 +157,21 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         //데이터 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()
         //데이터 확인용 로그
-        for (data in arr) {
-            Log.d(
-                TAG,
-                "id:" + data.id + " date:" + data.date + " " +
-                        "time:" + data.time + " settingTime:" + data.settingTime + "" +
-                        " success:" + data.success+" flower:"+data.flower
-            )
-        }
+//        for (data in arr) {
+//            Log.d(
+//                TAG,
+//                "id:" + data.id + " date:" + data.date + " " +
+//                        "time:" + data.time + " settingTime:" + data.settingTime + "" +
+//                        " success:" + data.success+" flower:"+data.flower
+//            )
+//        }
         //설정시간 쉐어드에 저장
         TimerSetShared.setDate(mContext,date)
         TimerSetShared.setTime(mContext,time)
         TimerSetShared.setSettingTime(mContext,settingTime)
         //쉐어드 저장 확인용 로그
-        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
-                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
-                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
+//        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
+//                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
+//                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
     }
 }

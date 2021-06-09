@@ -11,6 +11,7 @@ import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -53,20 +54,21 @@ class LockScreenActivity : AppCompatActivity() {
             Log.d(TAG, "onCreate: " + time)
             if (time != null) {
                 settingTime = time
+                tvWatch.visibility = View.GONE
+                btStop.visibility = View.GONE
+
+                //노티피 초기화
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                //방해금지모드작동
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+                Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
+
+                setStartService()
             }
-        }
+        }else if(intent.hasExtra("restart"))
+            Toast.makeText(this,"재시작:"+intent.getBooleanExtra("restart",false),Toast.LENGTH_SHORT).show()
 
-        tvWatch.visibility = View.GONE
-        btStop.visibility = View.GONE
-
-        //노티피 초기화
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        //방해금지모드작동
-        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-        Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
-
-        setStartService()
     }
 
     override fun onBackPressed() {
@@ -216,6 +218,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     //성공시 sqlite timer table 에 success 업데이트
     fun successUpdate(){
+        Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
         var settingTime = TimerSetShared.getSettingTime(this)
