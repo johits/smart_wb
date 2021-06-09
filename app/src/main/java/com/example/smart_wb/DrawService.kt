@@ -90,7 +90,6 @@ class DrawService : Service() {
             Log.d(TAG, "종료버튼 클릭")
             drawServiceStop(false)
 
-
         }
         wm!!.addView(mView, params)
     }
@@ -115,6 +114,10 @@ class DrawService : Service() {
 
         stopService(Intent(applicationContext, DrawService::class.java))
 
+        //메인액티비티 호출
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
 
     }
 

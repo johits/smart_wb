@@ -46,7 +46,7 @@ class LockScreenActivity : AppCompatActivity() {
     private var settingTime = 0
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
@@ -57,7 +57,7 @@ class LockScreenActivity : AppCompatActivity() {
 
         if (intent.hasExtra("settingTime")) {
             var time = intent.getStringExtra("settingTime")?.toInt()
-            Log.d(TAG, "onCreate: " + time)
+
             if (time != null) {
                 settingTime = time
 
@@ -71,7 +71,6 @@ class LockScreenActivity : AppCompatActivity() {
             }
         } else if (intent.hasExtra("restart")) {
             val remainTime = calRemainTime()
-            Log.d(TAG, "남은시간:$remainTime")
 
             //남은시간이 0보다 크면 스크린타임 계속
             //남은시간이 0, 음수면 스크린타임 이미 종료됨
@@ -85,7 +84,12 @@ class LockScreenActivity : AppCompatActivity() {
 
                 setStartService()
             } else {
-
+                showNotification()//노티활성화
+                successUpdate() //성공시//sqlite 업데이트
+                TimerSetShared.clearTimerSet(this)//쉐어드 초기화
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
+//                finish()
             }
         }
 
@@ -142,18 +146,18 @@ class LockScreenActivity : AppCompatActivity() {
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp()
                     showNotification()
-                    successUpdate() //성공시
+                    successUpdate() //성공시//sqlite 업데이트
                 } else {//스크린타임 실패시
 
                 }
                 //쉐어드 데이터 클리어
                 TimerSetShared.clearTimerSet(this)
                 //쉐어드 저장 확인용 로그
-                Log.d(
-                    TAG, "시작날짜:" + TimerSetShared.getDate(this) + " " +
-                            "시작시간:" + TimerSetShared.getTime(this) + " " +
-                            "설정시간:" + TimerSetShared.getSettingTime(this)
-                )
+//                Log.d(
+//                    TAG, "시작날짜:" + TimerSetShared.getDate(this) + " " +
+//                            "시작시간:" + TimerSetShared.getTime(this) + " " +
+//                            "설정시간:" + TimerSetShared.getSettingTime(this)
+//                )
                 setStopService()
                 finish()
             }
@@ -194,7 +198,8 @@ class LockScreenActivity : AppCompatActivity() {
 
     //노티피케이션 발생
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotification() {
+   private fun showNotification() {
+        Log.d(TAG, "showNotification: ")
         var builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
@@ -239,7 +244,7 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
-    fun successUpdate() {
+   private fun successUpdate() {
         Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
@@ -254,14 +259,14 @@ class LockScreenActivity : AppCompatActivity() {
         //   데이터 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()
         // 데이터 확인용 로그
-        for (data in arr) {
-            Log.d(
-                TAG,
-                "id:" + data.id + " date:" + data.date + " " +
-                        "time:" + data.time + " settingTime:" + data.settingTime + " " +
-                        "success:" + data.success + " flower:" + data.flower
-            )
-        }
+//        for (data in arr) {
+//            Log.d(
+//                TAG,
+//                "id:" + data.id + " date:" + data.date + " " +
+//                        "time:" + data.time + " settingTime:" + data.settingTime + " " +
+//                        "success:" + data.success + " flower:" + data.flower
+//            )
+//        }
 
         //받은 꽃 쉐어드에 더한다.
         PointItemShared.sumFlower(this, flower)
@@ -275,7 +280,7 @@ class LockScreenActivity : AppCompatActivity() {
     //남은시간 양수 스크린타임 계속
     //남은시간 0or음수 스크린타임 이미 종료
     //날짜가 바뀌면 보정을 해야한다. 어떻게?
-    fun calRemainTime(): Int {
+    private fun calRemainTime(): Int {
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
@@ -291,7 +296,7 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //시간 -> 초 변환 //String->Int
-    fun calSec(time: String): Int {
+    private fun calSec(time: String): Int {
         val parts = time.split(":").toTypedArray()
         val hour: Int = parts[0].toInt()
         val min: Int = parts[1].toInt()
