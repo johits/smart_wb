@@ -59,6 +59,7 @@ class FragmentCalendar : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -101,9 +102,15 @@ class FragmentCalendar : Fragment() {
             val result:String = year+"-"+month+"-"+day
             dataList.clear()
             dataList=selectDate(result)
-            calendarAdapter.replaceList(dataList)
-            binding.linear.visibility=View.VISIBLE
-            calculateSum()
+            if(dataList.size==0){
+                binding.linear.visibility=View.GONE
+                binding.tvNoData.visibility=View.VISIBLE
+            }else{
+                binding.linear.visibility = View.VISIBLE
+                binding.tvNoData.visibility=View.GONE
+            }
+                calendarAdapter.replaceList(dataList)
+                calculateSum()
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
@@ -112,6 +119,7 @@ class FragmentCalendar : Fragment() {
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
             binding.linear.visibility=View.GONE
+            binding.tvNoData.visibility=View.GONE
         }
 
         return view

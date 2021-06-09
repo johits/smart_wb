@@ -13,9 +13,9 @@ class Restart : BroadcastReceiver() {
         val settingTime = TimerSetShared.getSettingTime(context)
         val action = intent.getAction();
         if(action.equals("android.intent.action.BOOT_COMPLETED")) {
-            if(settingTime==null){
+            if(settingTime==null){ //스크린타임 동작 x
 
-            }else if(settingTime>0){
+            }else if(settingTime>0){ //스크린타임 동작 o
                 val i = Intent(context, LockScreenActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("restart", true)

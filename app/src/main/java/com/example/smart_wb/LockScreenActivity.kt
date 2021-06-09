@@ -21,6 +21,9 @@ import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.Shared.PointItemShared
 import com.example.smart_wb.Shared.TimerSetShared
 import kotlinx.android.synthetic.main.activity_lock_screen.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -66,15 +69,17 @@ class LockScreenActivity : AppCompatActivity() {
 
                 setStartService()
             }
-        }else if(intent.hasExtra("restart"))
-            Toast.makeText(this,"재시작:"+intent.getBooleanExtra("restart",false),Toast.LENGTH_SHORT).show()
+        }else if(intent.hasExtra("restart")){
+            val remainTime = calRemainTime()
+            Toast.makeText(this,"남은시간:$remainTime",Toast.LENGTH_SHORT).show()
+        }
 
     }
 
-    override fun onBackPressed() {
-        // 뒤로가기 버튼 클릭
-        Log.d(TAG, "onBackPressed: 뒤로가기 버튼 제어")
-    }
+//    override fun onBackPressed() {
+//        // 뒤로가기 버튼 클릭
+//        Log.d(TAG, "onBackPressed: 뒤로가기 버튼 제어")
+//    }
 
     //     서비스 시작 및 Messenger 전달
     private fun setStartService() {
@@ -216,7 +221,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
-    //성공시 sqlite timer table 에 success 업데이트
+    //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
     fun successUpdate(){
         Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this)
@@ -244,6 +249,36 @@ class LockScreenActivity : AppCompatActivity() {
         PointItemShared.sumFlower(this, flower)
 
         Log.d(TAG, "현재 꽃 갯수"+PointItemShared.getFlower(this))
+    }
+
+    //남은시간 계산기 //남은시간 리턴
+    //시작시간+설정시간=종료시간
+    //종료시간-현재시간=남은시간
+    //남은시간 양수 스크린타임 계속
+    //남은시간 0or음수 스크린타임 이미 종료
+    //날짜가 바뀌면 보정을 해야한다. 어떻게?
+    fun calRemainTime():Int{
+        val timeStamp = System.currentTimeMillis()
+        // 현재 시간을 Date 타입으로 변환
+        val dateType = Date(timeStamp)
+        // 날짜, 시간을 가져오고 싶은 형태 선언
+        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+        val nowTime :Int =  calSec(dateFormatTime.format(dateType))//현재시간
+        val startTime :Int = calSec(TimerSetShared.getTime(this)) //시작시간
+        val settingTime :Int= TimerSetShared.getSettingTime(this)//설정시간
+        val endTime = startTime+settingTime// 종료시간
+
+        return endTime-nowTime //남은시간
+    }
+
+    //시간 -> 초 변환 //String->Int
+    fun calSec(time:String):Int{
+        val parts = time.split(":").toTypedArray()
+        val hour: Int = parts[0].toInt()
+        val min: Int = parts[1].toInt()
+        val sec: Int = parts[2].toInt()
+        return hour*3600+min*60+sec
     }
 }
 

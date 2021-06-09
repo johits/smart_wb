@@ -116,9 +116,14 @@ class DrawService : Service() {
 
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        return super.onUnbind(intent)
+        Log.d(TAG, "onUnbind: ")
+    }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "드로우서비스 onDestroy: ")
         if (wm != null) {
             if (mView != null) {
                 wm!!.removeView(mView)
