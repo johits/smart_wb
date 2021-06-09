@@ -8,12 +8,16 @@ import android.util.Log
 
 class Restart : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val i = Intent(context, DrawService::class.java)
+//        val i = Intent(context, DrawService::class.java)
+        val i = Intent(context, LockScreenActivity::class.java)
+        i.putExtra("restart", true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(i)
+//            context.startForegroundService(i)
+            context.startActivity(i)
             Log.d("Restart", "onReceive: 재실행")
         } else {
-            context.startService(i)
+            context.startActivity(i)
+//            context.startService(i)
         }
     }
 }
