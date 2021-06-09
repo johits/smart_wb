@@ -48,8 +48,6 @@ class FragmentItem : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
 
-
-
         }
     }
 
@@ -87,10 +85,15 @@ class FragmentItem : Fragment() {
 //            }
 //        }
 
+
+        //쉐어드 적용된 아이템 불러오기(배경, 타이머)
+        i_back.setImageResource(PointItemShared.getBg(iContext))
+        i_timer.setImageResource(PointItemShared.getTimer(iContext))
+
         initRecycler()
 
-        Log.d(TAG, "bt_value:" + bt_value)
 
+        //아이템보기 접기/펼치기
         iv.setOnClickListener {
             Log.d(TAG, "bt_value:" + bt_value)
             if (bt_value) {
@@ -138,6 +141,18 @@ class FragmentItem : Fragment() {
                 }
             }
         }
+
+        //적용 아이템에 따른 체크 표시 세팅
+            for(j in 0 until itemData.size){
+                if(PointItemShared.getBg(iContext)==(itemData[j].item)){
+                    itemData[j].bcheck =true
+                    itemData[j].bg =true
+                }else if(PointItemShared.getTimer(iContext)==(itemData[j].item)){
+                    itemData[j].tcheck =true
+                    itemData[j].timer =true
+                }
+            }
+
 
         Log.d(TAG, "initRecycler: 최종결과!!!!!!!!!:    "+itemData.toString())
 
