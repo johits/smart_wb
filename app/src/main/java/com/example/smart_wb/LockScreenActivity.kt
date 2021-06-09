@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.database.sqlite.SQLiteDatabase
 import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
@@ -69,10 +68,6 @@ class LockScreenActivity : AppCompatActivity() {
         setStartService()
     }
 
-    override fun onBackPressed() {
-        // 뒤로가기 버튼 클릭
-        Log.d(TAG, "onBackPressed: 뒤로가기 버튼 제어")
-    }
 
     //     서비스 시작 및 Messenger 전달
     private fun setStartService() {

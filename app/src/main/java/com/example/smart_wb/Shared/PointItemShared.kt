@@ -55,41 +55,11 @@ object PointItemShared {
         Log.d(TAG, "getLocker: 보관함 불러오기")
     }
 
-//    //보관함 저장하기
-//    fun sumLocker(context: Context, list: java.util.ArrayList<String>) {
-//        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//        val editor: Editor = prefs.edit()
-//        val gson = Gson()
-//        val json: String = gson.toJson(list)
-//        editor.putString("locker", json)
-////        editor.apply()
-//        editor.commit()
-//        Log.d(TAG, "sumLocker: 쉐어드 저장 완료 // 저장된 값:"+json)
-//    }
-
-
-//
-//    //보관함 저장하기
-//    fun sumLocker(context: Context, itemname:String) {
-//        val editor: Editor =
-//            context.getSharedPreferences(fileName, MODE_PRIVATE).edit()
-//        editor.putString("locker", itemname)
-//        editor.commit()
-//        Log.d(TAG, "sumLocker: 쉐어드 저장 완료 // 저장된 값:"+itemname)
-//    }
-
-//    //보관함 불러오기
-//    fun getLocker(context: Context): String? {
-//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-//        return prefs.getString("locker",null)
-//        Log.d(TAG, "getLocker: 보관함 불러오기")
-//
-//    }
-
 
 
     //꽃 받기 사용하기, 양수 받기, 음수 사용
     fun sumFlower(context: Context, count:Int) {
+        Log.d(TAG, "sumFlower: 받아온 카운트 값:"+count)
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         var result = getFlower(context)+count

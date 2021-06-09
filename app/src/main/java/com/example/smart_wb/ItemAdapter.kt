@@ -19,7 +19,7 @@ joker
 아이템 미리보기(아이템 리사이클러뷰) 어댑터
  */
 
-class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData>, var flower:Int): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData>, var flower:Int, var lockerlist:ArrayList<String>): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 
     // (1) 아이템 레이아웃과 결합
@@ -54,7 +54,6 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         holder.item.setImageResource(itemList[position].item)
 
 
-
         var bg = itemList[position].bg
         var timer = itemList[position].timer
         var type = itemList[position].type
@@ -62,19 +61,27 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
         Log.d(TAG, "락값:"+lock)
 
+
+
+
         if(itemList[position].name.equals("reset")){
             holder.price.visibility = View.INVISIBLE
             holder.pointIcon.visibility = View.INVISIBLE
+            holder.lock.visibility = View.INVISIBLE
         }else{
             holder.price.visibility = View.VISIBLE
             holder.pointIcon.visibility = View.VISIBLE
+            holder.lock.visibility = View.VISIBLE
         }
+
 
         if (lock){ //구매한 아이템일 경우 item.lock = true
             holder.lock.visibility = View.INVISIBLE
             Log.d(TAG, "bind: 받아온 item.lock 값:"+itemList[position].lock)
+            Log.d(TAG, " 세팅순서1")
         }else{
             holder.lock.visibility = View.VISIBLE
+            Log.d(TAG, " 세팅순서2")
         }
 
 
@@ -96,7 +103,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 //            //실제코드
 //            if(flower>=itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
 //                val dialog = PayDialog(context)
-//                dialog.myDig(itemList[position].item, itemList[position].price, flower, context)
+//                dialog.myDig(itemList[position].item, itemList[position].price, flower,itemList[position].name, context)
 //            }else{ //꽃송이가 부족할 경우
 //                val builder = AlertDialog.Builder(context)
 //                builder.setMessage("꽃송이가 부족합니다.")

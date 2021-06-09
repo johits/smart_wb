@@ -39,7 +39,7 @@ class FragmentItem : Fragment() {
 //    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
     var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
     var flower : Int = 0 //쉐어드 꽃 담을 변수
-    var locker : String ?= null //쉐어드 보관함 담을 변수
+    var locker = ArrayList<String>() //쉐어드 보관함 담을 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +47,7 @@ class FragmentItem : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+
 
 
         }
@@ -70,14 +71,23 @@ class FragmentItem : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecycler()
 
         flower = PointItemShared.getFlower(iContext)
         point.text = flower.toString()
-        locker = PointItemShared.getLocker(iContext).toString()
+        locker = PointItemShared.getLocker(iContext) as ArrayList<String>
         Log.d(TAG, "쉐어드에서 가져온 꽃:"+flower)
-        Log.d(TAG, "쉐어드에서 가져온 보관함:"+locker)
+        Log.d(TAG, "쉐어드에서 가져온 보관함:"+locker.toString())
 
+
+//        for (i in 0 until locker.size) {
+//            val lockeritem: String = locker[i]
+//            if (lockeritem.equals(itemData[i].name)) {
+//                itemData[i].lock = true
+//                Log.d(TAG, "name: "+itemData[i].name+ " lock: "+ itemData[i].lock)
+//            }
+//        }
+
+        initRecycler()
 
         Log.d(TAG, "bt_value:" + bt_value)
 
@@ -107,18 +117,42 @@ class FragmentItem : Fragment() {
                 it.orientation = LinearLayoutManager.HORIZONTAL
             }
 
+
         //구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
         irv.addItemDecoration(DividerItemDecoration(requireContext(), 0))
         itemData.add(ItemData(name = "reset", item = R.drawable.reset, price = 0, lock = true, type = "reset"))
-        itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, lock = false, type = "bg"))
-        itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200, lock = true, type = "bg"))
-        itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300, lock = false, type = "timer"))
-        itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400, lock = true, type = "timer"))
+        itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, type = "bg"))
+        itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200,  type = "bg"))
+        itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300,  type = "timer"))
+        itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400,  type = "timer"))
 
 
 
-     //Itemadapter 클릭 리스너
-        val itemAdapter = ItemAdapter(iContext,itemData,flower)     // 어댑터
+        //자물쇠 구매여부에 따른 세팅
+        for(i in 0 until  locker.size){
+            Log.d(TAG, "나열1: "+locker[i])
+            for(j in 0 until itemData.size){
+                if(locker[i].equals(itemData[j].name)|| "reset".equals(itemData[j].name)){
+                    Log.d(TAG, "나열2: "+locker[i]+"  "+itemData[j].name)
+                    itemData[j].lock =true
+                }
+            }
+        }
+
+        Log.d(TAG, "initRecycler: 최종결과!!!!!!!!!:    "+itemData.toString())
+
+//        Log.d(TAG, "locker사이즈:"+locker.size)
+//        for (i in 0 until locker.size) {
+//            val lockeritem: String = locker[i]
+//            if (lockeritem.equals(itemData[i].name)) {
+//                itemData[i].lock = true
+//                Log.d(TAG, "////////////////// name: "+itemData[i].name+ " lock: "+ itemData[i].lock)
+//            }
+//        }
+
+
+        //Itemadapter 클릭 리스너
+        val itemAdapter = ItemAdapter(iContext,itemData,flower,locker)     // 어댑터
 
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
@@ -145,6 +179,15 @@ class FragmentItem : Fragment() {
             }
         })
 
+        //Itemadapter 클릭 리스너
+        val payDialog= PayDialog(requireContext())     // 어댑터
+        payDialog.setOnClickedListener(object: PayDialog.ButtonClickListener{
+            override fun onClick(myName: String) {
+                TODO("Not yet implemented")
+                point.text = myName
+            }
+        })
+
 
         irv.adapter = itemAdapter
         itemAdapter.notifyDataSetChanged()
@@ -162,3 +205,5 @@ class FragmentItem : Fragment() {
             }
     }
 }
+
+
