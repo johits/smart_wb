@@ -1,5 +1,6 @@
     package com.example.smart_wb
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
@@ -103,6 +104,9 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
                     //설정시간 데이터 삽입
                     insertSettingTime(settingTime)
+
+                    //액티비티 종료
+                    activity?.finish()
                 }
             }
         }
@@ -127,6 +131,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        Log.d(TAG, "onDestroyView: ")
     }
 
     //토스트 메세지 화면 중앙
@@ -137,6 +142,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     }
 
     //설정시간 sqlite 에 데이터 삽입&쉐어드 저장
+    @SuppressLint("SimpleDateFormat")
     fun insertSettingTime(settingTime:Int){
 //        Log.d(TAG, "insertSettingTime: ")
         val timeStamp = System.currentTimeMillis()

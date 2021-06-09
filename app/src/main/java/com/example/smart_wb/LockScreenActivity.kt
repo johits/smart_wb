@@ -51,27 +51,42 @@ class LockScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
+        tvWatch.visibility = View.GONE
+        btStop.visibility = View.GONE
+        Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 
         if (intent.hasExtra("settingTime")) {
             var time = intent.getStringExtra("settingTime")?.toInt()
             Log.d(TAG, "onCreate: " + time)
             if (time != null) {
                 settingTime = time
-                tvWatch.visibility = View.GONE
-                btStop.visibility = View.GONE
 
                 //노티피 초기화
                 val notificationManager =
                     getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 //방해금지모드작동
                 notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-                Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
 
                 setStartService()
             }
-        }else if(intent.hasExtra("restart")){
+        } else if (intent.hasExtra("restart")) {
             val remainTime = calRemainTime()
-            Toast.makeText(this,"남은시간:$remainTime",Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "남은시간:$remainTime")
+
+            //남은시간이 0보다 크면 스크린타임 계속
+            //남은시간이 0, 음수면 스크린타임 이미 종료됨
+            if (remainTime > 0) {
+                settingTime=remainTime //중요
+                //노티피 초기화
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                //방해금지모드작동
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+
+                setStartService()
+            } else {
+
+            }
         }
 
     }
@@ -97,7 +112,7 @@ class LockScreenActivity : AppCompatActivity() {
         stopService(Intent(this@LockScreenActivity, DrawService::class.java))
     }
 
-    //액티비티 서비스 연결
+    //액티비티 서비스 연결//설정시간 데이터 전달한다.
     private val mConnection: ServiceConnection = object : ServiceConnection {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
@@ -134,9 +149,11 @@ class LockScreenActivity : AppCompatActivity() {
                 //쉐어드 데이터 클리어
                 TimerSetShared.clearTimerSet(this)
                 //쉐어드 저장 확인용 로그
-                Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(this)+" " +
-                        "시작시간:"+TimerSetShared.getTime(this)+" " +
-                        "설정시간:"+TimerSetShared.getSettingTime(this))
+                Log.d(
+                    TAG, "시작날짜:" + TimerSetShared.getDate(this) + " " +
+                            "시작시간:" + TimerSetShared.getTime(this) + " " +
+                            "설정시간:" + TimerSetShared.getSettingTime(this)
+                )
                 setStopService()
                 finish()
             }
@@ -222,33 +239,34 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
-    fun successUpdate(){
+    fun successUpdate() {
         Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
         var settingTime = TimerSetShared.getSettingTime(this)
-        var flower = settingTime/600 //꽃 갯수 10분당 1개 받는다.
+        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
 
-        var timerDbHelper=TimerDbHelper(this, "timerDb.db", null, 1)
+        var timerDbHelper = TimerDbHelper(this, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
 
         //데이터 삽입
         timerDbHelper.upDate(date, time, flower)
-     //   데이터 불러오기
+        //   데이터 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()
-       // 데이터 확인용 로그
+        // 데이터 확인용 로그
         for (data in arr) {
             Log.d(
                 TAG,
                 "id:" + data.id + " date:" + data.date + " " +
                         "time:" + data.time + " settingTime:" + data.settingTime + " " +
-                        "success:" + data.success+" flower:"+ data.flower)
+                        "success:" + data.success + " flower:" + data.flower
+            )
         }
 
         //받은 꽃 쉐어드에 더한다.
         PointItemShared.sumFlower(this, flower)
 
-        Log.d(TAG, "현재 꽃 갯수"+PointItemShared.getFlower(this))
+        Log.d(TAG, "현재 꽃 갯수" + PointItemShared.getFlower(this))
     }
 
     //남은시간 계산기 //남은시간 리턴
@@ -257,28 +275,28 @@ class LockScreenActivity : AppCompatActivity() {
     //남은시간 양수 스크린타임 계속
     //남은시간 0or음수 스크린타임 이미 종료
     //날짜가 바뀌면 보정을 해야한다. 어떻게?
-    fun calRemainTime():Int{
+    fun calRemainTime(): Int {
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
         // 날짜, 시간을 가져오고 싶은 형태 선언
         val dateFormatTime = SimpleDateFormat("HH:mm:ss")
         // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
-        val nowTime :Int =  calSec(dateFormatTime.format(dateType))//현재시간
-        val startTime :Int = calSec(TimerSetShared.getTime(this)) //시작시간
-        val settingTime :Int= TimerSetShared.getSettingTime(this)//설정시간
-        val endTime = startTime+settingTime// 종료시간
+        val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
+        val startTime: Int = calSec(TimerSetShared.getTime(this)) //시작시간
+        val settingTime: Int = TimerSetShared.getSettingTime(this)//설정시간
+        val endTime = startTime + settingTime// 종료시간
 
-        return endTime-nowTime //남은시간
+        return endTime - nowTime //남은시간
     }
 
     //시간 -> 초 변환 //String->Int
-    fun calSec(time:String):Int{
+    fun calSec(time: String): Int {
         val parts = time.split(":").toTypedArray()
         val hour: Int = parts[0].toInt()
         val min: Int = parts[1].toInt()
         val sec: Int = parts[2].toInt()
-        return hour*3600+min*60+sec
+        return hour * 3600 + min * 60 + sec
     }
 }
 

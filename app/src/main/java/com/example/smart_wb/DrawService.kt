@@ -89,6 +89,8 @@ class DrawService : Service() {
             settingTime = -2
             Log.d(TAG, "종료버튼 클릭")
             drawServiceStop(false)
+
+
         }
         wm!!.addView(mView, params)
     }
@@ -145,7 +147,7 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 500)
                 } else {
                     watch.text = calTime(settingTime)
-                    handler?.postDelayed(this, 10)
+                    handler?.postDelayed(this, 1000)
                 }
                 settingTime--
                 Log.d(TAG, "settingTime:" + settingTime)
