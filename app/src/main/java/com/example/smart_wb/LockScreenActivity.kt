@@ -46,6 +46,9 @@ class LockScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
+        //쉐어드 불러오기
+        l_back.setImageResource(PointItemShared.getBg(this))
+        l_timer.setImageResource(PointItemShared.getTimer(this))
 
         if (intent.hasExtra("settingTime")) {
             var time = intent.getStringExtra("settingTime")?.toInt()

@@ -7,6 +7,24 @@
     android:background="@color/colorWhite"
     tools:context=".LockScreenActivity">
 
+    <ImageView
+        android:id="@+id/l_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <ImageView
+        android:id="@+id/l_timer"
+        android:layout_width="480dp"
+        android:layout_height="280dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/tvWatch"
+        app:layout_constraintEnd_toEndOf="@+id/tvWatch"
+        app:layout_constraintStart_toStartOf="@+id/tvWatch"
+        app:layout_constraintTop_toTopOf="@+id/tvWatch" />
+
     <TextView
         android:id="@+id/tvWatch"
         android:layout_width="wrap_content"

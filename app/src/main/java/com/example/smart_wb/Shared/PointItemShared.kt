@@ -75,28 +75,31 @@ object PointItemShared {
     }
 
     //배경화면 변경
-    fun setBg(context: Context, input: String) {
+    fun setBg(context: Context, input: Int) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
-        editor.putString("bg", input)
+        editor.putInt("bg", input)
         editor.commit()
+        Log.d(TAG, "쉐어드 // 적용된 배경화면:$input")
     }
     //배경화면 불러오기
-    fun getBg(context: Context): String {
+    fun getBg(context: Context): Int {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-        return prefs.getString("bg", "").toString()
+        return prefs.getInt("bg", 0)
+        Log.d(TAG, "쉐어드 // 배경화면 불러오기")
     }
     //타이머 변경
-    fun setTimer(context: Context, input: String) {
+    fun setTimer(context: Context, input: Int) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
-        editor.putString("timer", input)
+        editor.putInt("timer", input)
         editor.commit()
+        Log.d(TAG, "쉐어드 // 적용된 타이머:$input")
     }
     //타이머 불러오기
-    fun getTimer(context: Context): String {
+    fun getTimer(context: Context): Int {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-        return prefs.getString("timer", "").toString()
+        return prefs.getInt("timer", 0)
     }
 
     fun setLock(){

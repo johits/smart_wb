@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_wb.LockScreenActivity.Companion.TAG
+import com.example.smart_wb.Shared.PointItemShared
 
 
 /**
@@ -42,28 +44,31 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         val name: TextView = itemView.findViewById(R.id.name)
         val price: TextView = itemView.findViewById(R.id.price)
         val lock: ImageView = itemView.findViewById(R.id.lock)
+        val check: ImageView = itemView.findViewById(R.id.check)
 
 
     }
 
     override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
-        // View에 내용 입력
-        holder.name.text = itemList[position].name
-        holder.price.text = itemList[position].price.toString()
-        Log.d(TAG, "가격세팅:"+itemList[position].price.toString())
-        holder.item.setImageResource(itemList[position].item)
 
 
         var bg = itemList[position].bg
         var timer = itemList[position].timer
-        var type = itemList[position].type
-        var lock = itemList[position].lock
+        var bcheck = itemList[position].bcheck //배경 적용 버튼
+        var tcheck = itemList[position].tcheck //타이머 적용 버튼
+        var type = itemList[position].type  //배경, 타이머 유형
+        var lock = itemList[position].lock  //자물쇠
+        var item = itemList[position].item  //상품 아이템 이미지
 
-        Log.d(TAG, "락값:"+lock)
+
+        // View에 내용 입력
+        holder.name.text = itemList[position].name
+        holder.price.text = itemList[position].price.toString()
+        holder.item.setImageResource(item)
 
 
 
-
+        //초기화 버튼 세팅
         if(itemList[position].name.equals("reset")){
             holder.price.visibility = View.INVISIBLE
             holder.pointIcon.visibility = View.INVISIBLE
@@ -75,15 +80,42 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         }
 
 
+        // 구매한 아이템 여부에 따른 자물쇠, 적용버튼 보여지기
         if (lock){ //구매한 아이템일 경우 item.lock = true
             holder.lock.visibility = View.INVISIBLE
-            Log.d(TAG, "bind: 받아온 item.lock 값:"+itemList[position].lock)
-            Log.d(TAG, " 세팅순서1")
+            if(itemList[position].name.equals("reset")){
+                holder.check.visibility = View.INVISIBLE
+            }else {
+                holder.check.visibility = View.VISIBLE
+            }
         }else{
             holder.lock.visibility = View.VISIBLE
-            Log.d(TAG, " 세팅순서2")
+            holder.check.visibility = View.INVISIBLE
         }
 
+
+
+        // 체크 버튼 적용 여부 구분
+        if (bcheck||tcheck){
+            holder.check.setImageResource(R.drawable.ok_check)
+            if(type.equals("bg")) {
+                PointItemShared.setBg(context, item)
+            }else if(type.equals("timer")){
+                PointItemShared.setTimer(context,item)
+            }
+        }else{
+            holder.check.setImageResource(R.drawable.no_check)
+        }
+
+
+        holder.check.setOnClickListener{
+            itemClickListener.onClick(it, position)
+//            holder.check.setImageResource(R.drawable.ok_check)
+            ck(type,position)
+            loop(type, position)
+            Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
+//            PointItemShared.setBg(context, item)
+        }
 
         if (bg||timer){
             Log.d(TAG, "bg1:"+bg+"timer1"+timer)
@@ -114,27 +146,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 //                builder.show()
 //
 //            }
-            if(type.equals("bg")) {
-                //선택 하나만 되게
-                for (i in 0 until itemList.size) {
-                    for (i in 0 until itemList.size) {
-                        if (i == position) {
-                            itemList[i].bg = true
-                        } else {
-                            itemList[i].bg = false
-                        }
-                    }
-                }
-            }else if(type.equals("timer")){
-                for (i in 0 until itemList.size) {
-                    if (i == position) {
-                        itemList[i].timer = true
-                    } else {
-                        itemList[i].timer = false
-                    }
-                }
-            }
-            notifyDataSetChanged()
+            loop(type,position)
 
         }
 
@@ -152,25 +164,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                         itemList[i].timer = false
                 }
             }
-            if(type.equals("bg")) {
-                //선택 하나만 되게
-                for (i in 0 until itemList.size) {
-                    if (i == position) {
-                        itemList[i].bg = true
-                    } else {
-                        itemList[i].bg = false
-                    }
-                }
-            }else if(type.equals("timer")){
-                for (i in 0 until itemList.size) {
-                    if (i == position) {
-                        itemList[i].timer = true
-                    } else {
-                        itemList[i].timer = false
-                    }
-                }
-            }
-            notifyDataSetChanged()
+            loop(type,position)
         }
     }
 
@@ -187,5 +181,59 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
     // (4) setItemClickListener로 설정한 함수 실행
     private lateinit var itemClickListener: OnItemClickListener
 
+
+
+    //아이템 타입별(배경, 타이머) 하나만 선택되게하는 메서드
+    fun loop(type:String, position:Int){
+        Log.d(TAG, "loop: 루프 작동")
+        if(type.equals("bg")) {
+            //선택 하나만 되게
+            for (i in 0 until itemList.size) {
+                for (i in 0 until itemList.size) {
+                    if (i == position) {
+                        itemList[i].bg = true
+                    } else {
+                        itemList[i].bg = false
+                    }
+                }
+            }
+        }else if(type.equals("timer")){
+            for (i in 0 until itemList.size) {
+                if (i == position) {
+                    itemList[i].timer = true
+                } else {
+                    itemList[i].timer = false
+                }
+            }
+        }
+        notifyDataSetChanged()
+    }
+
+
+    //아이템 타입별(배경, 타이머) 하나만 선택되게하는 메서드
+    fun ck(type:String, position:Int){
+        Log.d(TAG, "loop: 루프 작동")
+        if(type.equals("bg")) {
+            //선택 하나만 되게
+            for (i in 0 until itemList.size) {
+                for (i in 0 until itemList.size) {
+                    if (i == position) {
+                        itemList[i].bcheck = true
+                    } else {
+                        itemList[i].bcheck = false
+                    }
+                }
+            }
+        }else if(type.equals("timer")){
+            for (i in 0 until itemList.size) {
+                if (i == position) {
+                    itemList[i].tcheck = true
+                } else {
+                    itemList[i].tcheck = false
+                }
+            }
+        }
+        notifyDataSetChanged()
+    }
 }
 

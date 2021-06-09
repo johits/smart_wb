@@ -39,7 +39,7 @@ class PayDialog (val context: Context) {
             Log.d(TAG, "현재 내 포인트:" + f)
             present_flower = f - p
             Log.d(TAG, "구매 후 내 포인트:" + present_flower)
-            PointItemShared.sumFlower(c, present_flower)
+            PointItemShared.sumFlower(c, -p)
             Log.d(TAG, "꽃 쉐어드 저장")
             lockerlist.add(n)
             Log.d(TAG, "list 담긴 값은:" + lockerlist)
