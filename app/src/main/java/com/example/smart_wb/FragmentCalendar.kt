@@ -178,14 +178,14 @@ class FragmentCalendar : Fragment() {
 //
         var dateList = ArrayList<String>()
         // 데이터 확인용 로그
-        for (data in timerDataList) {
-            var date: String = data.date
-            dateList.add(date)
-            Log.d(
-                TAG,
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-            )
-        }
+//        for (data in timerDataList) {
+//            var date: String = data.date
+//            dateList.add(date)
+//            Log.d(
+//                TAG,
+//                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+//            )
+//        }
         //중복값 지우기
         val linkedHashSet = LinkedHashSet<String>()
         for (item in dateList) {

@@ -1,5 +1,6 @@
 package com.example.smart_wb
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ComponentName
@@ -77,20 +78,21 @@ class LockScreenActivity : AppCompatActivity() {
             if (remainTime > 0) {
                 settingTime=remainTime //중요
                 //노티피 초기화
+            } else {
+                settingTime=0
+//                showNotification()//노티활성화
+//                successUpdate() //성공시//sqlite 업데이트
+//                TimerSetShared.clearTimerSet(this)//쉐어드 초기화
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
+//                finish()
+            }
                 val notificationManager =
                     getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 //방해금지모드작동
                 notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
 
                 setStartService()
-            } else {
-                showNotification()//노티활성화
-                successUpdate() //성공시//sqlite 업데이트
-                TimerSetShared.clearTimerSet(this)//쉐어드 초기화
-//                val intent = Intent(this, MainActivity::class.java)
-//                startActivity(intent)
-//                finish()
-            }
         }
 
     }
@@ -224,6 +226,7 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //화면 기상
+    @SuppressLint("WakelockTimeout")
     fun getDisplayWakeUp() {
         try {
             val pm = getSystemService(POWER_SERVICE) as PowerManager
