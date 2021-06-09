@@ -8,7 +8,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.database.sqlite.SQLiteDatabase
 import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
@@ -56,6 +55,9 @@ class LockScreenActivity : AppCompatActivity() {
         tvWatch.visibility = View.GONE
         btStop.visibility = View.GONE
         Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
+        //쉐어드 적용된 아이템 불러오기(배경, 타이머)
+        l_back.setImageResource(PointItemShared.getBg(this))
+        l_timer.setImageResource(PointItemShared.getTimer(this))
 
         if (intent.hasExtra("settingTime")) {
             var time = intent.getStringExtra("settingTime")?.toInt()
@@ -226,6 +228,8 @@ class LockScreenActivity : AppCompatActivity() {
 
 
     }
+
+
 
     //화면 기상
     @SuppressLint("WakelockTimeout")

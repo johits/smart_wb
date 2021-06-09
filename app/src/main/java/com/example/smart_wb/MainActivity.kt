@@ -12,11 +12,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.smart_wb.databinding.ActivityMainBinding
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 private lateinit var binding: ActivityMainBinding
-
+var dialog : Boolean= false
 
 //2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드)
 
@@ -25,6 +24,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (intent.hasExtra("dialog")) {
+            dialog = intent.getBooleanExtra("dialog",false)
+        }
+
 
         Log.d(TAG, "onCreate: 메인으로넘어옴")
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -66,8 +70,12 @@ class MainActivity : AppCompatActivity() {
             xml_main_tablayout.getTabAt(2)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_chart)   as RelativeLayout
             xml_main_tablayout.getTabAt(3)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_item)     as RelativeLayout
             xml_main_tablayout.getTabAt(4)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_setting)  as RelativeLayout
+
+            if(dialog){
+                xml_main_viewpaper.setCurrentItem(3)
+            }
         }
 
+
+
 }
-
-
