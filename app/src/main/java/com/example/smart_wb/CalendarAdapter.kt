@@ -20,14 +20,14 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
     val TAG = "CalendarAdapter"
     var dataList = mutableListOf<TimerData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarAdapter.ViewHolder {
-        Log.d(TAG, "onCreateViewHolder: ")
+       // Log.d(TAG, "onCreateViewHolder: ")
             val view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false)
             return ViewHolder(view)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: CalendarAdapter.ViewHolder, position: Int) {
-        Log.d(TAG, "onBindViewHolder: ")
+       // Log.d(TAG, "onBindViewHolder: ")
         holder.bind(dataList[position])
         if(dataList[position].success==0){
             holder.tvSuccess.setTextColor(ContextCompat.getColor(context,R.color.colorRed))
@@ -44,7 +44,7 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
     }
 
     override fun getItemCount(): Int{
-        Log.d(TAG, "getItemCount: "+dataList.size)
+        //Log.d(TAG, "getItemCount: "+dataList.size)
         return dataList.size
     }
 

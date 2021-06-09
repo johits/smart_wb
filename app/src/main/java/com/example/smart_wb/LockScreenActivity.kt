@@ -77,7 +77,6 @@ class LockScreenActivity : AppCompatActivity() {
             //남은시간이 0, 음수면 스크린타임 이미 종료됨
             if (remainTime > 0) {
                 settingTime=remainTime //중요
-                //노티피 초기화
             } else {
                 settingTime=0
 //                showNotification()//노티활성화
@@ -87,6 +86,7 @@ class LockScreenActivity : AppCompatActivity() {
 //                startActivity(intent)
 //                finish()
             }
+                //노티피 초기화
                 val notificationManager =
                     getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 //방해금지모드작동
