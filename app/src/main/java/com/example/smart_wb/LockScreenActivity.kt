@@ -3,6 +3,7 @@ package com.example.smart_wb
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -72,7 +73,7 @@ class LockScreenActivity : AppCompatActivity() {
             }
         } else if (intent.hasExtra("restart")) {
             val remainTime = calRemainTime()
-
+            Log.d(TAG, "남은시간:$remainTime")
             //남은시간이 0보다 크면 스크린타임 계속
             //남은시간이 0, 음수면 스크린타임 이미 종료됨
             if (remainTime > 0) {
@@ -207,6 +208,7 @@ class LockScreenActivity : AppCompatActivity() {
             .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentText(getString(R.string.screen_time_success_noti_text))
             .setAutoCancel(true)
+            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
@@ -284,18 +286,32 @@ class LockScreenActivity : AppCompatActivity() {
     //남은시간 0or음수 스크린타임 이미 종료
     //날짜가 바뀌면 보정을 해야한다. 어떻게?
     private fun calRemainTime(): Int {
+        var result = 0
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
         // 날짜, 시간을 가져오고 싶은 형태 선언
+        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
         val dateFormatTime = SimpleDateFormat("HH:mm:ss")
         // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+        val nowDate:String = dateFormatDate.format(dateType) //현재 년 월 일
         val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
         val startTime: Int = calSec(TimerSetShared.getTime(this)) //시작시간
         val settingTime: Int = TimerSetShared.getSettingTime(this)//설정시간
-        val endTime = startTime + settingTime// 종료시간
+        var endTime = startTime + settingTime// 종료시간
 
-        return endTime - nowTime //남은시간
+        //종료시간이 하루가 지난 상황
+        if(endTime>86400){
+            if(nowDate.equals(TimerSetShared.getDate(this))){
+                result=endTime-nowTime
+            }else{
+                result=endTime-nowTime-86400//보정필요하다
+            }
+        }else{
+            result = endTime - nowTime//남은시간
+        }
+
+        return result
     }
 
     //시간 -> 초 변환 //String->Int
