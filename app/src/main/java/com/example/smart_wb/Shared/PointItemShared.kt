@@ -1,11 +1,13 @@
 package com.example.smart_wb.Shared
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
+import android.preference.PreferenceManager
 import android.util.Log
 import com.example.smart_wb.LockScreenActivity.Companion.TAG
+import org.json.JSONArray
+import org.json.JSONException
+import java.util.*
 
 
 /**
@@ -15,23 +17,74 @@ import com.example.smart_wb.LockScreenActivity.Companion.TAG
 object PointItemShared {
     private val fileName : String = "pointItem" //쉐어드 파일이름
 
-
     //보관함 저장하기
-    fun sumLocker(context: Context, itemname:String) {
-        val editor: Editor =
-            context.getSharedPreferences(fileName, MODE_PRIVATE).edit()
-        editor.putString("locker", itemname)
-        editor.commit()
-        Log.d(TAG, "sumLocker: 쉐어드 저장 완료 // 저장된 값:"+itemname)
+    fun sumLocker(context: Context, values: ArrayList<*>) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        val a = JSONArray()
+        for (i in values.indices) {
+            a.put(values[i])
+        }
+        if (!values.isEmpty()) {
+            editor.putString("locker", a.toString())
+        } else {
+            editor.putString("locker", null)
+        }
+        editor.apply()
+        Log.d(TAG, "sumLocker: 쉐어드 저장 완료 // 저장된 값:"+values)
     }
 
     //보관함 불러오기
-    fun getLocker(context: Context): String? {
-        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-        return prefs.getString("locker",null)
+    fun getLocker(context: Context): ArrayList<*>? {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val json = prefs.getString("locker", null)
+//        val urls: ArrayList<*> = ArrayList<Any?>()
+        var urls =  ArrayList<String>();
+        if (json != null) {
+            try {
+                val a = JSONArray(json)
+                for (i in 0 until a.length()) {
+                    val url = a.optString(i)
+                    urls.add(url)
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+        return urls
         Log.d(TAG, "getLocker: 보관함 불러오기")
-
     }
+
+//    //보관함 저장하기
+//    fun sumLocker(context: Context, list: java.util.ArrayList<String>) {
+//        val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+//        val editor: Editor = prefs.edit()
+//        val gson = Gson()
+//        val json: String = gson.toJson(list)
+//        editor.putString("locker", json)
+////        editor.apply()
+//        editor.commit()
+//        Log.d(TAG, "sumLocker: 쉐어드 저장 완료 // 저장된 값:"+json)
+//    }
+
+
+//
+//    //보관함 저장하기
+//    fun sumLocker(context: Context, itemname:String) {
+//        val editor: Editor =
+//            context.getSharedPreferences(fileName, MODE_PRIVATE).edit()
+//        editor.putString("locker", itemname)
+//        editor.commit()
+//        Log.d(TAG, "sumLocker: 쉐어드 저장 완료 // 저장된 값:"+itemname)
+//    }
+
+//    //보관함 불러오기
+//    fun getLocker(context: Context): String? {
+//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+//        return prefs.getString("locker",null)
+//        Log.d(TAG, "getLocker: 보관함 불러오기")
+//
+//    }
 
 
 

@@ -74,7 +74,7 @@ class FragmentItem : Fragment() {
 
         flower = PointItemShared.getFlower(iContext)
         point.text = flower.toString()
-        locker = PointItemShared.getLocker(iContext)
+        locker = PointItemShared.getLocker(iContext).toString()
         Log.d(TAG, "쉐어드에서 가져온 꽃:"+flower)
         Log.d(TAG, "쉐어드에서 가져온 보관함:"+locker)
 
