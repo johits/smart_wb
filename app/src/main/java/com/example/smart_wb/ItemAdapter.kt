@@ -111,9 +111,17 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         holder.check.setOnClickListener{
             itemClickListener.onClick(it, position)
 //            holder.check.setImageResource(R.drawable.ok_check)
-            ck(type,position)
-            loop(type, position)
-            Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
+
+            if(type.equals("bg")&&bcheck){
+                bcheck = false
+                holder.check.setImageResource(R.drawable.no_check)
+
+                Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
+            }else{
+                ck(type,position)
+                loop(type, position)
+                Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
+            }
 //            PointItemShared.setBg(context, item)
         }
 
