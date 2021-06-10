@@ -62,8 +62,6 @@
         android:id="@+id/d_yes"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/bt"
         android:text="네"
