@@ -262,6 +262,6 @@ class FragmentCalendar : Fragment() {
         val date: Int = parts[2].toInt()
         val calDay = CalendarDay.from(year,month,date)
 
-        binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
+        binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
     }
 }
