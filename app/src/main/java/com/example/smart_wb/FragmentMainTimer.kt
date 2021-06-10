@@ -20,7 +20,6 @@ import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.timer
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -85,6 +84,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         binding.npMin.maxValue = 59
         binding.npSec.minValue = 0
         binding.npSec.maxValue = 59
+
 
         var settingTime = 0
         view.start.setOnClickListener {

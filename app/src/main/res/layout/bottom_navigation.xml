@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/timer" />
+            android:src="@drawable/mtimer1" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/calendar" />
+            android:src="@drawable/mcalendar1" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/chart" />
+            android:src="@drawable/mchart1" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/item" />
+            android:src="@drawable/mitem1" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,6 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/setting" />
+            android:src="@drawable/msetting1" />
     </RelativeLayout>
 </LinearLayout>

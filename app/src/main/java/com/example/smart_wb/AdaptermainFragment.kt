@@ -17,4 +17,6 @@ class AdapterMainFragment(fm : FragmentManager, private val fragmentCount : Int)
     }
 
     override fun getCount(): Int = fragmentCount
+
+
 }

@@ -48,6 +48,7 @@ class FragmentItem : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
 
+
         }
     }
 
@@ -57,6 +58,7 @@ class FragmentItem : Fragment() {
             iContext = context
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
