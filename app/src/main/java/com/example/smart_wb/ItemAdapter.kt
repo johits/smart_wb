@@ -183,7 +183,8 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         // (1) 리스트 내 항목 클릭 시 onClick() 호출
         holder.product.setOnClickListener {
             Log.d(TAG, "onBindViewHolder: 리스너 작동")
-            itemClickListener.onClick(it, position)
+
+
 
             if(type.equals("reset")){
                 for (i in 0 until itemList.size) {
@@ -192,6 +193,9 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                 }
             }
             loop(type,position)
+
+
+            itemClickListener.onClick(it, position)
         }
     }
 
