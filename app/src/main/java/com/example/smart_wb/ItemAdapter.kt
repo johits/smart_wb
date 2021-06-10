@@ -1,6 +1,8 @@
 package com.example.smart_wb
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -140,22 +142,22 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 //            itemClickListener.onClick(it, position)
             //테스트
             val dialog = PayDialog(context)
-                dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
+//                dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
 
-//            //실제코드
-//            if(flower>=itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
-//                val dialog = PayDialog(context)
-//                dialog.myDig(itemList[position].item, itemList[position].price, flower,itemList[position].name, context)
-//            }else{ //꽃송이가 부족할 경우
-//                val builder = AlertDialog.Builder(context)
-//                builder.setMessage("꽃송이가 부족합니다.")
-//                builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
-//
-//                }
-//                builder.setCancelable(false) //뒷배경 터치 막기
-//                builder.show()
-//
-//            }
+            //실제코드
+            if(flower>=itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
+                val dialog = PayDialog(context)
+                dialog.myDig(itemList[position].item, itemList[position].price, flower,itemList[position].name, context)
+            }else{ //꽃송이가 부족할 경우
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("꽃송이가 부족합니다.")
+                builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
+
+                }
+                builder.setCancelable(false) //뒷배경 터치 막기
+                builder.show()
+
+            }
 //            loop(type,position) // 자물쇠 누르면 미리보기 적용 동시에 됨
 
             //Itemadapter 클릭 리스너

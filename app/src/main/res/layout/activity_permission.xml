@@ -33,7 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:paddingVertical="10dp"
-        android:background="@drawable/sst"
         android:src="@drawable/p1"/>
     <Button
         android:id="@+id/pbt"
