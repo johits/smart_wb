@@ -10,6 +10,7 @@ import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.smart_wb.Shared.TimerSetShared
 
 
 /**
@@ -57,6 +58,12 @@ class CallReceiver : BroadcastReceiver() {
                     Log.d("CallReceiver", phoneNo + "currentNumber")
                     Log.d("CallReceiver", "통화벨 울리는중")
 
+                    if(phoneNo!=null){
+                        //통화벨 종료 부재중전화 더하기
+                        TimerSetShared.sumMissedCall(context)
+                        Log.d("CallReceiver", "부재중전화 수:${TimerSetShared.getMissedCall(context)}")
+                    }
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             if(activityName.equals("LockScreenActivity")){
                                 telephonyManager.endCall()
@@ -67,6 +74,7 @@ class CallReceiver : BroadcastReceiver() {
 
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d("CallReceiver", "통화종료 혹은 통화벨 종료")
+
                 }
                 Log.d("CallReceiver", "phone state : $state")
             }

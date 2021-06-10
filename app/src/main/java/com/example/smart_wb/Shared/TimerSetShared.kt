@@ -45,6 +45,18 @@ object TimerSetShared {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         return prefs.getInt("settingTime", 0)
     }
+    //부재중전화 횟수 더하기
+    fun sumMissedCall(context: Context){
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = prefs.edit()
+        editor.putInt("missedCall", getMissedCall(context)+1)
+        editor.commit()
+    }
+    //부재중전화 불러오기
+    fun getMissedCall(context: Context):Int{
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        return prefs.getInt("missedCall", 0)
+    }
     //데이터 초기화
     fun clearTimerSet(context: Context) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)

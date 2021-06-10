@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+
     }
         private fun configureBottomNavigation(){
             xml_main_viewpaper.adapter = AdapterMainFragment(supportFragmentManager, 5)
