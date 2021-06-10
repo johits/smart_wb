@@ -182,15 +182,15 @@ class FragmentItem : Fragment() {
                     i_back.setImageResource(0)
                     i_timer.setImageResource(0)
                 }
-                if(itemData[position].name.equals("bg1")){
+                if(itemData[position].name.equals("bg1")&&itemData[position].bg){
                 i_back.setImageResource(R.drawable.bg1)
-            }else if(itemData[position].name.equals("bg2")){
+            }else if(itemData[position].name.equals("bg2")&&itemData[position].bg){
                 i_back.setImageResource(R.drawable.bg2)
             }
 
-            if(itemData[position].name.equals("timer1")){
+            if(itemData[position].name.equals("timer1")&&itemData[position].timer){
                 i_timer.setImageResource(R.drawable.timer1)
-            }else if(itemData[position].name.equals("timer2")){
+            }else if(itemData[position].name.equals("timer2")&&itemData[position].timer){
                 i_timer.setImageResource(R.drawable.timer2)
             }
 
