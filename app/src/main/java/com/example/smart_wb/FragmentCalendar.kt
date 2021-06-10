@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,7 +16,6 @@ import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.text.SimpleDateFormat
 
 import java.util.*
@@ -201,7 +199,7 @@ class FragmentCalendar : Fragment() {
             var month: Int = parts[1].toInt()
             var date: Int = parts[2].toInt()
             var calDay = CalendarDay.from(year, month, date)
-            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
+            binding.calendar.addDecorator(CalendarDecoratorpDotSpan(requireActivity(), calDay))
         }
 
     }
@@ -248,7 +246,8 @@ class FragmentCalendar : Fragment() {
         return result
     }
 
-    private fun decorateToday(){
+    //오늘날짜 표시
+   private fun decorateToday(){
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)

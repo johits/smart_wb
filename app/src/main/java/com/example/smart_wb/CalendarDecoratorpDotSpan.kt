@@ -13,7 +13,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
 
-class CalendarDecorator(context: Context, currentDay: CalendarDay) : DayViewDecorator {
+class CalendarDecoratorpDotSpan(context: Context, currentDay: CalendarDay) : DayViewDecorator {
 //    @SuppressLint("UseCompatLoadingForDrawables")
 //    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 //    private val drawable: Drawable = context.getDrawable(R.drawable.edge_gray)!!
