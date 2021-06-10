@@ -159,7 +159,7 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 500)
                 } else {
                     watch.text = calTime(settingTime)
-                    handler?.postDelayed(this, 1000)
+                    handler?.postDelayed(this, 10)
                 }
                 settingTime--
                 Log.d(TAG, "settingTime:" + settingTime)

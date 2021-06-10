@@ -11,6 +11,7 @@ import android.content.ServiceConnection
 import android.media.RingtoneManager
 import android.os.*
 import android.os.VibrationEffect.DEFAULT_AMPLITUDE
+import android.text.format.Time
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -156,13 +157,20 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " message : $message")
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp()
-                    showNotification(notificationId_success, CHANNEL_ID_SUCCESS, "축하합니다.")
+                    val setTime = TimerSetShared.getSettingTime(this)
+                    val setTimeString:String = calTime(setTime)
+                    val flower = setTime/600
+                    val successTitle:String ="목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
+                    val successText:String = "꽃 $flower 송이 획득."
+                    showNotification(notificationId_success, CHANNEL_ID_SUCCESS, successTitle,successText)
                     //부재중 전화가 있으면 알람
                     if (TimerSetShared.getMissedCall(this) != 0) {
+                        val missedCall = TimerSetShared.getMissedCall(this)
+                        val missedCallText:String= "부재중 전화 $missedCall 건이 있습니다."
                         //코루틴//비동기처리
                         GlobalScope.launch {
                             delay(4500)
-                            showNotification(notificationId_call, CHANNEL_ID_MISSEDCALL, "부재중 전화있습니다.")
+                            showNotification(notificationId_call, CHANNEL_ID_MISSEDCALL, missedCallText, "")
                         }
                     }
                     successUpdate() //성공시//sqlite 업데이트
@@ -171,12 +179,7 @@ class LockScreenActivity : AppCompatActivity() {
                 }
                 //쉐어드 데이터 클리어
                 TimerSetShared.clearTimerSet(this)
-                //쉐어드 저장 확인용 로그
-//                Log.d(
-//                    TAG, "시작날짜:" + TimerSetShared.getDate(this) + " " +
-//                            "시작시간:" + TimerSetShared.getTime(this) + " " +
-//                            "설정시간:" + TimerSetShared.getSettingTime(this)
-//                )
+
                 setStopService()
                 finish()
             }
@@ -245,14 +248,16 @@ class LockScreenActivity : AppCompatActivity() {
 
     //노티피케이션 발생
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotification(notiId: Int, chanelId: String, text: String) {
+    fun showNotification(notiId: Int, chanelId: String, title:String, text: String) {
         val arr = arrayListOf(0, 1, 2)
         var a = longArrayOf(1000)
         var builder = NotificationCompat.Builder(this, chanelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(getString(R.string.screen_time_success_noti_title))
+//            .setContentTitle(getString(R.string.screen_time_success_noti_title))
+            .setContentTitle(title)
             .setContentText(text)
             .setAutoCancel(true)
+//            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
             .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
@@ -364,6 +369,21 @@ class LockScreenActivity : AppCompatActivity() {
         val min: Int = parts[1].toInt()
         val sec: Int = parts[2].toInt()
         return hour * 3600 + min * 60 + sec
+    }
+
+    //초-> 시간 변환환
+     @RequiresApi(Build.VERSION_CODES.N)
+    private fun calTime(setTime: Int): String {
+        val result: String?
+        val hour = Math.floorDiv(setTime, 3600)
+        val min = Math.floorMod(setTime, 3600) / 60
+      //  val sec = Math.floorMod(setTime, 3600) % 60
+        //if (hour > 0) {
+            result="%1$02d:%2$02d".format(hour,min)
+       // } else {
+         //   result="%1$02d:%2$02d".format(min,sec)
+        //}
+        return result
     }
 }
 
