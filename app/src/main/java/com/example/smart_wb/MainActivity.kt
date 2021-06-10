@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 private lateinit var binding: ActivityMainBinding
 
 
-//2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드)
+//2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드) .
 
 class MainActivity : AppCompatActivity() {
     private val adapter by lazy {AdapterMainFragment(supportFragmentManager, 5)}
