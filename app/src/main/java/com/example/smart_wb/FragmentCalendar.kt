@@ -18,6 +18,7 @@ import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import kotlinx.android.synthetic.main.fragment_calendar.*
+import java.text.SimpleDateFormat
 
 import java.util.*
 import kotlin.collections.ArrayList
@@ -67,9 +68,10 @@ class FragmentCalendar : Fragment() {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //오늘날짜 표시
+        decorateToday()
 
-
-
+        //달력표시제한
 //        binding.calendar.setHeaderTextAppearance(getCurrentDay())
 //        binding.calendar.state().edit()
 //            .setMaximumDate(
@@ -205,7 +207,7 @@ class FragmentCalendar : Fragment() {
     }
 
     //날짜 클릭시 데이터 가져오기
-    fun selectDate(date:String):MutableList<TimerData>{
+   private fun selectDate(date:String):MutableList<TimerData>{
         Log.d(TAG, "selectDate: ")
         dataList.clear()
         val timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
@@ -218,7 +220,7 @@ class FragmentCalendar : Fragment() {
 
     //총도전시간,성공시간,꽃 계산기
     @RequiresApi(Build.VERSION_CODES.N)
-    fun calculateSum(){
+   private fun calculateSum(){
         var settingTimeSum=0
         var successTimeSum=0
         var flowerSum=0
@@ -237,12 +239,29 @@ class FragmentCalendar : Fragment() {
 
     //설정시간은 초 -> HH:mm:ss 로 변환
     @RequiresApi(Build.VERSION_CODES.N)
-    fun changeTime(settingTime: Int): String {
+    private fun changeTime(settingTime: Int): String {
         val result: String?
         val hour = Math.floorDiv(settingTime, 3600)
         val min = Math.floorMod(settingTime, 3600) / 60
         result = "%1$02d:%2$02d".format(hour, min)
 
         return result
+    }
+
+    private fun decorateToday(){
+        val timeStamp = System.currentTimeMillis()
+        // 현재 시간을 Date 타입으로 변환
+        val dateType = Date(timeStamp)
+        // 날짜, 시간을 가져오고 싶은 형태 선언
+        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
+        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+        val today:String = dateFormatDate.format(dateType) //현재 년 월 일
+        val parts = today.split("-").toTypedArray()
+        val year: Int = parts[0].toInt()
+        val month: Int = parts[1].toInt()
+        val date: Int = parts[2].toInt()
+        val calDay = CalendarDay.from(year,month,date)
+
+        binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
     }
 }

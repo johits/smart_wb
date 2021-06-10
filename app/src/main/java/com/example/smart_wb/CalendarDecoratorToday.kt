@@ -13,10 +13,10 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
 
-class CalendarDecorator(context: Context, currentDay: CalendarDay) : DayViewDecorator {
-//    @SuppressLint("UseCompatLoadingForDrawables")
-//    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-//    private val drawable: Drawable = context.getDrawable(R.drawable.edge_gray)!!
+class CalendarDecoratorToday(context: Context, currentDay: CalendarDay) : DayViewDecorator {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private val drawable: Drawable = context.getDrawable(R.drawable.caledar_today)!!
     val mContext = context
     private var myDay = currentDay
     override fun shouldDecorate(day: CalendarDay): Boolean {
@@ -26,9 +26,7 @@ class CalendarDecorator(context: Context, currentDay: CalendarDay) : DayViewDeco
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun decorate(view: DayViewFacade) {
         //view.setSelectionDrawable(drawable!!)
-//        view.setBackgroundDrawable(drawable)
-//        view.setDaysDisabled(true)//클릭불가
-        view.addSpan(DotSpan(15f, ContextCompat.getColor(mContext, R.color.colorRed)))
+        view.setBackgroundDrawable(drawable)
     }
 
     init {
