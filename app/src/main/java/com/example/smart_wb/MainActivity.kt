@@ -17,7 +17,7 @@ private lateinit var binding: ActivityMainBinding
 //2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드) .
 
 class MainActivity : AppCompatActivity() {
-    private val adapter by lazy {AdapterMainFragment(supportFragmentManager, 5)}
+    private val adapter by lazy {AdapterMainFragment(supportFragmentManager, 4)}
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 xml_main_tablayout.getTabAt(1)?.setIcon(R.drawable.mcalendar1)
                 xml_main_tablayout.getTabAt(2)?.setIcon(R.drawable.mchart1)
                 xml_main_tablayout.getTabAt(3)?.setIcon(R.drawable.mitem1)
-                xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting1)
+//                xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting1)
 
 
                 when(position) {
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                     1   ->   xml_main_tablayout.getTabAt(1)?.setIcon(R.drawable.mcalendar2)
                     2   ->    xml_main_tablayout.getTabAt(2)?.setIcon(R.drawable.mchart2)
                     3   ->    xml_main_tablayout.getTabAt(3)?.setIcon(R.drawable.mitem2)
-                    4   ->    xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting2)
+//                    4   ->    xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting2)
                 }
 
 
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         xml_main_tablayout.getTabAt(1)?.setIcon(R.drawable.mcalendar1)
         xml_main_tablayout.getTabAt(2)?.setIcon(R.drawable.mchart1)
         xml_main_tablayout.getTabAt(3)?.setIcon(R.drawable.mitem1)
-        xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting1)
+//        xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting1)
 
     }
 }
