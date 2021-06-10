@@ -141,13 +141,27 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             Log.d(TAG, "구매하기"+position+"아이템 이름"+itemList[position].item)
 //            itemClickListener.onClick(it, position)
             //테스트
-            val dialog = PayDialog(context)
+//            val dialog = PayDialog(context)
 //                dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
 
             //실제코드
             if(flower>=itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
                 val dialog = PayDialog(context)
                 dialog.myDig(itemList[position].item, itemList[position].price, flower,itemList[position].name, context)
+                //Itemadapter 클릭 리스너
+                dialog.setItemClickListener2(object: PayDialog.OnItemClickListener {
+                    override fun onClick(p: Int) {
+                        itemList[position].lock = true //이거 설정해줘야 금액 변경됨
+                        holder.lock.visibility = View.GONE
+                        holder.check.setImageResource(R.drawable.no_check)
+                        holder.check.visibility = View.VISIBLE
+                        itemClickListener.onClick(it, position)
+
+
+                    }
+                })
+
+
             }else{ //꽃송이가 부족할 경우
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("꽃송이가 부족합니다.")
@@ -160,18 +174,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             }
 //            loop(type,position) // 자물쇠 누르면 미리보기 적용 동시에 됨
 
-            //Itemadapter 클릭 리스너
-            dialog.setItemClickListener2(object: PayDialog.OnItemClickListener {
-                override fun onClick(p: Int) {
-                    itemList[position].lock = true //이거 설정해줘야 금액 변경됨
-                    holder.lock.visibility = View.GONE
-                    holder.check.setImageResource(R.drawable.no_check)
-                    holder.check.visibility = View.VISIBLE
-                    itemClickListener.onClick(it, position)
 
-
-                }
-            })
         }
 
 
