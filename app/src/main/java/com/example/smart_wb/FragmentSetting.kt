@@ -67,6 +67,8 @@ class FragmentSetting : Fragment() {
             tss.text = "무음"
         }
 
+
+
         ts.setOnClickListener(){
             var builder = AlertDialog.Builder(context)
 

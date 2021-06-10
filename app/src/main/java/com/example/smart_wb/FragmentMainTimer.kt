@@ -3,6 +3,7 @@
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -34,6 +35,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private val TAG = "FragmentMainTimer"
     private var param1: String? = null
     private var param2: String? = null
+
+    private var sound_value : Int = -1
 
     private lateinit var mContext: Context
 
@@ -76,6 +79,43 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     ): View? {
         _binding = FragmentMainTimerBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        view.soundsetting.setBackgroundResource(R.drawable.mbell)
+
+        //알림 상태 확인
+        val audioManager =
+            requireContext().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+            Log.d(LockScreenActivity.TAG, "벨소리모드")
+            view.soundsetting.setBackgroundResource(R.drawable.mbell)
+            sound_value = 0
+        } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+            Log.d(LockScreenActivity.TAG, "진동모드")
+            view.soundsetting.setBackgroundResource(R.drawable.mvibe)
+            sound_value = 1
+        } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
+            Log.d(LockScreenActivity.TAG, "무음모드")
+            view.soundsetting.setBackgroundResource(R.drawable.mmute)
+            sound_value = 2
+        }
+
+        //알림 버튼 탭할 때마다 모드 변경
+        view.soundsetting.setOnClickListener{
+            if(sound_value==0){
+                view.soundsetting.setBackgroundResource(R.drawable.mvibe) //진동모드
+                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE // 진동 모드로 변경
+                sound_value = 1
+            }else if(sound_value==1){
+                view.soundsetting.setBackgroundResource(R.drawable.mmute) //무음모드
+                audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT // 무음 모드로 변경
+                sound_value = 2
+            }else if(sound_value==2){
+                view.soundsetting.setBackgroundResource(R.drawable.mbell) //벨소리모드
+                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL // 벨소리 모드로 변경
+                sound_value = 0
+            }
+        }
 
         //numberPicker 최소,최대값 지정
         binding.npHour.minValue = 0

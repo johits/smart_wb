@@ -2,7 +2,9 @@ package com.example.smart_wb
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
@@ -16,6 +18,7 @@ private lateinit var binding: ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val adapter by lazy {AdapterMainFragment(supportFragmentManager, 5)}
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
