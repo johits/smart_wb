@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 /**
  * 2021-06-06 yama 타이머 테이블 SQLiteOpenHelper
@@ -75,6 +76,29 @@ class TimerDbHelper
             val flower:Int =cursor.getInt(5)
             var data: TimerData = TimerData(id, date, time, settingTime, success, flower)
             result?.add(data)
+        }
+        db.close()
+        return result
+    }
+
+    //동일한 날짜 데이터 불러오기
+    fun select(date:String):ArrayList<TimerData>{
+        Log.d("cal", date)
+        val result = arrayListOf<TimerData>()
+        val db: SQLiteDatabase = writableDatabase
+        val sql = "SELECT * FROM timer WHERE date='"+ date +"';"
+
+        val cursor:Cursor = db.rawQuery(sql, null)
+        while (cursor.moveToNext()) {
+            val id: Int = cursor.getInt(0)
+            val date: String = cursor.getString(1)
+            val time: String = cursor.getString(2)
+            val settingTime: Int = cursor.getInt(3)
+            val success: Int = cursor.getInt(4)
+            val flower:Int =cursor.getInt(5)
+            var data: TimerData = TimerData(id, date, time, settingTime, success, flower)
+            result?.add(data)
+
         }
         db.close()
         return result

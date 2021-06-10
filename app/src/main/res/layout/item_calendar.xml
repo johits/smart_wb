@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10"
+    android:layout_marginTop="4dp">
+
+    <TextView
+        android:id="@+id/tvStartTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="12:00"
+        android:textColor="@color/colorBlack"
+        android:maxLength="5"
+        android:background="@drawable/edge_white"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:layout_weight="2"/>
+    <TextView
+        android:id="@+id/tvSettingTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:background="@drawable/edge_gray"
+        android:text="23:59:59"
+        android:maxLength="5"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:layout_weight="3"/>
+    <TextView
+        android:id="@+id/tvSuccess"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="성공"
+        android:background="@drawable/edge_white"
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:layout_weight="3"/>
+    <TextView
+        android:id="@+id/tvFlower"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:background="@drawable/edge_gray"
+        android:paddingTop="4dp"
+        android:layout_weight="2"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -98,6 +98,7 @@ class DrawService : Service() {
             settingTime = -2
             Log.d(TAG, "종료버튼 클릭")
             drawServiceStop(false)
+
         }
         wm!!.addView(mView, params)
     }
@@ -122,12 +123,21 @@ class DrawService : Service() {
 
         stopService(Intent(applicationContext, DrawService::class.java))
 
+        //메인액티비티 호출
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
 
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        return super.onUnbind(intent)
+        Log.d(TAG, "onUnbind: ")
+    }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "드로우서비스 onDestroy: ")
         if (wm != null) {
             if (mView != null) {
                 wm!!.removeView(mView)
@@ -149,7 +159,7 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 500)
                 } else {
                     watch.text = calTime(settingTime)
-                    handler?.postDelayed(this, 1000)
+                    handler?.postDelayed(this, 10)
                 }
                 settingTime--
                 Log.d(TAG, "settingTime:" + settingTime)
@@ -169,30 +179,10 @@ class DrawService : Service() {
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
         val sec = Math.floorMod(setTime, 3600) % 60
-//        result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
         if (hour > 0) {
-            if (min < 10 && sec < 10) {
-                result = "${hour}:0${min}:0${sec}"
-            } else if (min < 10 && sec > 10) {
-                result = "${hour}:0${min}:${sec}"
-            } else if (min > 10 && sec < 10) {
-                result = "${hour}:${min}:0${sec}"
-            } else {
-                result = "${hour}:${min}:${sec}"
-            }
+            result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
         } else {
-//            Log.d("tag", "시간0")
-            if (min < 10 && sec < 10) {
-                result = "0${min}:0${sec}"
-            }else if(min < 10 && sec ==10){
-                result = "0${min}:${sec}"
-            } else if (min < 10 && sec > 10) {
-                result = "0${min}:${sec}"
-            } else if (min > 10 && sec < 10) {
-                result = "${min}:0${sec}"
-            } else {
-                result = "${min}:${sec}"
-            }
+          result="%1$02d:%2$02d".format(min,sec)
         }
         return result
     }

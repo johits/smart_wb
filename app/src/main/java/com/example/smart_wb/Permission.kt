@@ -1,5 +1,7 @@
 package com.example.smart_wb
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -26,8 +28,34 @@ class Permission : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
-
+        createNotificationChannelSuccess()
+        createNotificationChannelMissedCall()
         checkPermission()
+    }
+    //노티피케이션 체널 생성
+    private fun createNotificationChannelMissedCall() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val id = "smart_wb_call"
+            val name = "smart_wb_call"
+            val descriptionText = "call"
+            val importance = NotificationManager.IMPORTANCE_HIGH//high 이상이여야 헤드업 알림 나온다.
+            val mChannel = NotificationChannel(id, name, importance)
+            mChannel.description = descriptionText
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
+    }
+    private fun createNotificationChannelSuccess() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val id = "smart_wb_success"
+            val name = "smart_wb_success"
+            val descriptionText = "success"
+            val importance = NotificationManager.IMPORTANCE_HIGH//high 이상이여야 헤드업 알림 나온다.
+            val mChannel = NotificationChannel(id, name, importance)
+            mChannel.description = descriptionText
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
     }
 
 

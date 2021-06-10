@@ -1,18 +1,23 @@
 package com.example.smart_wb
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
+import java.text.SimpleDateFormat
+
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,10 +34,12 @@ class FragmentCalendar : Fragment() {
 
             }
     }
+    lateinit var calendarAdapter: CalendarAdapter
+    var dataList = mutableListOf<TimerData>()
 
     lateinit var timerDataList: ArrayList<TimerData>
 
-    private val TAG = "FragmentCalender"
+    private val TAG = "FragmentCalendar"
     private lateinit var mContext: Context
 
     //뷰바인딩 위한 변수
@@ -51,31 +58,59 @@ class FragmentCalendar : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
-        binding.calendar.setHeaderTextAppearance(getCurrentDay())
-        binding.calendar.state().edit()
-            .setMaximumDate(
-                CalendarDay.from(
-                    getCurrentYear(),
-                    getCurrentMonth(),
-                    getCurrentDay()
-                )
-            )
-            .commit()
+
+        //오늘날짜 표시
+        decorateToday()
+
+        //달력표시제한
+//        binding.calendar.setHeaderTextAppearance(getCurrentDay())
+//        binding.calendar.state().edit()
+//            .setMaximumDate(
+//                CalendarDay.from(
+//                    getCurrentYear(),
+//                    getCurrentMonth(),
+//                    getCurrentDay()
+//                )
+//            )
+//            .commit()
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
-            Toast.makeText(mContext, date.toString(), Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "위젯-" + widget + " 날짜-" + date + " 셀렉트-" + selected)
-//            screenTimeData()
-//            //보여지는 모드 변경 주
-//            binding.calendar.state().edit()
-//                .setCalendarDisplayMode(CalendarMode.WEEKS)
-//                .commit()
+            binding.calendar.state().edit()
+                .setCalendarDisplayMode(CalendarMode.WEEKS)
+                .commit()
+            val year:String = date.year.toString()
+            val month:String
+            val day:String
+            //ex String 06 과 6 은 다르다
+            if(date.month<10){
+                month="0"+date.month
+            }else{
+                month=date.month.toString()
+            }
+            if(date.day<10){
+                day="0"+date.day
+            }else{
+                day=date.day.toString()
+            }
+            val result:String = year+"-"+month+"-"+day
+            dataList.clear()
+            dataList=selectDate(result)
+            if(dataList.size==0){
+                binding.linear.visibility=View.GONE
+                binding.tvNoData.visibility=View.VISIBLE
+            }else{
+                binding.linear.visibility = View.VISIBLE
+                binding.tvNoData.visibility=View.GONE
+            }
+                calendarAdapter.replaceList(dataList)
+                calculateSum()
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
@@ -83,24 +118,9 @@ class FragmentCalendar : Fragment() {
             binding.calendar.state().edit()
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
+            binding.linear.visibility=View.GONE
+            binding.tvNoData.visibility=View.GONE
         }
-        //데코레이션 테스트
-        val calList = ArrayList<CalendarDay>()
-        calList.add(CalendarDay.from(2021, 5, 6))
-        calList.add(CalendarDay.from(2021, 5, 3))
-        calList.add(CalendarDay.from(2021, 5, 7))
-        calList.add(CalendarDay.from(2021, 5, 15))
-        calList.add(CalendarDay.from(2021, 5, 12))
-        calList.add(CalendarDay.from(2021, 5, 29))
-        calList.add(CalendarDay.from(2021, 5, 28))
-        calList.add(CalendarDay.from(2021, 5, 22))
-        calList.add(CalendarDay.from(2021, 5, 21))
-
-        for (calDay in calList) {
-            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
-        }
-
-//        screenTimeData()
 
         return view
     }
@@ -108,6 +128,23 @@ class FragmentCalendar : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         screenTimeData()
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycler()
+    }
+
+    private fun initRecycler() {
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.recycler.setLayoutManager(layoutManager)
+        binding.recycler.layoutManager = LinearLayoutManager(requireContext()).also { it.orientation = LinearLayoutManager.VERTICAL }
+
+//        구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
+        binding.recycler.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+
+        calendarAdapter = CalendarAdapter(mContext)
+        binding.recycler.adapter = calendarAdapter
+
     }
 
     //프래그먼트는 뷰보다 더 오래살아남는다.
@@ -135,9 +172,7 @@ class FragmentCalendar : Fragment() {
 
         var timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
-//
-////        //데이터 삽입
-////        timerDbHelper.upDate(date, time)
+
         //   데이터 불러오기
         timerDataList = timerDbHelper.select()
 //
@@ -146,10 +181,10 @@ class FragmentCalendar : Fragment() {
         for (data in timerDataList) {
             var date: String = data.date
             dateList.add(date)
-            Log.d(
-                TAG,
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-            )
+//            Log.d(
+//                TAG,
+//                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+//            )
         }
         //중복값 지우기
         val linkedHashSet = LinkedHashSet<String>()
@@ -164,9 +199,68 @@ class FragmentCalendar : Fragment() {
             var month: Int = parts[1].toInt()
             var date: Int = parts[2].toInt()
             var calDay = CalendarDay.from(year, month, date)
-            binding.calendar.addDecorator(CalendarDecorator(requireActivity(), calDay))
+            binding.calendar.addDecorator(CalendarDecoratorpDotSpan(requireActivity(), calDay))
         }
 
     }
 
+    //날짜 클릭시 데이터 가져오기
+   private fun selectDate(date:String):MutableList<TimerData>{
+        Log.d(TAG, "selectDate: ")
+        dataList.clear()
+        val timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
+        var database = timerDbHelper.writableDatabase
+
+        var arr:MutableList<TimerData> = timerDbHelper.select(date)
+        val settingTimeSum:String
+        return arr;
+    }
+
+    //총도전시간,성공시간,꽃 계산기
+    @RequiresApi(Build.VERSION_CODES.N)
+   private fun calculateSum(){
+        var settingTimeSum=0
+        var successTimeSum=0
+        var flowerSum=0
+        for(data in dataList){
+            settingTimeSum+=data.settingTime
+            if(data.success==1){
+                successTimeSum+=data.settingTime
+                flowerSum+=data.flower
+            }
+        }
+        Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
+        binding.tvSettingTimeSum.text=changeTime(settingTimeSum)
+        binding.tvSuccessTimeSum.text=changeTime(successTimeSum)
+        binding.tvFlowerSum.text=flowerSum.toString()
+    }
+
+    //설정시간은 초 -> HH:mm:ss 로 변환
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun changeTime(settingTime: Int): String {
+        val result: String?
+        val hour = Math.floorDiv(settingTime, 3600)
+        val min = Math.floorMod(settingTime, 3600) / 60
+        result = "%1$02d:%2$02d".format(hour, min)
+
+        return result
+    }
+
+    //오늘날짜 표시
+   private fun decorateToday(){
+        val timeStamp = System.currentTimeMillis()
+        // 현재 시간을 Date 타입으로 변환
+        val dateType = Date(timeStamp)
+        // 날짜, 시간을 가져오고 싶은 형태 선언
+        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
+        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+        val today:String = dateFormatDate.format(dateType) //현재 년 월 일
+        val parts = today.split("-").toTypedArray()
+        val year: Int = parts[0].toInt()
+        val month: Int = parts[1].toInt()
+        val date: Int = parts[2].toInt()
+        val calDay = CalendarDay.from(year,month,date)
+
+        binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
+    }
 }

@@ -58,12 +58,14 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text=":"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone"/>
 
             <NumberPicker
                 android:id="@+id/np_sec"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

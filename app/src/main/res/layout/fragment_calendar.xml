@@ -1,25 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FragmentCalendar">
 
-   <androidx.appcompat.widget.LinearLayoutCompat
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:orientation="vertical">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-       <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-           android:id="@+id/calendar"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:visibility="visible"
-           app:mcv_selectionColor="#00F"
-           app:mcv_selectionMode="single" />
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:mcv_selectionColor="#A7FFC4"
+            app:mcv_selectionMode="single" />
 
+        <View style="@style/Divider" />
 
-   </androidx.appcompat.widget.LinearLayoutCompat>
+        <TextView
+            android:id="@+id/tvNoData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="@string/calendar_no_data"
+            android:textSize="18sp"
+            android:layout_margin="18dp"
+            android:visibility="gone"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:stretchColumns="*">
+
+                <TableRow android:padding="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="도전시간 합"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvSettingTimeSum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="20:00"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp" />
+                </TableRow>
+
+                <TableRow android:padding="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="성공시간 합"
+                        android:textColor="@color/colorBlue"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvSuccessTimeSum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="10:00"
+                        android:textColor="@color/colorBlue"
+                        android:textSize="18sp" />
+                </TableRow>
+
+                <TableRow android:padding="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="획득한꽃 합 "
+                        android:textColor="@color/colorBlue"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvFlowerSum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/colorBlue"
+                        android:textSize="18sp" />
+                </TableRow>
+            </TableLayout>
+
+            <View style="@style/Divider" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="시작시간"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:gravity="center"
+                    android:text="설정시간"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="성공유무"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="꽃"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                tools:listitem="@layout/item_calendar" />
+            <!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            <!--                android:orientation="vertical"-->
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </FrameLayout>
