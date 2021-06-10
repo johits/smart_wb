@@ -109,20 +109,22 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
 
         holder.check.setOnClickListener{
-            itemClickListener.onClick(it, position)
-//            holder.check.setImageResource(R.drawable.ok_check)
-
+//            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
             if(type.equals("bg")&&bcheck){
                 bcheck = false
                 holder.check.setImageResource(R.drawable.no_check)
-
+                PointItemShared.setBg(context, 0)
+                Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
+            }else if(type.equals("timer")&&tcheck){
+                tcheck = false
+                holder.check.setImageResource(R.drawable.no_check)
+                PointItemShared.setTimer(context, 0)
                 Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
             }else{
                 ck(type,position)
-                loop(type, position)
+//                loop(type, position) //선택란 배경 체크됨
                 Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
             }
-//            PointItemShared.setBg(context, item)
         }
 
         if (bg||timer){
@@ -135,7 +137,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
         holder.lock.setOnClickListener {
             Log.d(TAG, "구매하기"+position+"아이템 이름"+itemList[position].item)
-            itemClickListener.onClick(it, position)
+//            itemClickListener.onClick(it, position)
             //테스트
             val dialog = PayDialog(context)
                 dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
@@ -154,8 +156,20 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 //                builder.show()
 //
 //            }
-            loop(type,position)
+//            loop(type,position) // 자물쇠 누르면 미리보기 적용 동시에 됨
 
+            //Itemadapter 클릭 리스너
+            dialog.setItemClickListener2(object: PayDialog.OnItemClickListener {
+                override fun onClick(p: Int) {
+                    itemList[position].lock = true //이거 설정해줘야 금액 변경됨
+                    holder.lock.visibility = View.GONE
+                    holder.check.setImageResource(R.drawable.no_check)
+                    holder.check.visibility = View.VISIBLE
+                    itemClickListener.onClick(it, position)
+
+
+                }
+            })
         }
 
 

@@ -92,7 +92,6 @@ class FragmentItem : Fragment() {
 
         initRecycler()
 
-
         //아이템보기 접기/펼치기
         iv.setOnClickListener {
             Log.d(TAG, "bt_value:" + bt_value)
@@ -172,6 +171,7 @@ class FragmentItem : Fragment() {
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
                 Log.d(TAG, "onClick리스너: "+itemData[position].name)
+                Log.d(TAG, "onClicK 현재 플라워: "+itemData[position].lock)
                 // 클릭 시 이벤트 작성
 //                Toast.makeText(view?.context,
 //                    "${itemData[position].name}\n${itemData[position].number}",
@@ -191,17 +191,26 @@ class FragmentItem : Fragment() {
             }else if(itemData[position].name.equals("timer2")){
                 i_timer.setImageResource(R.drawable.timer2)
             }
+
+                if(itemData[position].lock){
+                    point.text =  PointItemShared.getFlower(iContext).toString()
+                    Log.d(TAG, "현재 플라워 불러옴:"+PointItemShared.getFlower(iContext).toString())
+                }
+
+
+//                if(itemData[position].type.equals("bg")&&itemData[position].bcheck){
+//                    i_back.setImageResource(0)
+//                }else if(itemData[position].type.equals("bg") && !itemData[position].bcheck){
+//                    i_back.setImageResource(itemData[position].item)
+//                }
+//                if(itemData[position].type.equals("timer")&&itemData[position].tcheck){
+//                    i_timer.setImageResource(0)
+//                }else if(itemData[position].type.equals("timer") && !itemData[position].tcheck){
+//                    i_timer.setImageResource(itemData[position].item)
+//                }
             }
         })
 
-        //Itemadapter 클릭 리스너
-        val payDialog= PayDialog(requireContext())     // 어댑터
-        payDialog.setOnClickedListener(object: PayDialog.ButtonClickListener{
-            override fun onClick(myName: String) {
-                TODO("Not yet implemented")
-                point.text = myName
-            }
-        })
 
 
         irv.adapter = itemAdapter
@@ -209,6 +218,17 @@ class FragmentItem : Fragment() {
 
 
     }
+
+//    private fun init(){
+//        //Itemadapter 클릭 리스너
+//        val dialog = PayDialog(iContext)  // 어댑터
+//        dialog.setItemClickListener2(object: PayDialog.OnItemClickListener {
+//            override fun onClick(p: Int) {
+//                point.text = flower.toString()
+//                Log.d(TAG, "현재 플라워 불러옴:" + flower.toString())
+//            }
+//        })
+//    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

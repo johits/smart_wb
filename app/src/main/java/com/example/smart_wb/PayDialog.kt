@@ -2,7 +2,6 @@ package com.example.smart_wb
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -12,12 +11,11 @@ import com.example.smart_wb.Shared.PointItemShared
 import java.util.*
 
 
-class PayDialog (val context: Context) {
-
-
-    private val dialog = Dialog(context)
+ class PayDialog (context: Context) {
+     private var dialog = Dialog(context)
     var present_flower: Int = 0
     var lockerlist = java.util.ArrayList<String>()
+    var itemdata =  ArrayList<ItemData>()
 
     fun myDig(i:Int,p:Int,f:Int, n:String, c:Context) { //i=image, p=price, f=flower, n=name, c=cotext
 
@@ -46,12 +44,11 @@ class PayDialog (val context: Context) {
             PointItemShared.sumLocker(c, lockerlist)
             Log.d(TAG, "상품 쉐어드 저장")
 
-
-            val intent = Intent (c, MainActivity::class.java)
-            intent.putExtra("dialog",true)
-            c.startActivity(intent)
-
-
+//            onClickedListener.onClick(present_flower.toString())
+//            val intent = Intent (c, MainActivity::class.java)
+//            intent.putExtra("dialog",true)
+//            c.startActivity(intent)
+            itemClickListener.onClick(present_flower)
             dialog.dismiss()
 
         }
@@ -66,15 +63,27 @@ class PayDialog (val context: Context) {
 
     }
 
-    interface ButtonClickListener {
-        fun onClick(myName: String)
+//    interface ButtonClickListener {
+//        fun onClick(myName: String)
+//    }
+//
+//    private lateinit var onClickedListener: ButtonClickListener
+//
+//    fun setOnClickedListener(listener: ButtonClickListener) {
+//        onClickedListener = listener
+//    }
+
+
+    // (2) 리스너 인터페이스
+    interface OnItemClickListener {
+        fun onClick(flower : Int)
     }
 
-    private lateinit var onClickedListener: ButtonClickListener
-
-    fun setOnClickedListener(listener: ButtonClickListener) {
-        onClickedListener = listener
+    // (3) 외부에서 클릭 시 이벤트 설정
+    fun setItemClickListener2(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
     }
 
-
+    // (4) setItemClickListener로 설정한 함수 실행
+    private lateinit var itemClickListener: OnItemClickListener
 }
