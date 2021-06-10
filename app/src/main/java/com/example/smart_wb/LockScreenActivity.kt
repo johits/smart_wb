@@ -302,9 +302,8 @@ class LockScreenActivity : AppCompatActivity() {
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
         var settingTime = TimerSetShared.getSettingTime(this)
+        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
 
-//        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
-        var flower = 3000
 
         var timerDbHelper = TimerDbHelper(this, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
