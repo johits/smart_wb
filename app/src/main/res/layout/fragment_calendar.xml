@@ -18,7 +18,7 @@
             android:layout_marginBottom="4dp"
             android:orientation="horizontal"
             android:visibility="visible"
-            app:mcv_selectionColor="#A7FFC4"
+            app:mcv_selectionColor="@color/mainclolor"
             app:mcv_selectionMode="single" />
 
         <View style="@style/Divider" />
