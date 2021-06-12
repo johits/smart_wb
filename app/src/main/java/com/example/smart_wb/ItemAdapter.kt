@@ -111,20 +111,24 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
 
         holder.check.setOnClickListener{
-//            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
+            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
             if(type.equals("bg")&&bcheck){
                 bcheck = false
+//                bg = false
                 holder.check.setImageResource(R.drawable.no_check)
                 PointItemShared.setBg(context, 0)
+                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
                 Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
             }else if(type.equals("timer")&&tcheck){
                 tcheck = false
+//                timer = false
                 holder.check.setImageResource(R.drawable.no_check)
                 PointItemShared.setTimer(context, 0)
+                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
                 Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
             }else{
                 ck(type,position)
-//                loop(type, position) //선택란 배경 체크됨
+                loop(type, position) //선택란 배경 체크됨
                 Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
             }
         }

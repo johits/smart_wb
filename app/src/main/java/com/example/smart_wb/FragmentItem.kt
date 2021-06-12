@@ -37,7 +37,7 @@ class FragmentItem : Fragment() {
     //아이템 어댑터 및 데이터 연결
     val itemData= arrayListOf<ItemData>()      // 아이템 배열
 //    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
-    var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
+    var bt_value: Boolean = false //아이템 미리보기 접기/펼치기
     var flower : Int = 0 //쉐어드 꽃 담을 변수
     var locker = ArrayList<String>() //쉐어드 보관함 담을 변수
 
@@ -182,15 +182,15 @@ class FragmentItem : Fragment() {
                     i_back.setImageResource(0)
                     i_timer.setImageResource(0)
                 }
-                if(itemData[position].name.equals("bg1")&&itemData[position].bg){
+                if(itemData[position].name.equals("bg1")){
                 i_back.setImageResource(R.drawable.bg1)
-            }else if(itemData[position].name.equals("bg2")&&itemData[position].bg){
+            }else if(itemData[position].name.equals("bg2")){
                 i_back.setImageResource(R.drawable.bg2)
             }
 
-            if(itemData[position].name.equals("timer1")&&itemData[position].timer){
+            if(itemData[position].name.equals("timer1")){
                 i_timer.setImageResource(R.drawable.timer1)
-            }else if(itemData[position].name.equals("timer2")&&itemData[position].timer){
+            }else if(itemData[position].name.equals("timer2")){
                 i_timer.setImageResource(R.drawable.timer2)
             }
 
