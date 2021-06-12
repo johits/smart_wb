@@ -114,7 +114,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="상세보기" />
+                android:background="@drawable/bt2"
+                android:text="@string/calendar_btn_detail_show"
+                android:textColor="@color/colorWhite"/>
 
             <View style="@style/Divider" />
 

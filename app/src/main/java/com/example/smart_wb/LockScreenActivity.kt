@@ -160,7 +160,7 @@ class LockScreenActivity : AppCompatActivity() {
                     val setTime = TimerSetShared.getSettingTime(this)
                     val setTimeString:String = calTime(setTime)
                     val flower = setTime/600
-                    val successTitle:String ="목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
+                    val successTitle:String ="목표하신 $setTimeString 시간 동안 휴대폰을 사용하지 않으셨군요!"
                     val successText:String = "꽃 $flower 송이 획득."
                     showNotification(notificationId_success, CHANNEL_ID_SUCCESS, successTitle,successText)
                     //부재중 전화가 있으면 알람
@@ -204,47 +204,6 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
-    //노티피케이션 채널 생성
-//    private fun createNotificationChannel(id: String, names: String, channelDescription: String) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val name = names
-//            val descriptionText = channelDescription
-//            val importance = NotificationManager.IMPORTANCE_HIGH //high 이상이여야 헤드업 알림 나온다.
-//            val mChannel = NotificationChannel(id, name, importance)
-//            mChannel.description = descriptionText
-//
-//            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(mChannel)
-//        }
-//    }
-
-//    //노티피케이션 발생
-//    @RequiresApi(Build.VERSION_CODES.O)
-//   private fun showNotification() {
-//        Log.d(TAG, "showNotification: ")
-//        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setSmallIcon(android.R.drawable.ic_dialog_info)
-//            .setContentTitle(getString(R.string.screen_time_success_noti_title))
-//            .setContentText(getString(R.string.screen_time_success_noti_text))
-//            .setAutoCancel(true)
-//            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel
-//            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
-//
-//        createNotificationChannel(CHANNEL_ID, channel_name, getString(R.string.app_name))
-//
-//        val notificationManager = NotificationManagerCompat.from(this)
-//        notificationManager.notify(notificationId, builder.build())
-//
-//        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator;
-////        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
-////        vibrator.vibrate(vibrationEffect);
-//
-////        vibrator.vibrate(VibrationEffect.createOneShot(1000, 50))
-//
-//
-//    }
 
     //노티피케이션 발생
     @RequiresApi(Build.VERSION_CODES.O)
@@ -253,11 +212,9 @@ class LockScreenActivity : AppCompatActivity() {
         var a = longArrayOf(1000)
         var builder = NotificationCompat.Builder(this, chanelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-//            .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentTitle(title)
             .setContentText(text)
             .setAutoCancel(true)
-//            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
             .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기

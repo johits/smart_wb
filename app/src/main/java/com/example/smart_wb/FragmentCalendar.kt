@@ -106,6 +106,7 @@ class FragmentCalendar : Fragment() {
             if (dataList.size == 0) {//데이터 없을 때
                 binding.linearParent.visibility = View.GONE//8
                 binding.tvNoData.visibility = View.VISIBLE//0
+                binding.linearExplain.visibility = View.GONE
                 if(binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_close))){
                     binding.calendar.state().edit()
                         .setCalendarDisplayMode(CalendarMode.MONTHS)
@@ -115,7 +116,8 @@ class FragmentCalendar : Fragment() {
             } else { //데이터 있을 때
                 binding.linearParent.visibility = View.VISIBLE
                 binding.tvNoData.visibility = View.GONE
-                binding.recycler.visibility = View.VISIBLE
+                binding.recycler.smoothScrollToPosition(0)
+//                binding.recycler.visibility = View.VISIBLE
             }
             calendarAdapter.replaceList(dataList)
             calculateSum()
@@ -129,14 +131,14 @@ class FragmentCalendar : Fragment() {
                 .commit()
                 binding.btnShowDetail.text=getString(R.string.calendar_btn_detail_close)
                 binding.recycler.visibility=View.VISIBLE
-                binding.recycler.smoothScrollToPosition(0)
+                binding.linearExplain.visibility=View.VISIBLE
             }else{
                 binding.calendar.state().edit()
                     .setCalendarDisplayMode(CalendarMode.MONTHS)
                     .commit()
                 binding.btnShowDetail.text=getString(R.string.calendar_btn_detail_show)
                 binding.recycler.visibility=View.GONE
-            }
+                binding.linearExplain.visibility=View.GONE           }
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
