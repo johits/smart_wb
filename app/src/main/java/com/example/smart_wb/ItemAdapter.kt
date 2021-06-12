@@ -54,24 +54,24 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
     override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
 
 
+        val p : Int = -1 //포지션 상수
         var bg = itemList[position].bg
         var timer = itemList[position].timer
-        var bcheck = itemList[position].bcheck //배경 적용 버튼
-        var tcheck = itemList[position].tcheck //타이머 적용 버튼
         var type = itemList[position].type  //배경, 타이머 유형
         var lock = itemList[position].lock  //자물쇠
         var item = itemList[position].item  //상품 아이템 이미지
+        var name = itemList[position].name
 
 
         // View에 내용 입력
-        holder.name.text = itemList[position].name
+        holder.name.text = name
         holder.price.text = itemList[position].price.toString()
         holder.item.setImageResource(item)
 
 
 
         //초기화 버튼 세팅
-        if(itemList[position].name.equals("reset")){
+        if(name.equals("reset")){
             holder.price.visibility = View.INVISIBLE
             holder.pointIcon.visibility = View.INVISIBLE
             holder.lock.visibility = View.INVISIBLE
@@ -80,7 +80,6 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             holder.pointIcon.visibility = View.VISIBLE
             holder.lock.visibility = View.VISIBLE
         }
-
 
         // 구매한 아이템 여부에 따른 자물쇠, 적용버튼 보여지기
         if (lock){ //구매한 아이템일 경우 item.lock = true
@@ -95,49 +94,97 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             holder.check.visibility = View.INVISIBLE
         }
 
-
-
-        // 체크 버튼 적용 여부 구분
-        if (bcheck||tcheck){
-            holder.check.setImageResource(R.drawable.ok_check)
-            if(type.equals("bg")) {
-                PointItemShared.setBg(context, item)
-            }else if(type.equals("timer")){
-                PointItemShared.setTimer(context,item)
+        Log.d(TAG, "초기화 ${itemList[position].bcheck}")
+        // 체크 버튼 초기화 세팅
+        if(type.equals("bg")) {
+            if (itemList[position].bcheck) {
+                Log.d(TAG, "배경적용버튼 true일때 작동 ${itemList[position].bcheck}")
+                holder.check.setImageResource(R.drawable.ok_check)
+            } else {
+                Log.d(TAG, "배경적용버튼 false일때 작동 ${itemList[position].bcheck}")
+                holder.check.setImageResource(R.drawable.no_check)
             }
-        }else{
-            holder.check.setImageResource(R.drawable.no_check)
+        }else if(type.equals("timer")) {
+            if (itemList[position].tcheck) {
+                Log.d(TAG, "타이머적용버튼 true일때 작동 ${itemList[position].tcheck}")
+                holder.check.setImageResource(R.drawable.ok_check)
+            } else {
+                Log.d(TAG, "타이머적용버튼 false일때 작동 ${itemList[position].tcheck}")
+                holder.check.setImageResource(R.drawable.no_check)
+            }
         }
 
 
+//        holder.check.setOnClickListener {
+//            if(type.equals("bg")){
+//                if (itemList[position].bcheck){
+//                    Log.d(TAG, "1배경트루로들어옴?${itemList[position].bcheck}")
+//                    itemList[position].bcheck = false
+//                    Log.d(TAG, "2배경false로나감?${itemList[position].bcheck}")
+//                }else{
+//                    Log.d(TAG, "3배경false로들어옴?"+itemList[position].bcheck)
+//                    itemList[position].bcheck = true
+//                    Log.d(TAG, "4배경트루로나감?${itemList[position].bcheck}")
+//                }
+//                notifyItemChanged(position)
+//            } else if(type.equals("timer")){
+//                if(itemList[position].tcheck){
+//                    itemList[position].tcheck = false
+//                }else{
+//                    itemList[position].tcheck = true
+//                }
+//            }
+//        }
+
+//        // 체크 버튼 적용 여부 구분
+//        Log.d(TAG, "$name 배경체크초기화세팅:"+bcheck)
+//        Log.d(TAG, "$name 타이머체크초기화세팅:"+tcheck)
+//        if (bcheck||tcheck){ //체크 안 한 상태 = false
+//            Log.d(TAG, "1111111111 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
+//            holder.check.setImageResource(R.drawable.ok_check)
+//            Log.d(TAG, "적용후 111111111 아이템 :$name bcheck:$bcheck, tcheck:$tcheck")
+//        }else{
+//            Log.d(TAG, "2222222222 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
+//            holder.check.setImageResource(R.drawable.no_check)
+//            Log.d(TAG, "적용 후2222222222 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
+//        }
+//
+//
         holder.check.setOnClickListener{
-            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
-            if(type.equals("bg")&&bcheck){
-                bcheck = false
-//                bg = false
-                holder.check.setImageResource(R.drawable.no_check)
+//            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
+            if(type.equals("bg")&&itemList[position].bcheck){
+                Log.d(TAG, "아이템:$name 실행ㅇ1"+itemList[position].bcheck)
                 PointItemShared.setBg(context, 0)
-                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+                itemList[position].bcheck = false
+                itemList[position].bg = false
                 Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
-            }else if(type.equals("timer")&&tcheck){
-                tcheck = false
-//                timer = false
-                holder.check.setImageResource(R.drawable.no_check)
+            }else if(type.equals("timer")&&itemList[position].tcheck){
                 PointItemShared.setTimer(context, 0)
-                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+                    itemList[position].tcheck = false
+                itemList[position].timer= false
+                notifyItemChanged(position)
                 Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
             }else{
                 ck(type,position)
                 loop(type, position) //선택란 배경 체크됨
+                if(type.equals("bg")){
+                    itemList[position].bcheck = true
+                    PointItemShared.setBg(context, item)
+                }else if(type.equals("timer")){
+                    itemList[position].tcheck = true
+                    PointItemShared.setTimer(context,item)
+                }
+//                holder.check.setImageResource(R.drawable.ok_check)
                 Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
             }
+            Log.d(TAG, "최종 체크값:$itemList[position].bcheck")
+            notifyItemChanged(position)
+            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
         }
 
         if (bg||timer){
-            Log.d(TAG, "bg1:"+bg+"timer1"+timer)
             holder.product.setBackgroundColor(Color.parseColor("#81000000"))
         }else{
-            Log.d(TAG, "bg2:"+bg+"timer2"+timer)
             holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
         }
 
@@ -197,8 +244,6 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                 }
             }
             loop(type,position)
-
-
             itemClickListener.onClick(it, position)
         }
     }
