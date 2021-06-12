@@ -155,7 +155,7 @@ class DrawService : Service() {
             if (settingTime >= 0) {
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
                 if (settingTime == 0) {
-                    watch.text="00:00"
+                   // watch.text="00:00"
                     handler?.postDelayed(this, 500)
                 } else {
                     watch.text = calTime(settingTime)
@@ -180,9 +180,13 @@ class DrawService : Service() {
         val min = Math.floorMod(setTime, 3600) / 60
         val sec = Math.floorMod(setTime, 3600) % 60
         if (hour > 0) {
-            result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
-        } else {
-          result="%1$02d:%2$02d".format(min,sec)
+            result="%1$02d시 %2$02d분".format(hour,min)
+        } else if(hour==0&&min>0){
+          result="%1$02d분 %2$02d초".format(min,sec)
+        }else if(hour==0&&min==0){
+            result="%1$02d초".format(sec)
+        }else{
+            result="%1$02d초".format(sec)
         }
         return result
     }
