@@ -7,5 +7,7 @@
     <string name="screen_time_success_noti_text">축하합니다.</string>
     <string name="calendar_time_success">성공</string>
     <string name="calendar_time_fail">실패</string>
-    <string name="calendar_no_data">도전 x</string>
+    <string name="calendar_no_data">도전한 기록이 없습니다.</string>
+    <string name="calendar_btn_detail_show">상세보기</string>
+    <string name="calendar_btn_detail_close">닫기</string>
 </resources>

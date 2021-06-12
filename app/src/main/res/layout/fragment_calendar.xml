@@ -27,15 +27,15 @@
             android:id="@+id/tvNoData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/colorBlack"
-            android:text="@string/calendar_no_data"
-            android:textSize="18sp"
             android:layout_margin="18dp"
-            android:visibility="gone"/>
+            android:gravity="center"
+            android:text="@string/calendar_no_data"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linear"
+            android:id="@+id/linear_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -109,13 +109,22 @@
                 </TableRow>
             </TableLayout>
 
+            <Button
+                android:id="@+id/btn_showDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="상세보기" />
+
             <View style="@style/Divider" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_explain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="10">
 
                 <TextView
@@ -162,6 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
+                android:visibility="gone"
                 tools:listitem="@layout/item_calendar" />
             <!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
             <!--                android:orientation="vertical"-->
