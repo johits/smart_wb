@@ -94,62 +94,40 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             holder.check.visibility = View.INVISIBLE
         }
 
-        Log.d(TAG, "초기화 ${itemList[position].bcheck}")
+
+        // 미리보기 초기화 세팅
+        if(type.equals("bg")) {
+            if (itemList[position].bg) {
+                holder.product.setBackgroundColor(Color.parseColor("#81000000"))
+            } else {
+                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+            }
+        }else if(type.equals("timer")) {
+            if (itemList[position].timer) {
+                holder.product.setBackgroundColor(Color.parseColor("#81000000"))
+            } else {
+                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+            }
+        }
+
+
         // 체크 버튼 초기화 세팅
         if(type.equals("bg")) {
             if (itemList[position].bcheck) {
-                Log.d(TAG, "배경적용버튼 true일때 작동 ${itemList[position].bcheck}")
                 holder.check.setImageResource(R.drawable.ok_check)
             } else {
-                Log.d(TAG, "배경적용버튼 false일때 작동 ${itemList[position].bcheck}")
                 holder.check.setImageResource(R.drawable.no_check)
             }
         }else if(type.equals("timer")) {
             if (itemList[position].tcheck) {
-                Log.d(TAG, "타이머적용버튼 true일때 작동 ${itemList[position].tcheck}")
                 holder.check.setImageResource(R.drawable.ok_check)
             } else {
-                Log.d(TAG, "타이머적용버튼 false일때 작동 ${itemList[position].tcheck}")
                 holder.check.setImageResource(R.drawable.no_check)
             }
         }
 
 
-//        holder.check.setOnClickListener {
-//            if(type.equals("bg")){
-//                if (itemList[position].bcheck){
-//                    Log.d(TAG, "1배경트루로들어옴?${itemList[position].bcheck}")
-//                    itemList[position].bcheck = false
-//                    Log.d(TAG, "2배경false로나감?${itemList[position].bcheck}")
-//                }else{
-//                    Log.d(TAG, "3배경false로들어옴?"+itemList[position].bcheck)
-//                    itemList[position].bcheck = true
-//                    Log.d(TAG, "4배경트루로나감?${itemList[position].bcheck}")
-//                }
-//                notifyItemChanged(position)
-//            } else if(type.equals("timer")){
-//                if(itemList[position].tcheck){
-//                    itemList[position].tcheck = false
-//                }else{
-//                    itemList[position].tcheck = true
-//                }
-//            }
-//        }
-
-//        // 체크 버튼 적용 여부 구분
-//        Log.d(TAG, "$name 배경체크초기화세팅:"+bcheck)
-//        Log.d(TAG, "$name 타이머체크초기화세팅:"+tcheck)
-//        if (bcheck||tcheck){ //체크 안 한 상태 = false
-//            Log.d(TAG, "1111111111 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
-//            holder.check.setImageResource(R.drawable.ok_check)
-//            Log.d(TAG, "적용후 111111111 아이템 :$name bcheck:$bcheck, tcheck:$tcheck")
-//        }else{
-//            Log.d(TAG, "2222222222 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
-//            holder.check.setImageResource(R.drawable.no_check)
-//            Log.d(TAG, "적용 후2222222222 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
-//        }
-//
-//
+        //적용 버튼 클릭 시 이벤트
         holder.check.setOnClickListener{
 //            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
             if(type.equals("bg")&&itemList[position].bcheck){
@@ -182,12 +160,14 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
         }
 
-        if (bg||timer){
-            holder.product.setBackgroundColor(Color.parseColor("#81000000"))
-        }else{
-            holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
-        }
+//        if (bg||timer){
+//            holder.product.setBackgroundColor(Color.parseColor("#81000000"))
+//        }else{
+//            holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+//        }
 
+
+        //자물쇠 버틀 클릭 시 이벤트
         holder.lock.setOnClickListener {
             Log.d(TAG, "구매하기"+position+"아이템 이름"+itemList[position].item)
 //            itemClickListener.onClick(it, position)
@@ -241,20 +221,36 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
 
 
-        // (1) 리스트 내 항목 클릭 시 onClick() 호출
+        //미리보기 적용 이벤트
         holder.product.setOnClickListener {
             Log.d(TAG, "onBindViewHolder: 리스너 작동")
-
-
 
             if(type.equals("reset")){
                 for (i in 0 until itemList.size) {
                         itemList[i].bg = false
+                        itemList[i].bcheck = false
                         itemList[i].timer = false
+                        itemList[i].tcheck = false
+                }
+            }else if(type.equals("bg")){
+                if(itemList[position].bg){
+                    Log.d(TAG, "미리보기 배경true로 들어옴 ${itemList[position].bg}")
+                    itemList[position].bg =false
+                }else{
+                    Log.d(TAG, "미리보기 배경 flase로 들어옴 ${itemList[position].bg}")
+                    itemList[position].bg =true
+                }
+            }else if(type.equals("timer")){
+                if(itemList[position].timer){
+                    itemList[position].timer =false
+                }else{
+                    itemList[position].timer =true
                 }
             }
+            notifyItemChanged(position)
             loop(type,position)
             itemClickListener.onClick(it, position)
+            Log.d(TAG, "미리보기 어댑터 최종값은 ${itemList[position].bg}")
         }
     }
 
