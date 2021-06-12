@@ -204,10 +204,20 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                     override fun onClick(p: Int) {
                         itemList[position].lock = true //이거 설정해줘야 금액 변경됨
                         holder.lock.visibility = View.GONE
-                        holder.check.setImageResource(R.drawable.no_check)
                         holder.check.visibility = View.VISIBLE
+                        if(itemList[position].type.equals("bg")){
+                            itemList[position].bcheck = true
+                            itemList[position].bg = true
+                        }else if(itemList[position].type.equals("timer")){
+                            itemList[position].tcheck = true
+                            itemList[position].timer = true
+                            Log.d(TAG, "둘다 트루 타이머여야함 ${itemList[position].tcheck} // ${itemList[position].timer}")
+                        }
+                        notifyItemChanged(position)
+                        loop(type,position)
+                        ck(type,position)
                         itemClickListener.onClick(it, position)
-
+                        Toast.makeText(context,"구매한 아이템이 적용되었습니다.",Toast.LENGTH_SHORT).show()
 
                     }
                 })

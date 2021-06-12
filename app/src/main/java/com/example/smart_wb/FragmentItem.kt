@@ -151,8 +151,9 @@ class FragmentItem : Fragment() {
 
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
-                Log.d(TAG, "onClick리스너: "+itemData[position].name)
-                Log.d(TAG, "onClicK 현재 플라워: "+itemData[position].lock)
+                Log.d(TAG, "onClick리스너 tcheck: "+itemData[position].tcheck)
+                Log.d(TAG, "onClick리스너 timer: "+itemData[position].timer)
+                Log.d(TAG, "onClick리스너 name: "+itemData[position].name)
 
                 if(itemData[position].name.equals("reset")){
                     i_back.setImageResource(0)
@@ -165,8 +166,10 @@ class FragmentItem : Fragment() {
                     i_back.setImageResource(0)
                 }
                 if(itemData[position].type.equals("timer")&&itemData[position].timer){
+                    Log.d(TAG, "onClick: 작동1")
                     i_timer.setImageResource(itemData[position].item)
                 }else if(itemData[position].type.equals("timer")&&!itemData[position].timer){
+                    Log.d(TAG, "onClick: 작동2")
                     i_timer.setImageResource(0)
                 }
 

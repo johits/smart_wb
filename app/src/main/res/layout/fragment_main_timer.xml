@@ -13,6 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/m_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:layout_editor_absoluteX="138dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+
+        <ImageView
+            android:id="@+id/m_timer"
+            android:layout_width="480dp"
+            android:layout_height="280dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/ti"
+            app:layout_constraintEnd_toEndOf="@+id/ti"
+            app:layout_constraintStart_toStartOf="@+id/ti"
+            app:layout_constraintTop_toTopOf="@+id/ti" />
+
+
         <ImageButton
             android:id="@+id/soundsetting"
             android:layout_width="40dp"
