@@ -1,4 +1,4 @@
-    package com.example.smart_wb
+package com.example.smart_wb
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
+import com.example.smart_wb.Shared.GuideShowCheckShared
 import com.example.smart_wb.Shared.TimerSetShared
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
@@ -37,7 +38,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var sound_value : Int = -1
+    private var sound_value: Int = -1
 
     private lateinit var mContext: Context
 
@@ -102,16 +103,16 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         }
 
         //알림 버튼 탭할 때마다 모드 변경
-        view.soundsetting.setOnClickListener{
-            if(sound_value==0){
+        view.soundsetting.setOnClickListener {
+            if (sound_value == 0) {
                 view.soundsetting.setBackgroundResource(R.drawable.mvibe) //진동모드
                 audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE // 진동 모드로 변경
                 sound_value = 1
-            }else if(sound_value==1){
+            } else if (sound_value == 1) {
                 view.soundsetting.setBackgroundResource(R.drawable.mmute) //무음모드
                 audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT // 무음 모드로 변경
                 sound_value = 2
-            }else if(sound_value==2){
+            } else if (sound_value == 2) {
                 view.soundsetting.setBackgroundResource(R.drawable.mbell) //벨소리모드
                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL // 벨소리 모드로 변경
                 sound_value = 0
@@ -126,6 +127,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         binding.npSec.minValue = 0
         binding.npSec.maxValue = 59
 
+        val noDialCheck = GuideShowCheckShared.getNoDialCheck(mContext)
+        Log.d(TAG, "onCreateView: $noDialCheck")
 
         var settingTime = 0
         view.start.setOnClickListener {
@@ -137,16 +140,30 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                 if (settingTime == 0) {
                     toastCenter(R.string.toast_time_set_blank_warning)
                 } else {
-//                    Log.d(TAG, "onCreateView: ")
-                    val intent = Intent(mContext, LockScreenActivity::class.java)
-                    intent.putExtra("settingTime", settingTime.toString())
-                    startActivity(intent)
+                    //안내 다이얼로그 보여주기 유무
+                    if (!noDialCheck) {
+                        val dialog = GuideDialog(mContext)
+                        dialog.showDialog()
 
-                    //설정시간 데이터 삽입
-                    insertSettingTime(settingTime)
+                        dialog.setItemClickListener2(object : GuideDialog.OnItemClickListener {
+                            override fun onClickStart(flag: Boolean) {
+                                Log.d(TAG, "onClickStart: $flag")
 
-                    //액티비티 종료
-                    activity?.finish()
+                                GuideShowCheckShared.setNoDialCheck(mContext, flag)
+
+                                startScreenTime(settingTime)
+                                Log.d(
+                                    TAG,
+                                    "onClickStart: ${GuideShowCheckShared.getNoDialCheck(mContext)}"
+                                )
+                            }
+
+                        })
+                        //안내 다이얼로그 x 스크린타임 바로 시작
+                    } else {
+                        startScreenTime(settingTime)
+                    }
+
                 }
             }
         }
@@ -171,7 +188,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.d(TAG, "onDestroyView: ")
     }
 
     //토스트 메세지 화면 중앙
@@ -183,7 +199,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     //설정시간 sqlite 에 데이터 삽입&쉐어드 저장
     @SuppressLint("SimpleDateFormat")
-    fun insertSettingTime(settingTime:Int){
+    fun insertSettingTime(settingTime: Int) {
 //        Log.d(TAG, "insertSettingTime: ")
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
@@ -212,12 +228,24 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 //            )
 //        }
         //설정시간 쉐어드에 저장
-        TimerSetShared.setDate(mContext,date)
-        TimerSetShared.setTime(mContext,time)
-        TimerSetShared.setSettingTime(mContext,settingTime)
+        TimerSetShared.setDate(mContext, date)
+        TimerSetShared.setTime(mContext, time)
+        TimerSetShared.setSettingTime(mContext, settingTime)
         //쉐어드 저장 확인용 로그
 //        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
 //                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
 //                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
+    }
+
+    //스크린 타임 시작
+    private fun startScreenTime(settingTime: Int) {
+        val intent = Intent(mContext, LockScreenActivity::class.java)
+        intent.putExtra("settingTime", settingTime.toString())
+        startActivity(intent)
+        //설정시간 데이터 삽입
+        insertSettingTime(settingTime)
+        //액티비티 종료
+        activity?.finish()
+
     }
 }
