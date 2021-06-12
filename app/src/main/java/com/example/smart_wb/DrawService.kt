@@ -182,7 +182,7 @@ class DrawService : Service() {
         if (hour > 0) {
             result="%1$02d:%2$02d:%3$02d".format(hour,min,sec)
         } else {
-          result="%1$02d:%2$02d".format(min,sec)
+          result="%1$02d시%2$02d분".format(min,sec)
         }
         return result
     }
