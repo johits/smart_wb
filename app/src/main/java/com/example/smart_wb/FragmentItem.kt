@@ -21,7 +21,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 /**
-2021-05-31
+2021-06-12 (업데이트)
 joker
 아이템 리사이클러뷰 연결
 */
@@ -35,9 +35,8 @@ class FragmentItem : Fragment() {
     private lateinit var iContext: Context
 
     //아이템 어댑터 및 데이터 연결
-    val itemData= arrayListOf<ItemData>()      // 아이템 배열
-//    val itemAdapter = ItemAdapter(iContext,itemData)     // 어댑터
-    var bt_value: Boolean = true //아이템 미리보기 접기/펼치기
+    val itemData= arrayListOf<ItemData>() // 아이템 배열
+    var bt_value: Boolean = false //아이템 미리보기 접기/펼치기
     var flower : Int = 0 //쉐어드 꽃 담을 변수
     var locker = ArrayList<String>() //쉐어드 보관함 담을 변수
 
@@ -77,15 +76,6 @@ class FragmentItem : Fragment() {
         locker = PointItemShared.getLocker(iContext) as ArrayList<String>
         Log.d(TAG, "쉐어드에서 가져온 꽃:"+flower)
         Log.d(TAG, "쉐어드에서 가져온 보관함:"+locker.toString())
-
-
-//        for (i in 0 until locker.size) {
-//            val lockeritem: String = locker[i]
-//            if (lockeritem.equals(itemData[i].name)) {
-//                itemData[i].lock = true
-//                Log.d(TAG, "name: "+itemData[i].name+ " lock: "+ itemData[i].lock)
-//            }
-//        }
 
 
         //쉐어드 적용된 아이템 불러오기(배경, 타이머)
@@ -155,61 +145,40 @@ class FragmentItem : Fragment() {
             }
 
 
-        Log.d(TAG, "initRecycler: 최종결과!!!!!!!!!:    "+itemData.toString())
-
-//        Log.d(TAG, "locker사이즈:"+locker.size)
-//        for (i in 0 until locker.size) {
-//            val lockeritem: String = locker[i]
-//            if (lockeritem.equals(itemData[i].name)) {
-//                itemData[i].lock = true
-//                Log.d(TAG, "////////////////// name: "+itemData[i].name+ " lock: "+ itemData[i].lock)
-//            }
-//        }
-
 
         //Itemadapter 클릭 리스너
-        val itemAdapter = ItemAdapter(iContext,itemData,flower,locker)     // 어댑터
+        val itemAdapter = ItemAdapter(iContext,itemData,flower,locker)
 
         itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
-                Log.d(TAG, "onClick리스너: "+itemData[position].name)
-                Log.d(TAG, "onClicK 현재 플라워: "+itemData[position].lock)
-                // 클릭 시 이벤트 작성
-//                Toast.makeText(view?.context,
-//                    "${itemData[position].name}\n${itemData[position].number}",
-//                    Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onClick리스너 tcheck: "+itemData[position].tcheck)
+                Log.d(TAG, "onClick리스너 timer: "+itemData[position].timer)
+                Log.d(TAG, "onClick리스너 name: "+itemData[position].name)
+
                 if(itemData[position].name.equals("reset")){
                     i_back.setImageResource(0)
                     i_timer.setImageResource(0)
                 }
-                if(itemData[position].name.equals("bg1")&&itemData[position].bg){
-                i_back.setImageResource(R.drawable.bg1)
-            }else if(itemData[position].name.equals("bg2")&&itemData[position].bg){
-                i_back.setImageResource(R.drawable.bg2)
-            }
 
-            if(itemData[position].name.equals("timer1")&&itemData[position].timer){
-                i_timer.setImageResource(R.drawable.timer1)
-            }else if(itemData[position].name.equals("timer2")&&itemData[position].timer){
-                i_timer.setImageResource(R.drawable.timer2)
-            }
+                if(itemData[position].type.equals("bg")&&itemData[position].bg){
+                    i_back.setImageResource(itemData[position].item)
+                }else if(itemData[position].type.equals("bg")&&!itemData[position].bg){
+                    i_back.setImageResource(0)
+                }
+                if(itemData[position].type.equals("timer")&&itemData[position].timer){
+                    Log.d(TAG, "onClick: 작동1")
+                    i_timer.setImageResource(itemData[position].item)
+                }else if(itemData[position].type.equals("timer")&&!itemData[position].timer){
+                    Log.d(TAG, "onClick: 작동2")
+                    i_timer.setImageResource(0)
+                }
+
 
                 if(itemData[position].lock){
                     point.text =  PointItemShared.getFlower(iContext).toString()
                     Log.d(TAG, "현재 플라워 불러옴:"+PointItemShared.getFlower(iContext).toString())
                 }
 
-
-//                if(itemData[position].type.equals("bg")&&itemData[position].bcheck){
-//                    i_back.setImageResource(0)
-//                }else if(itemData[position].type.equals("bg") && !itemData[position].bcheck){
-//                    i_back.setImageResource(itemData[position].item)
-//                }
-//                if(itemData[position].type.equals("timer")&&itemData[position].tcheck){
-//                    i_timer.setImageResource(0)
-//                }else if(itemData[position].type.equals("timer") && !itemData[position].tcheck){
-//                    i_timer.setImageResource(itemData[position].item)
-//                }
             }
         })
 
@@ -221,16 +190,7 @@ class FragmentItem : Fragment() {
 
     }
 
-//    private fun init(){
-//        //Itemadapter 클릭 리스너
-//        val dialog = PayDialog(iContext)  // 어댑터
-//        dialog.setItemClickListener2(object: PayDialog.OnItemClickListener {
-//            override fun onClick(p: Int) {
-//                point.text = flower.toString()
-//                Log.d(TAG, "현재 플라워 불러옴:" + flower.toString())
-//            }
-//        })
-//    }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

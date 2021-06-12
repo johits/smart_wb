@@ -134,7 +134,7 @@
                 app:layout_constraintStart_toStartOf="parent">
                 <ImageView
                     android:id="@+id/arrow"
-                    android:rotation="90"
+                    android:rotation="270"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@drawable/arrow"/>
@@ -144,7 +144,6 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/irv"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="#ffffff"

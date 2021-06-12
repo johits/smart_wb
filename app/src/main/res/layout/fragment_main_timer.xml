@@ -13,6 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/m_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:layout_editor_absoluteX="138dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+
+        <ImageView
+            android:id="@+id/m_timer"
+            android:layout_width="480dp"
+            android:layout_height="280dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/ti"
+            app:layout_constraintEnd_toEndOf="@+id/ti"
+            app:layout_constraintStart_toStartOf="@+id/ti"
+            app:layout_constraintTop_toTopOf="@+id/ti" />
+
+
         <ImageButton
             android:id="@+id/soundsetting"
             android:layout_width="40dp"
@@ -20,6 +40,7 @@
             android:layout_margin="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -36,6 +57,7 @@
             app:layout_constraintVertical_bias="0.462">
 
 
+
             <NumberPicker
                 android:id="@+id/np_hour"
                 android:layout_width="wrap_content"
@@ -45,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text=":"
+                android:text="시"
                 android:textSize="18sp" />
 
             <NumberPicker
@@ -57,9 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text=":"
-                android:textSize="18sp"
-                android:visibility="gone"/>
+                android:text="분"
+                android:textSize="18sp" />
 
             <NumberPicker
                 android:id="@+id/np_sec"
