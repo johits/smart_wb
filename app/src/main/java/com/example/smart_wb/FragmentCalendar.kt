@@ -34,6 +34,7 @@ class FragmentCalendar : Fragment() {
 
             }
     }
+
     lateinit var calendarAdapter: CalendarAdapter
     var dataList = mutableListOf<TimerData>()
 
@@ -82,35 +83,62 @@ class FragmentCalendar : Fragment() {
 //            .commit()
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
-            binding.calendar.state().edit()
+//            binding.calendar.state().edit()
+//                .setCalendarDisplayMode(CalendarMode.MONTHS)
+//                .commit()
+            val year: String = date.year.toString()
+            val month: String
+            val day: String //2021-06-07
+            //ex String 06 과 6 은 다르다
+            if (date.month < 10) {
+                month = "0" + date.month
+            } else {
+                month = date.month.toString()
+            }
+            if (date.day < 10) {
+                day = "0" + date.day
+            } else {
+                day = date.day.toString()
+            }
+            val result: String = year + "-" + month + "-" + day
+            dataList.clear()
+            dataList = selectDate(result)
+            if (dataList.size == 0) {//데이터 없을 때
+                binding.linearParent.visibility = View.GONE//8
+                binding.tvNoData.visibility = View.VISIBLE//0
+                binding.linearExplain.visibility = View.GONE
+                if(binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_close))){
+                    binding.calendar.state().edit()
+                        .setCalendarDisplayMode(CalendarMode.MONTHS)
+                        .commit()
+                    binding.btnShowDetail.text=getString(R.string.calendar_btn_detail_show)
+                }
+            } else { //데이터 있을 때
+                binding.linearParent.visibility = View.VISIBLE
+                binding.tvNoData.visibility = View.GONE
+                binding.recycler.smoothScrollToPosition(0)
+//                binding.recycler.visibility = View.VISIBLE
+            }
+            calendarAdapter.replaceList(dataList)
+            calculateSum()
+        }
+
+        //상세보기버튼 클릭 이벤트. 리사이클러뷰 비저블
+        binding.btnShowDetail.setOnClickListener {
+            if(binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_show))){
+                binding.calendar.state().edit()
                 .setCalendarDisplayMode(CalendarMode.WEEKS)
                 .commit()
-            val year:String = date.year.toString()
-            val month:String
-            val day:String
-            //ex String 06 과 6 은 다르다
-            if(date.month<10){
-                month="0"+date.month
+                binding.btnShowDetail.text=getString(R.string.calendar_btn_detail_close)
+                binding.recycler.visibility=View.VISIBLE
+                binding.linearExplain.visibility=View.VISIBLE
             }else{
-                month=date.month.toString()
-            }
-            if(date.day<10){
-                day="0"+date.day
-            }else{
-                day=date.day.toString()
-            }
-            val result:String = year+"-"+month+"-"+day
-            dataList.clear()
-            dataList=selectDate(result)
-            if(dataList.size==0){
-                binding.linear.visibility=View.GONE
-                binding.tvNoData.visibility=View.VISIBLE
-            }else{
-                binding.linear.visibility = View.VISIBLE
-                binding.tvNoData.visibility=View.GONE
-            }
-                calendarAdapter.replaceList(dataList)
-                calculateSum()
+                binding.calendar.state().edit()
+                    .setCalendarDisplayMode(CalendarMode.MONTHS)
+                    .commit()
+                binding.btnShowDetail.text=getString(R.string.calendar_btn_detail_show)
+                binding.recycler.visibility=View.GONE
+                binding.linearExplain.visibility=View.GONE           }
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
@@ -118,8 +146,8 @@ class FragmentCalendar : Fragment() {
             binding.calendar.state().edit()
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
-            binding.linear.visibility=View.GONE
-            binding.tvNoData.visibility=View.GONE
+            binding.linearParent.visibility = View.GONE
+            binding.tvNoData.visibility = View.GONE
         }
 
         return view
@@ -129,6 +157,7 @@ class FragmentCalendar : Fragment() {
         super.onActivityCreated(savedInstanceState)
         screenTimeData()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
@@ -137,10 +166,17 @@ class FragmentCalendar : Fragment() {
     private fun initRecycler() {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.setLayoutManager(layoutManager)
-        binding.recycler.layoutManager = LinearLayoutManager(requireContext()).also { it.orientation = LinearLayoutManager.VERTICAL }
+        binding.recycler.layoutManager = LinearLayoutManager(requireContext()).also {
+            it.orientation = LinearLayoutManager.VERTICAL
+        }
 
 //        구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
-        binding.recycler.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        binding.recycler.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
 
         calendarAdapter = CalendarAdapter(mContext)
         binding.recycler.adapter = calendarAdapter
@@ -205,34 +241,34 @@ class FragmentCalendar : Fragment() {
     }
 
     //날짜 클릭시 데이터 가져오기
-   private fun selectDate(date:String):MutableList<TimerData>{
+    private fun selectDate(date: String): MutableList<TimerData> {
         Log.d(TAG, "selectDate: ")
         dataList.clear()
         val timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
 
-        var arr:MutableList<TimerData> = timerDbHelper.select(date)
-        val settingTimeSum:String
+        var arr: MutableList<TimerData> = timerDbHelper.select(date)
+        val settingTimeSum: String
         return arr;
     }
 
     //총도전시간,성공시간,꽃 계산기
     @RequiresApi(Build.VERSION_CODES.N)
-   private fun calculateSum(){
-        var settingTimeSum=0
-        var successTimeSum=0
-        var flowerSum=0
-        for(data in dataList){
-            settingTimeSum+=data.settingTime
-            if(data.success==1){
-                successTimeSum+=data.settingTime
-                flowerSum+=data.flower
+    private fun calculateSum() {
+        var settingTimeSum = 0
+        var successTimeSum = 0
+        var flowerSum = 0
+        for (data in dataList) {
+            settingTimeSum += data.settingTime
+            if (data.success == 1) {
+                successTimeSum += data.settingTime
+                flowerSum += data.flower
             }
         }
         Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
-        binding.tvSettingTimeSum.text=changeTime(settingTimeSum)
-        binding.tvSuccessTimeSum.text=changeTime(successTimeSum)
-        binding.tvFlowerSum.text=flowerSum.toString()
+        binding.tvSettingTimeSum.text = changeTime(settingTimeSum)
+        binding.tvSuccessTimeSum.text = changeTime(successTimeSum)
+        binding.tvFlowerSum.text = flowerSum.toString()
     }
 
     //설정시간은 초 -> HH:mm:ss 로 변환
@@ -247,19 +283,19 @@ class FragmentCalendar : Fragment() {
     }
 
     //오늘날짜 표시
-   private fun decorateToday(){
+    private fun decorateToday() {
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
         // 날짜, 시간을 가져오고 싶은 형태 선언
         val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
         // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
-        val today:String = dateFormatDate.format(dateType) //현재 년 월 일
+        val today: String = dateFormatDate.format(dateType) //현재 년 월 일
         val parts = today.split("-").toTypedArray()
         val year: Int = parts[0].toInt()
         val month: Int = parts[1].toInt()
         val date: Int = parts[2].toInt()
-        val calDay = CalendarDay.from(year,month,date)
+        val calDay = CalendarDay.from(year, month, date)
 
         binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
     }

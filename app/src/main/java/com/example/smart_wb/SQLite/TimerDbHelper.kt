@@ -61,19 +61,19 @@ class TimerDbHelper
         db.close()
     }
 
-    //셀렉트 데이터 불러오기
+    //셀렉트 데이터 모두 불러오기
     fun select(): ArrayList<TimerData> {
         val result = arrayListOf<TimerData>()
         val db: SQLiteDatabase = writableDatabase
 
         var cursor: Cursor = db.rawQuery("SELECT * FROM timer", null)
         while (cursor.moveToNext()) {
-            val id: Int = cursor.getInt(0)
-            val date: String = cursor.getString(1)
-            val time: String = cursor.getString(2)
-            val settingTime: Int = cursor.getInt(3)
-            val success: Int = cursor.getInt(4)
-            val flower:Int =cursor.getInt(5)
+            val id: Int = cursor.getInt(0) //pk
+            val date: String = cursor.getString(1) //ex 2021-11-11
+            val time: String = cursor.getString(2) //ex 11:11:00
+            val settingTime: Int = cursor.getInt(3)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+            val success: Int = cursor.getInt(4) //디폴트가 0 = 실패, 1 = 성공
+            val flower:Int =cursor.getInt(5) //디폴트가 0
             var data: TimerData = TimerData(id, date, time, settingTime, success, flower)
             result?.add(data)
         }

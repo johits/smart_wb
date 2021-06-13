@@ -1,19 +1,21 @@
 package com.example.smart_wb
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.AlertDialog.Builder
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.media.RingtoneManager
 import android.os.*
 import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.text.format.Time
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +49,8 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
+//    private var dialog: CustomDialog? = null
+    private var alertDialog:AlertDialog?=null
     //서비스에 데이터 보내기 위한 변수
     private var mServiceMessenger: Messenger? = null
     private var mIsBound = false
@@ -155,37 +159,99 @@ class LockScreenActivity : AppCompatActivity() {
                 val message = msg.data.getString("message")
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
+                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
+                val setTime = TimerSetShared.getSettingTime(this)//설정시간
+                val setTimeString: String = calTime(setTime)//설정시간 초 -> 시간 변환
+                val flower = setTime / 600 //획득한 꽃 갯수
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp()
-                    val setTime = TimerSetShared.getSettingTime(this)
-                    val setTimeString:String = calTime(setTime)
-                    val flower = setTime/600
-                    val successTitle:String ="목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
-                    val successText:String = "꽃 $flower 송이 획득."
-                    showNotification(notificationId_success, CHANNEL_ID_SUCCESS, successTitle,successText)
-                    //부재중 전화가 있으면 알람
-                    if (TimerSetShared.getMissedCall(this) != 0) {
-                        val missedCall = TimerSetShared.getMissedCall(this)
-                        val missedCallText:String= "부재중 전화 $missedCall 건이 있습니다."
-                        //코루틴//비동기처리
-                        GlobalScope.launch {
-                            delay(4500)
-                            showNotification(notificationId_call, CHANNEL_ID_MISSEDCALL, missedCallText, "")
-                        }
-                    }
-                    successUpdate() //성공시//sqlite 업데이트
-                } else {//스크린타임 실패시
 
+                    successUpdate(setTime,flower) //성공시//sqlite 업데이트
+                    showDialog(getString(R.string.success_dialog_title_success), setTimeString, flower, missedCall)
+                    //노티
+                    val successTitle = "목표하신 $setTimeString 시간 동안 휴대폰을 사용하지 않으셨군요!"
+                    val successText = "꽃 $flower 송이 획득."
+                    showNotification(
+                        notificationId_success,
+                        CHANNEL_ID_SUCCESS,
+                        successTitle,
+                        successText
+                    )
+                    //부재중 전화가 있으면 알람
+                    if (missedCall != 0) {
+                        missedCallNoti(missedCall, 4500)
+                    }
+
+                } else {//스크린타임 사용자 종료시
+                    showDialog(getString(R.string.success_dialog_title_fail), setTimeString, flower, missedCall)
+                    //부재중 전화가 있으면 알람
+                    if (missedCall != 0) {
+                        missedCallNoti(missedCall, 0)
+                    }
+                    startMainActivity()
                 }
                 //쉐어드 데이터 클리어
                 TimerSetShared.clearTimerSet(this)
 
                 setStopService()
-                finish()
+
             }
         }
         false
     })
+
+    //스크린타임 종료시 다이얼로그
+    private fun showDialog(title:String, setTime:String, flower:Int, missedCall:Int){
+        Log.d(TAG, "showDialog: ")
+        val layoutInflater = LayoutInflater.from(this)
+        val view = layoutInflater.inflate(R.layout.success_dialog, null)
+
+         alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .setCancelable(false)
+            .create()
+        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
+        val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
+        val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
+        val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
+        val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
+
+        tvTitle.text=title
+        tvSettingTime.text=setTime
+        tvFlower.text=flower.toString()
+        tvMissedCall.text = missedCall.toString()
+
+        btnConfirm.setOnClickListener {
+            alertDialog!!.dismiss()
+            startMainActivity()
+        }
+        alertDialog!!.show()
+    }
+
+    //부재중전화 노티 호출
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun missedCallNoti(call: Int, delay: Long) {
+        val missedCallText: String = "부재중 전화 $call 건이 있습니다."
+        //코루틴//비동기처리
+        GlobalScope.launch {
+            delay(delay)
+            showNotification(
+                notificationId_call,
+                CHANNEL_ID_MISSEDCALL,
+                missedCallText,
+                ""
+            )
+        }
+    }
+
+    //메인액티비티 호출
+    private fun startMainActivity() {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+
+        finish()
+    }
 
     //     Service 로 메시지를 보냄
     @RequiresApi(Build.VERSION_CODES.O)
@@ -204,60 +270,17 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
-    //노티피케이션 채널 생성
-//    private fun createNotificationChannel(id: String, names: String, channelDescription: String) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val name = names
-//            val descriptionText = channelDescription
-//            val importance = NotificationManager.IMPORTANCE_HIGH //high 이상이여야 헤드업 알림 나온다.
-//            val mChannel = NotificationChannel(id, name, importance)
-//            mChannel.description = descriptionText
-//
-//            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(mChannel)
-//        }
-//    }
-
-//    //노티피케이션 발생
-//    @RequiresApi(Build.VERSION_CODES.O)
-//   private fun showNotification() {
-//        Log.d(TAG, "showNotification: ")
-//        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setSmallIcon(android.R.drawable.ic_dialog_info)
-//            .setContentTitle(getString(R.string.screen_time_success_noti_title))
-//            .setContentText(getString(R.string.screen_time_success_noti_text))
-//            .setAutoCancel(true)
-//            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel
-//            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
-//
-//        createNotificationChannel(CHANNEL_ID, channel_name, getString(R.string.app_name))
-//
-//        val notificationManager = NotificationManagerCompat.from(this)
-//        notificationManager.notify(notificationId, builder.build())
-//
-//        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator;
-////        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
-////        vibrator.vibrate(vibrationEffect);
-//
-////        vibrator.vibrate(VibrationEffect.createOneShot(1000, 50))
-//
-//
-//    }
 
     //노티피케이션 발생
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotification(notiId: Int, chanelId: String, title:String, text: String) {
+    fun showNotification(notiId: Int, chanelId: String, title: String, text: String) {
         val arr = arrayListOf(0, 1, 2)
         var a = longArrayOf(1000)
         var builder = NotificationCompat.Builder(this, chanelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-//            .setContentTitle(getString(R.string.screen_time_success_noti_title))
             .setContentTitle(title)
             .setContentText(text)
             .setAutoCancel(true)
-//            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
             .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
@@ -296,19 +319,28 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (alertDialog != null&&alertDialog!!.isShowing) {
+            alertDialog!!.dismiss()
+            alertDialog=null
+        }
+    }
+
     //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
-    private fun successUpdate() {
+    private fun successUpdate(settingTime:Int, flower:Int) {
         Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
-        var settingTime = TimerSetShared.getSettingTime(this)
-        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
+//        var settingTime = TimerSetShared.getSettingTime(this)
+//        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
 
+        Log.d(TAG, "$date , $time , $settingTime , $flower")
 
         var timerDbHelper = TimerDbHelper(this, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
 
-        //데이터 삽입
+        //데이터 업데이트
         timerDbHelper.upDate(date, time, flower)
         //   데이터 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()
@@ -373,16 +405,16 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //초-> 시간 변환환
-     @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun calTime(setTime: Int): String {
         val result: String?
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
-      //  val sec = Math.floorMod(setTime, 3600) % 60
+        //  val sec = Math.floorMod(setTime, 3600) % 60
         //if (hour > 0) {
-            result="%1$02d:%2$02d".format(hour,min)
-       // } else {
-         //   result="%1$02d:%2$02d".format(min,sec)
+        result = "%1$02d:%2$02d".format(hour, min)
+        // } else {
+        //   result="%1$02d:%2$02d".format(min,sec)
         //}
         return result
     }

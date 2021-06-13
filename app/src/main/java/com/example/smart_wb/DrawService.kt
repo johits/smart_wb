@@ -1,5 +1,6 @@
 package com.example.smart_wb
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
@@ -48,9 +49,12 @@ class DrawService : Service() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
+
+        //타이머 스레드 동작
         handler = Handler()
         thread = StartTimer()
         handler?.post(thread as StartTimer)
+
         return Service.START_STICKY
     }
 
@@ -104,6 +108,7 @@ class DrawService : Service() {
     }
 
     //액티비티 호출 및 서비스 종료 위한 메세지 보냄
+    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
     fun drawServiceStop(result: Boolean) {
         try {
@@ -113,6 +118,8 @@ class DrawService : Service() {
             btStop.visibility = View.GONE
         } catch (e: KotlinNullPointerException) {
         }
+
+
         //노티피 초기화
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -124,9 +131,9 @@ class DrawService : Service() {
         stopService(Intent(applicationContext, DrawService::class.java))
 
         //메인액티비티 호출
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+//        val intent = Intent(applicationContext, MainActivity::class.java)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//        startActivity(intent)
 
     }
 
@@ -152,18 +159,19 @@ class DrawService : Service() {
     inner class StartTimer : Thread() {
         @RequiresApi(Build.VERSION_CODES.N)
         override fun run() {
-            if (settingTime >= 0) {
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+            if (settingTime >= 0) {
                 if (settingTime == 0) {
                    // watch.text="00:00"
-                    handler?.postDelayed(this, 500)
+                    handler?.postDelayed(this, 100)
                 } else {
                     watch.text = calTime(settingTime)
-                    handler?.postDelayed(this, 1000)
+                    handler?.postDelayed(this, 1000) //delayMills long 입니다.
                 }
                 settingTime--
                 Log.d(TAG, "settingTime:" + settingTime)
             } else if(settingTime==-1){
+                watch.text="00초"
                 Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
             }else if(settingTime==-2){
@@ -188,7 +196,7 @@ class DrawService : Service() {
         }else{
             result="%1$02d초".format(sec)
         }
-        return result
+        return result // 4000초 -> 01:??:00
     }
 
     //     activity로부터 binding 된 Messenger

@@ -57,6 +57,21 @@ object TimerSetShared {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         return prefs.getInt("missedCall", 0)
     }
+    //안내 다시보지 않기 체크하기
+    // 불린값 저장은 잘 됨. 불러오면 false 값만 불러옴. 일단 인트로 대체
+    //스크린타임 종료되면 쉐어드 클리어 한다. 젠장
+    //GuidShowCheckShared 생성
+//    fun setNoDialCheck(context: Context){
+//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+//        var editor : SharedPreferences.Editor = prefs.edit()
+//        editor.putInt("noDialCheck", 1)
+//        editor.apply()
+//    }
+//    //안내 다시보지 않기 체크유무 불러오기
+//    fun getNoDialCheck(context: Context):Int{
+//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+//        return prefs.getInt("noDialCheck", 0)
+//    }
     //데이터 초기화
     fun clearTimerSet(context: Context) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)

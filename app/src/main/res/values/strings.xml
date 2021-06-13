@@ -7,5 +7,21 @@
     <string name="screen_time_success_noti_text">축하합니다.</string>
     <string name="calendar_time_success">성공</string>
     <string name="calendar_time_fail">실패</string>
-    <string name="calendar_no_data">도전 x</string>
+    <string name="calendar_no_data">도전한 기록이 없습니다.</string>
+    <string name="calendar_btn_detail_show">상세보기</string>
+    <string name="calendar_btn_detail_close">닫기</string>
+    <string name="guide_dialog_title">안내</string>
+    <string name="guide_dialog_mes1">* 설정한 시간동안 핸드폰을 사용할 수 없습니다.</string>
+    <string name="guide_dialog_mes2">* 방해금지 모드가 활성화 됩니다.</string>
+    <string name="guide_dialog_mes3">* 수신전화가 자동 거절됩니다.</string>
+    <string name="guide_dialog_mes4">* 부득이한 경우 종료 버튼을 누르세요.</string>
+    <string name="guide_dialog_mes5">* 성공 시간 10분 당 꽃 1송이가 제공됩니다</string>
+    <string name="guide_dialog_check">다시보지 않기</string>
+    <string name="button_start">시작</string>
+    <string name="button_confirm">확인</string>
+    <string name="success_dialog_title_success">축하합니다.</string>
+    <string name="success_dialog_title_fail">다시 시도해주세요</string>
+    <string name="success_dialog_time">설정시간</string>
+    <string name="success_dialog_flower">획득한꽃</string>
+    <string name="success_dialog_call">부재중전화</string>
 </resources>
