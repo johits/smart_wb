@@ -189,6 +189,8 @@ class FragmentItem : Fragment() {
         //아이템 모든 적용 초기화
         reset.setOnClickListener {
             for (i in 0 until itemData.size) {
+                i_back.setImageResource(0)
+                i_timer.setImageResource(0)
                 itemData[i].bg = false
                 itemData[i].bcheck = false
                 itemData[i].timer = false
