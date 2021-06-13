@@ -1,4 +1,4 @@
-package com.example.smart_wb
+    package com.example.smart_wb
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.Shared.GuideShowCheckShared
+import com.example.smart_wb.Shared.PointItemShared
 import com.example.smart_wb.Shared.TimerSetShared
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
@@ -83,6 +84,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val view = binding.root
 
         view.soundsetting.setBackgroundResource(R.drawable.mbell)
+        view.m_back.setImageResource(PointItemShared.getBg(mContext))
+        view.m_timer.setImageResource(PointItemShared.getTimer(mContext))
 
         //알림 상태 확인
         val audioManager =
