@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.util.*
@@ -84,10 +83,6 @@ class FragmentChart : Fragment() {
         labelList.add("실패")
         valList.add(10)
         valList.add(90)
-        PieChartGraph(labelList,valList)
-    }
-    private fun PieChartGraph(labelList: ArrayList<String>, valList: ArrayList<Int>) {
-        // PieChart 메소드
 
         // PieChart 메소드
 //        val pieChart = findViewById<View>(R.id.chart) as PieChart
@@ -103,12 +98,13 @@ class FragmentChart : Fragment() {
         for (i in labelList.indices) {
             labels.add(labelList[i])
         }
-        val data = PieData(labels, depenses) // 라이브러리 v3.x 사용하면 에러 발생함
+        val data = BarChartData(labels, depenses) // 라이브러리 v3.x 사용하면 에러 발생함
         depenses.setColors(ColorTemplate.LIBERTY_COLORS) //
         chart.data = data
         chart.animateXY(1000, 1000)
         chart.invalidate()
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
