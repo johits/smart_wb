@@ -216,7 +216,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         database = timerDbHelper.writableDatabase
         //데이터 삽입
         timerDbHelper.insert(date, time, settingTime)
-        //데이터 불러오기
+        //데이터 모두 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()
         //데이터 확인용 로그
 //        for (data in arr) {

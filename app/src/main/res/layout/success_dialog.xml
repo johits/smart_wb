@@ -6,9 +6,9 @@
     android:padding="12dp">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/success_dialog_title"
         android:textSize="24sp"
         android:gravity="center"
         android:textColor="@color/colorBlack"

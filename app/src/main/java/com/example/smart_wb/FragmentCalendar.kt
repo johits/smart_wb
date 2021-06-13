@@ -88,7 +88,7 @@ class FragmentCalendar : Fragment() {
 //                .commit()
             val year: String = date.year.toString()
             val month: String
-            val day: String
+            val day: String //2021-06-07
             //ex String 06 과 6 은 다르다
             if (date.month < 10) {
                 month = "0" + date.month

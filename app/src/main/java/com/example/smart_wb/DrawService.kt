@@ -49,9 +49,12 @@ class DrawService : Service() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
+
+        //타이머 스레드 동작
         handler = Handler()
         thread = StartTimer()
         handler?.post(thread as StartTimer)
+
         return Service.START_STICKY
     }
 
@@ -163,7 +166,7 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 100)
                 } else {
                     watch.text = calTime(settingTime)
-                    handler?.postDelayed(this, 10)
+                    handler?.postDelayed(this, 1000) //delayMills long 입니다.
                 }
                 settingTime--
                 Log.d(TAG, "settingTime:" + settingTime)
@@ -193,7 +196,7 @@ class DrawService : Service() {
         }else{
             result="%1$02d초".format(sec)
         }
-        return result
+        return result // 4000초 -> 01:??:00
     }
 
     //     activity로부터 binding 된 Messenger
