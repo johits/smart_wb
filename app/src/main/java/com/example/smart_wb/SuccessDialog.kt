@@ -11,6 +11,10 @@ import com.example.smart_wb.Shared.TimerSetShared
 
 /**
  * 21-06-12 yama 스크린타임 성공시 성공축하 다이얼로그
+ * android.view.WindowLeaked 에러
+ * 핸드폰 잠금화면 상태에서 다이얼로그가 뜬 상태에서
+ * 앱이 강제종료 되는 에러.
+ * 해결책 찾지 못함.
  * */
 class SuccessDialog(context: Context) {
     private var dialog = Dialog(context)
@@ -65,7 +69,9 @@ class SuccessDialog(context: Context) {
         return result
     }
 
-//    fun dismiss() {
-//        dismiss()
-//    }
+    fun dismiss() {
+        dismiss()
+    }
+
+
 }

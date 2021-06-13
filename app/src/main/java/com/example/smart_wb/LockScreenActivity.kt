@@ -2,19 +2,20 @@ package com.example.smart_wb
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.AlertDialog.Builder
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.media.RingtoneManager
 import android.os.*
 import android.os.VibrationEffect.DEFAULT_AMPLITUDE
 import android.text.format.Time
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -48,8 +49,8 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
-    private lateinit var dialog: SuccessDialog
-
+//    private var dialog: CustomDialog? = null
+//    private var alertDialog:AlertDialog?=null
     //서비스에 데이터 보내기 위한 변수
     private var mServiceMessenger: Messenger? = null
     private var mIsBound = false
@@ -165,31 +166,75 @@ class LockScreenActivity : AppCompatActivity() {
                     val setTimeString: String = calTime(setTime)//설정시간 초 -> 시간 변환
                     val flower = setTime / 600 //획득한 꽃 갯수
 
+                    successUpdate(setTime,flower) //성공시//sqlite 업데이트
+
+                    //노티
+//                    val successTitle = "목표하신 $setTimeString 시간 동안 휴대폰을 사용하지 않으셨군요!"
+//                    val successText = "꽃 $flower 송이 획득."
+//                    showNotification(
+//                        notificationId_success,
+//                        CHANNEL_ID_SUCCESS,
+//                        successTitle,
+//                        successText
+//                    )
+//                    //부재중 전화가 있으면 알람
+//                    if (missedCall != 0) {
+//                        missedCallNoti(missedCall, 4500)
+//                    }
+
                     //다이얼로그
-                    dialog = SuccessDialog(this)
-                    dialog.showDialog(this)
-                    dialog.setItemClickListener(object : SuccessDialog.OnItemClickListener {
-                        override fun onClick() {
-                            successUpdate() //성공시//sqlite 업데이트
-                            startMainActivity()//메인액티비티 호출
-                            val successTitle = "목표하신 $setTimeString 시간 동안 휴대폰을 사용하지 않으셨군요!"
-                            val successText = "꽃 $flower 송이 획득."
-                            showNotification(
-                                notificationId_success,
-                                CHANNEL_ID_SUCCESS,
-                                successTitle,
-                                successText
-                            )
-                            //부재중 전화가 있으면 알람
-                            if (missedCall != 0) {
-                                missedCallNoti(missedCall, 4500)
-                            }
-                        }//onClick 끗
-                    })
+//                    dialog = SuccessDialog(this)
+//                    dialog!!.showDialog(this)
+//                    dialog!!.setItemClickListener(object : SuccessDialog.OnItemClickListener {
+//                        override fun onClick() {
+//                            startMainActivity()//메인액티비티 호출
+//                            dialog=null
+//                        }
+//                    })
+                    //다이얼로그
+//                    dialog = CustomDialog()
+//
+//                    dialog!!.setButtonClickListener(object: CustomDialog.OnButtonClickListener{
+//                        override fun onClick() {
+//                               startMainActivity()
+//                        }
+//
+//                    })
+//                    dialog!!.show(supportFragmentManager, "CustomDialog")
+
+//                    alertDialog = AlertDialog.Builder(this)
+//                        .setTitle("JhDroid")
+//                        .setMessage("dismiss()는 중요하다")
+//                        .show()
+
+
+                    val layoutInflater = LayoutInflater.from(this)
+                    val view = layoutInflater.inflate(R.layout.success_dialog, null)
+
+                    val alertDialog = AlertDialog.Builder(this)
+                        .setView(view)
+                        .setCancelable(false)
+                        .create()
+
+                    val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
+                    val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
+                    val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
+                    val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
+
+                    tvSettingTime.text=setTimeString
+                    tvFlower.text=flower.toString()
+                    tvMissedCall.text = missedCall.toString()
+
+                    btnConfirm.setOnClickListener {
+                        alertDialog.dismiss()
+                        startMainActivity()
+                    }
+                    alertDialog.show()
+
                 } else {//스크린타임 실패시
                     //부재중 전화가 있으면 알람
                     if (missedCall != 0) {
-                        missedCallNoti(missedCall, 4500)
+                        missedCallNoti(missedCall, 0)
                     }
                     startMainActivity()
                 }
@@ -291,25 +336,31 @@ class LockScreenActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-//        if (dialog != null) {
-//
-//            dialog.dismiss()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        if (alertDialog != null&&alertDialog!!.isShowing) {
+//            alertDialog!!.dismiss()
+//            alertDialog=null
 //        }
     }
 
     //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
-    private fun successUpdate() {
+    private fun successUpdate(settingTime:Int, flower:Int) {
         Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this)
         var time = TimerSetShared.getTime(this)
-        var settingTime = TimerSetShared.getSettingTime(this)
-        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
+//        var settingTime = TimerSetShared.getSettingTime(this)
+//        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
 
+        Log.d(TAG, "$date , $time , $settingTime , $flower")
 
         var timerDbHelper = TimerDbHelper(this, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
 
-        //데이터 삽입
+        //데이터 업데이트
         timerDbHelper.upDate(date, time, flower)
         //   데이터 불러오기
         var arr: ArrayList<TimerData> = timerDbHelper.select()

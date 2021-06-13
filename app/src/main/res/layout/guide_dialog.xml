@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_title"
+        android:textColor="@color/colorBlack"
         android:textSize="24sp"
         android:gravity="center"
         android:layout_marginBottom="4dp"/>
@@ -24,26 +25,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_mes1"
+        android:textColor="@color/colorBlack"
         android:layout_marginBottom="4dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_mes2"
+        android:textColor="@color/colorBlack"
         android:layout_marginBottom="4dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_mes3"
+        android:textColor="@color/colorBlack"
         android:layout_marginBottom="4dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_mes4"
+        android:textColor="@color/colorBlack"
         android:layout_marginBottom="4dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_mes5"
+        android:textColor="@color/colorBlack"
         android:layout_marginBottom="4dp"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
