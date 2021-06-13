@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -91,10 +92,12 @@ class FragmentItem : Fragment() {
                 irv.visibility = View.VISIBLE
                 arrow.rotation = 270f
                 bt_value = false
+                reset.visibility = View.VISIBLE
             } else if (bt_value == false) {
                 irv.visibility = View.GONE
                 arrow.rotation = 90f
                 bt_value = true
+                reset.visibility = View.INVISIBLE
             }
 
         }
@@ -111,10 +114,9 @@ class FragmentItem : Fragment() {
                 it.orientation = LinearLayoutManager.HORIZONTAL
             }
 
-
         //구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
         irv.addItemDecoration(DividerItemDecoration(requireContext(), 0))
-        itemData.add(ItemData(name = "reset", item = R.drawable.reset, price = 0, lock = true, type = "reset"))
+//        itemData.add(ItemData(name = "reset", item = R.drawable.reset, price = 0, lock = true, type = "reset"))
         itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, type = "bg"))
         itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200,  type = "bg"))
         itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300,  type = "timer"))
@@ -154,6 +156,8 @@ class FragmentItem : Fragment() {
                 Log.d(TAG, "onClick리스너 tcheck: "+itemData[position].tcheck)
                 Log.d(TAG, "onClick리스너 timer: "+itemData[position].timer)
                 Log.d(TAG, "onClick리스너 name: "+itemData[position].name)
+                Log.d(TAG, "onClick리스너 bcheck: "+itemData[position].bcheck)
+                Log.d(TAG, "onClick리스너 bg: "+itemData[position].bg)
 
                 if(itemData[position].name.equals("reset")){
                     i_back.setImageResource(0)
@@ -182,7 +186,19 @@ class FragmentItem : Fragment() {
             }
         })
 
-
+        //아이템 모든 적용 초기화
+        reset.setOnClickListener {
+            for (i in 0 until itemData.size) {
+                itemData[i].bg = false
+                itemData[i].bcheck = false
+                itemData[i].timer = false
+                itemData[i].tcheck = false
+                PointItemShared.setBg(iContext, 0)
+                PointItemShared.setTimer(iContext, 0)
+                Toast.makeText(context, "모든 적용이 해제되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            itemAdapter.notifyDataSetChanged()
+        }
 
         irv.adapter = itemAdapter
         itemAdapter.notifyDataSetChanged()
