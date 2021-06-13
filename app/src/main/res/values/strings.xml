@@ -18,4 +18,9 @@
     <string name="guide_dialog_mes5">* 성공 시간 10분 당 꽃 1송이가 제공됩니다</string>
     <string name="guide_dialog_check">다시보지 않기</string>
     <string name="button_start">시작</string>
+    <string name="button_confirm">확인</string>
+    <string name="success_dialog_title">축하합니다.</string>
+    <string name="success_dialog_time">설정시간</string>
+    <string name="success_dialog_flower">획득한꽃</string>
+    <string name="success_dialog_call">부재중전화</string>
 </resources>
