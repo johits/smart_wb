@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 /**
  * 2021-06-07 yama 스크린타임 시간 설정 저장
- * 스크린타임 시작날짜, 시작시간 , 설정시간
+ * 스크린타임 시작날짜, 시작시간 , 설정시간, 부재중전화수
  * */
 object TimerSetShared {
     private val fileName : String = "timerSet" //쉐어드 파일이름
@@ -72,7 +72,7 @@ object TimerSetShared {
 //        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
 //        return prefs.getInt("noDialCheck", 0)
 //    }
-    //데이터 초기화
+    //데이터 초기화 //스크린타임이 끝나면 호출한다.
     fun clearTimerSet(context: Context) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()

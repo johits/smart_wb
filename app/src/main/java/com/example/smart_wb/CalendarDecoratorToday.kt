@@ -12,7 +12,9 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
-
+/**
+ * 2021-06-?? yama 달력에 오늘날짜 표시
+ * */
 class CalendarDecoratorToday(context: Context, currentDay: CalendarDay) : DayViewDecorator {
     @SuppressLint("UseCompatLoadingForDrawables")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

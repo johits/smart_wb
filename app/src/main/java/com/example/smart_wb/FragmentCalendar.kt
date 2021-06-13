@@ -35,8 +35,8 @@ class FragmentCalendar : Fragment() {
             }
     }
 
-    lateinit var calendarAdapter: CalendarAdapter
-    var dataList = mutableListOf<TimerData>()
+    lateinit var calendarAdapter: CalendarAdapter //상세기록 표시 리사이클러뷰 어답터
+    var dataList = mutableListOf<TimerData>() //상세기록 데이터 리스트
 
     lateinit var timerDataList: ArrayList<TimerData>
 
@@ -120,7 +120,7 @@ class FragmentCalendar : Fragment() {
 //                binding.recycler.visibility = View.VISIBLE
             }
             calendarAdapter.replaceList(dataList)
-            calculateSum()
+            calculateSum() //날짜에 해당하는 총도전시간, 성공시간, 획득꽃 계산
         }
 
         //상세보기버튼 클릭 이벤트. 리사이클러뷰 비저블
@@ -200,7 +200,7 @@ class FragmentCalendar : Fragment() {
     // 현재 Day
     fun getCurrentDay(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-    //스크린타임 결과 데이터 가져오기
+    //스크린타임 결과 데이터 가져오기 //도전 기록이 있는 날짜에 점찍기
     fun screenTimeData() {
         Log.d(TAG, "screenTimeData: ")
 //        var date = TimerSetShared.getDate(mContext)
@@ -209,7 +209,7 @@ class FragmentCalendar : Fragment() {
         var timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
         var database = timerDbHelper.writableDatabase
 
-        //   데이터 불러오기
+        //  timer 테이블 데이터 불러오기
         timerDataList = timerDbHelper.select()
 //
         var dateList = ArrayList<String>()
@@ -228,6 +228,7 @@ class FragmentCalendar : Fragment() {
             linkedHashSet.add(item)
         }
 
+        //도전 기록이 있는 날짜에 점찍기
         for (item in linkedHashSet) {
             var parts = item.split("-").toTypedArray()
             Log.d(TAG, "중복 제거된 날짜:" + item)
@@ -252,7 +253,7 @@ class FragmentCalendar : Fragment() {
         return arr;
     }
 
-    //총도전시간,성공시간,꽃 계산기
+    //날짜에 해당하는 총도전시간,성공시간,꽃 계산기 및 setText
     @RequiresApi(Build.VERSION_CODES.N)
     private fun calculateSum() {
         var settingTimeSum = 0
