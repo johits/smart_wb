@@ -1,6 +1,5 @@
 package com.example.smart_wb
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
@@ -26,6 +25,8 @@ joker
 class DrawService : Service() {
 
     companion object {
+
+        //액티비티와 서비스간 데이터전달 위한 상수값
         const val MSG_REGISTER_CLIENT = 1
         const val MSG_UNREGISTER_CLIENT = 3
         const val MSG_SEND_TO_SERVICE = 3
@@ -37,8 +38,10 @@ class DrawService : Service() {
     var wm: WindowManager? = null
     var mView: View? = null
 
+    //타이머 동작 위한 핸들러, 쓰레드
     var handler: Handler? = null
     var thread: Thread? = null
+    //설정시간
     var settingTime = 0
 
     override fun onBind(p0: Intent?): IBinder {
@@ -50,7 +53,7 @@ class DrawService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
 
-        //타이머 스레드 동작
+        //타이머 시작
         handler = Handler()
         thread = StartTimer()
         handler?.post(thread as StartTimer)
@@ -108,7 +111,6 @@ class DrawService : Service() {
     }
 
     //액티비티 호출 및 서비스 종료 위한 메세지 보냄
-    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
     fun drawServiceStop(result: Boolean) {
         try {
@@ -118,22 +120,15 @@ class DrawService : Service() {
             btStop.visibility = View.GONE
         } catch (e: KotlinNullPointerException) {
         }
-
-
         //노티피 초기화
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         //방해금지모드 해제
         notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
-        sendMsgToActivity(result);//액티비티에 메세지보내기
+        sendMsgToActivity(result);//액티비티에 메세지보내기//result true == 성공, false == 종료버튼터치
 
         stopService(Intent(applicationContext, DrawService::class.java))
-
-        //메인액티비티 호출
-//        val intent = Intent(applicationContext, MainActivity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-//        startActivity(intent)
 
     }
 
@@ -159,22 +154,20 @@ class DrawService : Service() {
     inner class StartTimer : Thread() {
         @RequiresApi(Build.VERSION_CODES.N)
         override fun run() {
+            if (settingTime >= 0) { //설정시간(초)이 0보다 클떄 동작
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
-            if (settingTime >= 0) {
                 if (settingTime == 0) {
-                   // watch.text="00:00"
-                    handler?.postDelayed(this, 100)
+                    handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
                 } else {
-                    watch.text = calTime(settingTime)
-                    handler?.postDelayed(this, 1000) //delayMills long 입니다.
+                    watch.text = calTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
+                    handler?.postDelayed(this, 1000)
                 }
-                settingTime--
-                Log.d(TAG, "settingTime:" + settingTime)
-            } else if(settingTime==-1){
-                watch.text="00초"
+                settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
+//                Log.d(TAG, "settingTime:" + settingTime)
+            } else if(settingTime==-1){ //스크린타임 정상적으로 종료
                 Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
-            }else if(settingTime==-2){
+            }else if(settingTime==-2){//사용자가 종료버튼 눌렀을때
                 Log.d(TAG, "스크린타임 강제종료")
             }
         }
@@ -187,19 +180,20 @@ class DrawService : Service() {
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
         val sec = Math.floorMod(setTime, 3600) % 60
-        if (hour > 0) {
+
+        if (hour > 0) {//1시간 초과 남았을떄 ex 02시22분
             result="%1$02d시 %2$02d분".format(hour,min)
-        } else if(hour==0&&min>0){
+        } else if(hour==0&&min>0){ //1시간 이하 남았을 때 ex 22분22초
           result="%1$02d분 %2$02d초".format(min,sec)
-        }else if(hour==0&&min==0){
+        }else if(hour==0&&min==0){ // 1분 이하 남았을 때 ex 22초
             result="%1$02d초".format(sec)
-        }else{
+        }else{ //리턴값 있어서 else 넣어야 한다. ex 22초
             result="%1$02d초".format(sec)
         }
-        return result // 4000초 -> 01:??:00
+        return result
     }
 
-    //     activity로부터 binding 된 Messenger
+    //     activity로부터 binding 된 Messenger //메시지 받음
     private val mMessenger = Messenger(Handler { msg ->
         Log.d("tag", " message what : " + msg.what + " , msg.obj " + msg.obj)
         settingTime = msg.obj as Int
@@ -209,7 +203,7 @@ class DrawService : Service() {
         false
     })
 
-    //activity에 메세지 보냄
+    //activity에 메세지 보냄// result true == 성공, false == 종료버튼터치
     private fun sendMsgToActivity(result: Boolean) {
         try {
             Log.d(TAG, "결과"+result)

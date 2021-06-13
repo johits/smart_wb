@@ -4,9 +4,9 @@ package com.example.smart_wb.SQLite
  * */
 data class TimerData(
     val id:Int, //pk
-    val date:String,
-    val time:String,
-    val settingTime:Int,//설정시간
+    val date:String, //시작날짜 ex 2021-06-13
+    val time:String, //시작시간 ex 02:22:22
+    val settingTime:Int,//설정시간 3600
     val success:Int, //sqlite boolean 사용x. 성공 1, 실패 0. default 0
-    val flower:Int //받은 꽃 갯수
+    val flower:Int //받은 꽃 갯수 , default 0
 )

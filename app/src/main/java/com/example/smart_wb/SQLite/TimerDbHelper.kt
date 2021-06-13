@@ -17,6 +17,7 @@ class TimerDbHelper
     version: Int
 ) : SQLiteOpenHelper(context, name, factory, version) {
 
+    //테이블생성
     override fun onCreate(db: SQLiteDatabase) {
         var sql: String = "CREATE TABLE if not exists timer (" +
                 "id INTEGER primary key autoincrement," +
