@@ -49,8 +49,8 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
-//    private var dialog: CustomDialog? = null
-    private var alertDialog:AlertDialog?=null //스크린타임 결과표시용 다이얼로그
+    //    private var dialog: CustomDialog? = null
+    private var alertDialog: AlertDialog? = null //스크린타임 결과표시용 다이얼로그
 
     private var mServiceMessenger: Messenger? = null //서비스에 데이터 보내기 위한 변수
     private var mIsBound = false //서비스 동작 유무 확인용 플래그
@@ -87,7 +87,7 @@ class LockScreenActivity : AppCompatActivity() {
                 setStartService() //드로우서비스 시작
             }
 
-         //핸드폰 재시작할 때
+            //핸드폰 재시작할 때
         } else if (intent.hasExtra("restart")) {
             val remainTime = calRemainTime() //스크린타임 남은 시간계산
             Log.d(TAG, "남은시간:$remainTime")
@@ -168,12 +168,17 @@ class LockScreenActivity : AppCompatActivity() {
 
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp() //핸드폰화면 켜짐
-                    successUpdate(setTime,flower)//성공시//sqlite 업데이트
+                    successUpdate(setTime, flower)//성공시//sqlite 업데이트
 
-                    showDialog(getString(R.string.success_dialog_title_success), setTimeString, flower, missedCall)//결과 다이얼로그
+                    showDialog(
+                        getString(R.string.success_dialog_title_success),
+                        setTimeString,
+                        flower,
+                        missedCall
+                    )//결과 다이얼로그
 
                     //성공 노티피케이션
-                    val successTitle = "목표하신 $setTimeString 시간 동안 휴대폰을 사용하지 않으셨군요!"
+                    val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
                     val successText = "꽃 $flower 송이 획득."
                     showNotification(
                         notificationId_success,
@@ -187,7 +192,12 @@ class LockScreenActivity : AppCompatActivity() {
                     }
 
                 } else {//스크린타임 사용자 종료시
-                    showDialog(getString(R.string.success_dialog_title_fail), setTimeString, flower, missedCall)
+                    showDialog(
+                        getString(R.string.success_dialog_title_fail),
+                        setTimeString,
+                        flower,
+                        missedCall
+                    )
                     //부재중 전화가 있으면 노티피케이션
                     if (missedCall != 0) {
                         missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
@@ -205,12 +215,12 @@ class LockScreenActivity : AppCompatActivity() {
     })
 
     //스크린타임 종료시 다이얼로그
-    private fun showDialog(title:String, setTime:String, flower:Int, missedCall:Int){
+    private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
         Log.d(TAG, "showDialog: ")
         val layoutInflater = LayoutInflater.from(this)
         val view = layoutInflater.inflate(R.layout.success_dialog, null)
 
-         val alertDialog = AlertDialog.Builder(this)
+        val alertDialog = AlertDialog.Builder(this)
             .setView(view)
             .setCancelable(false)
             .create()
@@ -220,9 +230,9 @@ class LockScreenActivity : AppCompatActivity() {
         val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
         val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
 
-        tvTitle.text=title
-        tvSettingTime.text=setTime //설정시간표시
-        tvFlower.text=flower.toString() //얻은 꽃 표시
+        tvTitle.text = title
+        tvSettingTime.text = setTime //설정시간표시
+        tvFlower.text = flower.toString() //얻은 꽃 표시
         tvMissedCall.text = missedCall.toString()// 부재중 전화 표시
 
         btnConfirm.setOnClickListener {
@@ -312,7 +322,7 @@ class LockScreenActivity : AppCompatActivity() {
             val pm = getSystemService(POWER_SERVICE) as PowerManager
             val wakelock = pm.newWakeLock(
                 PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-               "My:Tag"
+                "My:Tag"
             )
             wakelock.acquire() //화면 기상
             wakelock.release() //WakeLock 자원 해제
@@ -329,14 +339,14 @@ class LockScreenActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         //android.view.WindowLeaked 에러 처리 위한 구문
-        if (alertDialog != null&&alertDialog!!.isShowing) {
+        if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.dismiss()
-            alertDialog=null
+            alertDialog = null
         }
     }
 
     //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
-    private fun successUpdate(settingTime:Int, flower:Int) {
+    private fun successUpdate(settingTime: Int, flower: Int) {
         Log.d(TAG, "successUpdate: ")
         var date = TimerSetShared.getDate(this) //시작날짜
         var time = TimerSetShared.getTime(this) //시작시간
@@ -419,11 +429,13 @@ class LockScreenActivity : AppCompatActivity() {
         val hour = Math.floorDiv(setTime, 3600)
         val min = Math.floorMod(setTime, 3600) / 60
         //  val sec = Math.floorMod(setTime, 3600) % 60
-        //if (hour > 0) {
-        result = "%1$02d:%2$02d".format(hour, min)
-        // } else {
-        //   result="%1$02d:%2$02d".format(min,sec)
-        //}
+        if (hour > 0 && min > 0) {
+            result = "%1$02d시간%2$02d분".format(hour, min)
+        } else if(hour>0 && min==0) {
+            result = "%1$02d시간".format(hour)
+        } else {
+            result = "%1$02d분".format(min)
+        }
         return result
     }
 }

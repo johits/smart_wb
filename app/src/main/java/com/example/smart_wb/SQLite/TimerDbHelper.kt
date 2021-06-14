@@ -104,4 +104,19 @@ class TimerDbHelper
         db.close()
         return result
     }
+
+    //차트 데이터 불러오기 성공한 데이터 만
+    fun selectWeek(){
+        val result = arrayListOf<TimerData>()
+        val db: SQLiteDatabase = writableDatabase
+        val sql = "SELECT date, sum(settingTime) FROM timer WHERE success=1 group by date;"
+
+        val cursor:Cursor = db.rawQuery(sql, null)
+        while(cursor.moveToNext()){
+            val date:String = cursor.getString(0)
+            val settingTime: Int = cursor.getInt(1)
+
+            Log.d("tag", "date:$date , settingTime:$settingTime")
+        }
+    }
 }

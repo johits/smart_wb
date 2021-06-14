@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.smart_wb.SQLite.TimerDbHelper
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.timer
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,6 +67,11 @@ class FragmentChart : Fragment() {
             chart_month.setTextColor(Color.parseColor("#2FA9FF"))
             chart_week.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
+
+            var timerDbHelper = TimerDbHelper(requireContext(), "timerDb.db", null, 1)
+            var database = timerDbHelper.writableDatabase
+
+            timerDbHelper.selectWeek()
         })
 
         chart_year.setOnClickListener(View.OnClickListener {

@@ -160,7 +160,7 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
                 } else {
                     watch.text = calTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
-                    handler?.postDelayed(this, 1000)
+                    handler?.postDelayed(this, 10)
                 }
                 settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
 //                Log.d(TAG, "settingTime:" + settingTime)
