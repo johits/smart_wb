@@ -54,7 +54,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
     override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
 
 
-        val p : Int = -1 //포지션 상수
+        val p: Int = -1 //포지션 상수
         var bg = itemList[position].bg
         var timer = itemList[position].timer
         var type = itemList[position].type  //배경, 타이머 유형
@@ -69,161 +69,149 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         holder.item.setImageResource(item)
 
 
-
         //초기화 버튼 세팅
-        if(name.equals("reset")){
+        if (name.equals("reset")) {
             holder.price.visibility = View.INVISIBLE
             holder.pointIcon.visibility = View.INVISIBLE
             holder.lock.visibility = View.INVISIBLE
-        }else{
+        } else {
             holder.price.visibility = View.VISIBLE
             holder.pointIcon.visibility = View.VISIBLE
             holder.lock.visibility = View.VISIBLE
         }
 
         // 구매한 아이템 여부에 따른 자물쇠, 적용버튼 보여지기
-        if (lock){ //구매한 아이템일 경우 item.lock = true
+        if (lock) { //구매한 아이템일 경우 item.lock = true
             holder.lock.visibility = View.INVISIBLE
-            if(itemList[position].name.equals("reset")){
+            if (itemList[position].name.equals("reset")) {
                 holder.check.visibility = View.INVISIBLE
-            }else {
+            } else {
                 holder.check.visibility = View.VISIBLE
             }
-        }else{
+        } else {
             holder.lock.visibility = View.VISIBLE
             holder.check.visibility = View.INVISIBLE
         }
 
-        Log.d(TAG, "초기화 ${itemList[position].bcheck}")
+
+        // 미리보기 초기화 세팅
+        if (type.equals("bg")) {
+            if (itemList[position].bg) {
+                holder.product.setBackgroundColor(Color.parseColor("#81000000"))
+            } else {
+                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+            }
+        } else if (type.equals("timer")) {
+            if (itemList[position].timer) {
+                holder.product.setBackgroundColor(Color.parseColor("#81000000"))
+            } else {
+                holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
+            }
+        }
+
+
         // 체크 버튼 초기화 세팅
-        if(type.equals("bg")) {
+        if (type.equals("bg")) {
             if (itemList[position].bcheck) {
-                Log.d(TAG, "배경적용버튼 true일때 작동 ${itemList[position].bcheck}")
                 holder.check.setImageResource(R.drawable.ok_check)
             } else {
-                Log.d(TAG, "배경적용버튼 false일때 작동 ${itemList[position].bcheck}")
                 holder.check.setImageResource(R.drawable.no_check)
             }
-        }else if(type.equals("timer")) {
+        } else if (type.equals("timer")) {
             if (itemList[position].tcheck) {
-                Log.d(TAG, "타이머적용버튼 true일때 작동 ${itemList[position].tcheck}")
                 holder.check.setImageResource(R.drawable.ok_check)
             } else {
-                Log.d(TAG, "타이머적용버튼 false일때 작동 ${itemList[position].tcheck}")
                 holder.check.setImageResource(R.drawable.no_check)
             }
         }
 
 
-//        holder.check.setOnClickListener {
-//            if(type.equals("bg")){
-//                if (itemList[position].bcheck){
-//                    Log.d(TAG, "1배경트루로들어옴?${itemList[position].bcheck}")
-//                    itemList[position].bcheck = false
-//                    Log.d(TAG, "2배경false로나감?${itemList[position].bcheck}")
-//                }else{
-//                    Log.d(TAG, "3배경false로들어옴?"+itemList[position].bcheck)
-//                    itemList[position].bcheck = true
-//                    Log.d(TAG, "4배경트루로나감?${itemList[position].bcheck}")
-//                }
-//                notifyItemChanged(position)
-//            } else if(type.equals("timer")){
-//                if(itemList[position].tcheck){
-//                    itemList[position].tcheck = false
-//                }else{
-//                    itemList[position].tcheck = true
-//                }
-//            }
-//        }
-
-//        // 체크 버튼 적용 여부 구분
-//        Log.d(TAG, "$name 배경체크초기화세팅:"+bcheck)
-//        Log.d(TAG, "$name 타이머체크초기화세팅:"+tcheck)
-//        if (bcheck||tcheck){ //체크 안 한 상태 = false
-//            Log.d(TAG, "1111111111 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
-//            holder.check.setImageResource(R.drawable.ok_check)
-//            Log.d(TAG, "적용후 111111111 아이템 :$name bcheck:$bcheck, tcheck:$tcheck")
-//        }else{
-//            Log.d(TAG, "2222222222 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
-//            holder.check.setImageResource(R.drawable.no_check)
-//            Log.d(TAG, "적용 후2222222222 아이템:$name bcheck:$bcheck, tcheck:$tcheck")
-//        }
-//
-//
-        holder.check.setOnClickListener{
+        //적용 버튼 클릭 시 이벤트
+        holder.check.setOnClickListener {
 //            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
-            if(type.equals("bg")&&itemList[position].bcheck){
-                Log.d(TAG, "아이템:$name 실행ㅇ1"+itemList[position].bcheck)
+            if (type.equals("bg") && itemList[position].bcheck) {
+                Log.d(TAG, "아이템:$name 실행ㅇ1" + itemList[position].bcheck)
                 PointItemShared.setBg(context, 0)
                 itemList[position].bcheck = false
                 itemList[position].bg = false
-                Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
-            }else if(type.equals("timer")&&itemList[position].tcheck){
+                Toast.makeText(context, "적용 해제되었습니다.", Toast.LENGTH_SHORT).show()
+            } else if (type.equals("timer") && itemList[position].tcheck) {
                 PointItemShared.setTimer(context, 0)
-                    itemList[position].tcheck = false
-                itemList[position].timer= false
+                itemList[position].tcheck = false
+                itemList[position].timer = false
                 notifyItemChanged(position)
-                Toast.makeText(context,"적용 해제되었습니다.",Toast.LENGTH_SHORT).show()
-            }else{
-                ck(type,position)
+                Toast.makeText(context, "적용 해제되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                ck(type, position)
                 loop(type, position) //선택란 배경 체크됨
-                if(type.equals("bg")){
+                if (type.equals("bg")) {
                     itemList[position].bcheck = true
+                    itemList[position].bg= true
                     PointItemShared.setBg(context, item)
-                }else if(type.equals("timer")){
+                } else if (type.equals("timer")) {
                     itemList[position].tcheck = true
-                    PointItemShared.setTimer(context,item)
+                    itemList[position].timer = true
+                    PointItemShared.setTimer(context, item)
                 }
 //                holder.check.setImageResource(R.drawable.ok_check)
-                Toast.makeText(context,"적용되었습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "적용되었습니다.", Toast.LENGTH_SHORT).show()
             }
+
+
             Log.d(TAG, "최종 체크값:$itemList[position].bcheck")
             notifyItemChanged(position)
             itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
         }
 
-        if (bg||timer){
-            holder.product.setBackgroundColor(Color.parseColor("#81000000"))
-        }else{
-            holder.product.setBackgroundColor(Color.parseColor("#ffffff"))
-        }
 
+
+        //자물쇠 버틀 클릭 시 이벤트
         holder.lock.setOnClickListener {
-            Log.d(TAG, "구매하기"+position+"아이템 이름"+itemList[position].item)
+            Log.d(TAG, "구매하기" + position + "아이템 이름" + itemList[position].item)
 //            itemClickListener.onClick(it, position)
             //테스트
 //            val dialog = PayDialog(context)
 //                dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
 
             //실제코드
-            if(flower>=itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
+            if (flower >= itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
                 val dialog = PayDialog(context)
-                dialog.myDig(itemList[position].item, itemList[position].price, flower,itemList[position].name, context)
+                dialog.myDig(
+                    itemList[position].item,
+                    itemList[position].price,
+                    flower,
+                    itemList[position].name,
+                    context
+                )
                 //Itemadapter 클릭 리스너
-                dialog.setItemClickListener2(object: PayDialog.OnItemClickListener {
+                dialog.setItemClickListener2(object : PayDialog.OnItemClickListener {
                     override fun onClick(p: Int) {
                         itemList[position].lock = true //이거 설정해줘야 금액 변경됨
                         holder.lock.visibility = View.GONE
                         holder.check.visibility = View.VISIBLE
-                        if(itemList[position].type.equals("bg")){
+                        if (itemList[position].type.equals("bg")) {
                             itemList[position].bcheck = true
                             itemList[position].bg = true
-                        }else if(itemList[position].type.equals("timer")){
+                        } else if (itemList[position].type.equals("timer")) {
                             itemList[position].tcheck = true
                             itemList[position].timer = true
-                            Log.d(TAG, "둘다 트루 타이머여야함 ${itemList[position].tcheck} // ${itemList[position].timer}")
+                            Log.d(
+                                TAG,
+                                "둘다 트루 타이머여야함 ${itemList[position].tcheck} // ${itemList[position].timer}"
+                            )
                         }
                         notifyItemChanged(position)
-                        loop(type,position)
-                        ck(type,position)
+                        loop(type, position)
+                        ck(type, position)
                         itemClickListener.onClick(it, position)
-                        Toast.makeText(context,"구매한 아이템이 적용되었습니다.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "구매한 아이템이 적용되었습니다.", Toast.LENGTH_SHORT).show()
 
                     }
                 })
 
 
-            }else{ //꽃송이가 부족할 경우
+            } else { //꽃송이가 부족할 경우
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("꽃송이가 부족합니다.")
                 builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
@@ -239,22 +227,25 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         }
 
 
-
-
-        // (1) 리스트 내 항목 클릭 시 onClick() 호출
+        //미리보기 적용 이벤트
         holder.product.setOnClickListener {
             Log.d(TAG, "onBindViewHolder: 리스너 작동")
 
-
-
-            if(type.equals("reset")){
+            if (type.equals("reset")) {
                 for (i in 0 until itemList.size) {
-                        itemList[i].bg = false
-                        itemList[i].timer = false
+                    itemList[i].bg = false
+                    itemList[i].bcheck = false
+                    itemList[i].timer = false
+                    itemList[i].tcheck = false
+                    PointItemShared.setBg(context , 0)
+                    PointItemShared.setTimer(context, 0)
+                    Toast.makeText(context, "모든 적용이 해제되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
+
             loop(type,position)
             itemClickListener.onClick(it, position)
+            Log.d(TAG, "미리보기 어댑터 최종값은 ${itemList[position].bg}")
         }
     }
 
@@ -274,25 +265,50 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
 
     //아이템 타입별(배경, 타이머) 하나만 선택되게하는 메서드
-    fun loop(type:String, position:Int){
+    fun loop(type:String, position:Int) {
         Log.d(TAG, "loop: 루프 작동")
-        if(type.equals("bg")) {
-            //선택 하나만 되게
-            for (i in 0 until itemList.size) {
+        if (type.equals("bg")) {
+            if (!itemList[position].bg) {
+                //선택 하나만 되게
                 for (i in 0 until itemList.size) {
-                    if (i == position) {
-                        itemList[i].bg = true
-                    } else {
-                        itemList[i].bg = false
+                    for (i in 0 until itemList.size) {
+                        if (i == position) {
+                            itemList[i].bg = true
+                        } else {
+                            itemList[i].bg = false
+                        }
+                    }
+                }
+            } else {
+                //선택 하나만 되게
+                for (i in 0 until itemList.size) {
+                    for (i in 0 until itemList.size) {
+                        if (i == position) {
+                            itemList[i].bg = false
+                        }
                     }
                 }
             }
-        }else if(type.equals("timer")){
-            for (i in 0 until itemList.size) {
-                if (i == position) {
-                    itemList[i].timer = true
-                } else {
-                    itemList[i].timer = false
+        }else if (type.equals("timer")) {
+            if (!itemList[position].timer) {
+                //선택 하나만 되게
+                for (i in 0 until itemList.size) {
+                    for (i in 0 until itemList.size) {
+                        if (i == position) {
+                            itemList[i].timer = true
+                        } else {
+                            itemList[i].timer = false
+                        }
+                    }
+                }
+            } else {
+                //선택 하나만 되게
+                for (i in 0 until itemList.size) {
+                    for (i in 0 until itemList.size) {
+                        if (i == position) {
+                            itemList[i].timer = false
+                        }
+                    }
                 }
             }
         }
