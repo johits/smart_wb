@@ -13,9 +13,6 @@ import com.example.smart_wb.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-private lateinit var binding: ActivityMainBinding
-
-
 //2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드) .
 
 class MainActivity : AppCompatActivity() {
@@ -23,8 +20,8 @@ class MainActivity : AppCompatActivity() {
         private val TAG = "MainActivity"
     }
 
-    private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
+//    private var _binding: ActivityMainBinding? = null
+//    private val binding get() = _binding!!
     private lateinit var stack: Stack<Int>//프래그먼트트 전환는 순서대로 스택에 푸시한다.
 
     private val adapter by lazy { AdapterMainFragment(supportFragmentManager, 4) }
@@ -35,8 +32,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+//        _binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
 //        configureBottomNavigation()
 
         stack = Stack<Int>()
@@ -79,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
 
-                stack.push(position)//프래그먼트 포지션값 스택에 푸쉬
+                stack.push(position)//프래그먼트 포지션값 푸쉬한다.
 
                 xml_main_tablayout.getTabAt(0)?.setIcon(R.drawable.mtimer1)
                 xml_main_tablayout.getTabAt(1)?.setIcon(R.drawable.mcalendar1)
