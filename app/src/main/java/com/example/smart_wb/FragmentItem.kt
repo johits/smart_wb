@@ -88,16 +88,18 @@ class FragmentItem : Fragment() {
         //아이템보기 접기/펼치기
         iv.setOnClickListener {
             Log.d(TAG, "bt_value:" + bt_value)
-            if (bt_value) {
+            if (bt_value) { //펼치기
                 irv.visibility = View.VISIBLE
                 arrow.rotation = 270f
                 bt_value = false
+//                btStop.visibility = View.INVISIBLE
                 reset.visibility = View.VISIBLE
-            } else if (bt_value == false) {
+            } else if (bt_value == false) { //접기
                 irv.visibility = View.GONE
                 arrow.rotation = 90f
                 bt_value = true
                 reset.visibility = View.INVISIBLE
+//                btStop.visibility = View.VISIBLE //종료버튼 미리보기
             }
 
         }
