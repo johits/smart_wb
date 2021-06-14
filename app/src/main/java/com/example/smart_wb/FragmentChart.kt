@@ -1,21 +1,20 @@
 package com.example.smart_wb
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentChart.newInstance] factory method to
- * create an instance of this fragment.
- */
+/**2021-06-14
+joker
+막대 그래프*/
+
 class FragmentChart : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -37,6 +36,56 @@ class FragmentChart : Fragment() {
         return inflater.inflate(R.layout.fragment_chart, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        chart_week.setOnClickListener(View.OnClickListener {
+            chart_week.setTextColor(Color.parseColor("#2FA9FF"))
+            chart_month.setTextColor(Color.parseColor("#000000"))
+            chart_year.setTextColor(Color.parseColor("#000000"))
+        })
+
+        chart_month.setOnClickListener(View.OnClickListener {
+            chart_month.setTextColor(Color.parseColor("#2FA9FF"))
+            chart_week.setTextColor(Color.parseColor("#000000"))
+            chart_year.setTextColor(Color.parseColor("#000000"))
+        })
+
+        chart_year.setOnClickListener(View.OnClickListener {
+            chart_year.setTextColor(Color.parseColor("#2FA9FF"))
+            chart_month.setTextColor(Color.parseColor("#000000"))
+            chart_week.setTextColor(Color.parseColor("#000000"))
+        })
+
+
+
+
+
+        val visitors = ArrayList<BarEntry>()
+
+        //예시 더미데이터
+        visitors.add(BarEntry(2015f,10f))
+        visitors.add(BarEntry(2016f,30f))
+        visitors.add(BarEntry(2017f,89f))
+        visitors.add(BarEntry(2018f,92f))
+        visitors.add(BarEntry(2019f,73f))
+
+        val barDataSet = BarDataSet(visitors, "사용량")
+        barDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
+        barDataSet.valueTextColor = Color.BLACK
+        barDataSet.valueTextSize = 16f
+
+        val barData = BarData(barDataSet)
+
+        chart.setFitBars(true)
+        chart.data = barData
+        chart.description.text = ""
+        chart.animateY(2000)
+
+    }
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -57,3 +106,5 @@ class FragmentChart : Fragment() {
             }
     }
 }
+
+
