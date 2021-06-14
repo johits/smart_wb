@@ -82,8 +82,7 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="40dp"
-                android:text="2021년 6월 14일 ~ 20일" />
+                android:layout_marginHorizontal="40dp"/>
 
             <Button
                 android:id="@+id/right"
