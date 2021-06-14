@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.util.*
@@ -18,11 +18,10 @@ import java.util.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentChart.newInstance] factory method to
- * create an instance of this fragment.
- */
+/**2021-06-14
+joker
+막대 그래프*/
+
 class FragmentChart : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -50,15 +49,6 @@ class FragmentChart : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-//        //현재 시간 가져오기.
-//        long now = System.currentTimeMillis();
-//        // Date 생성하기
-//        Date date = new Date(now);
-//
-//        //가져오고 싶은 형식으로 가져오기
-//        SimpleDateFormat sdf = new SimpleDateFormat("MM월");
-//        String getTime = sdf.format(date);
-
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
@@ -79,31 +69,31 @@ class FragmentChart : Fragment() {
 
 
 
-        labelList.add("성공")
-        labelList.add("실패")
-        valList.add(10)
-        valList.add(90)
 
-        // PieChart 메소드
-//        val pieChart = findViewById<View>(R.id.chart) as PieChart
-        val entries =
-            ArrayList<Entry>()
-        for (i : Int in valList.indices) {
-            entries.add(Entry(valList[i].toFloat(), i))
-        }
 
-        val depenses = PieDataSet(entries, "스마트 웰빙 평균 사용량 체크")
-        depenses.axisDependency = YAxis.AxisDependency.LEFT
-        val labels = ArrayList<String>()
-        for (i in labelList.indices) {
-            labels.add(labelList[i])
-        }
-        val data = BarChartData(labels, depenses) // 라이브러리 v3.x 사용하면 에러 발생함
-        depenses.setColors(ColorTemplate.LIBERTY_COLORS) //
-        chart.data = data
-        chart.animateXY(1000, 1000)
-        chart.invalidate()
+        val visitors = ArrayList<BarEntry>()
+
+        //예시 더미데이터
+        visitors.add(BarEntry(2015f,10f))
+        visitors.add(BarEntry(2016f,30f))
+        visitors.add(BarEntry(2017f,89f))
+        visitors.add(BarEntry(2018f,92f))
+        visitors.add(BarEntry(2019f,73f))
+
+        val barDataSet = BarDataSet(visitors, "사용량")
+        barDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
+        barDataSet.valueTextColor = Color.BLACK
+        barDataSet.valueTextSize = 16f
+
+        val barData = BarData(barDataSet)
+
+        chart.setFitBars(true)
+        chart.data = barData
+        chart.description.text = ""
+        chart.animateY(2000)
+
     }
+
 
     companion object {
         /**
@@ -125,3 +115,5 @@ class FragmentChart : Fragment() {
             }
     }
 }
+
+
