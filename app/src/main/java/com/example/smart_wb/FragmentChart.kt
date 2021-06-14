@@ -141,19 +141,19 @@ class FragmentChart : Fragment() {
         //주 단위 계산 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 7 * i)
-        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+        return SimpleDateFormat("yyyy년 MM월 dd일").format(week.time)
     }
 
     fun toDays(): String? {
         //오늘 날짜 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 0)
-        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+        return SimpleDateFormat("yyyy년 MM월 dd일").format(week.time)
     }
 
     fun Month(m: Int): String? {
         // 월 단위 계산 메서드
-        val df: DateFormat = SimpleDateFormat("yyyy-MM")
+        val df: DateFormat = SimpleDateFormat("yyyy년 MM월")
         val cal = Calendar.getInstance()
         cal.add(Calendar.MONTH, m)
         return df.format(cal.time)
@@ -161,7 +161,7 @@ class FragmentChart : Fragment() {
 
     fun Year(y: Int): String? {
         // 년 단위 계산 메서드
-        val df: DateFormat = SimpleDateFormat("yyyy")
+        val df: DateFormat = SimpleDateFormat("yyyy년")
         val cal = Calendar.getInstance()
         cal.add(Calendar.YEAR, y)
         return df.format(cal.time)
