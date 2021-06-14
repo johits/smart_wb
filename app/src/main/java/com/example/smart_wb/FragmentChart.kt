@@ -1,5 +1,6 @@
 package com.example.smart_wb
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,9 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 
 import kotlinx.android.synthetic.main.fragment_chart.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +30,7 @@ class FragmentChart : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    var i = 0 // 주 단위 계산에 필요한 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +48,17 @@ class FragmentChart : Fragment() {
         return inflater.inflate(R.layout.fragment_chart, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
+            date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
         })
 
         chart_month.setOnClickListener(View.OnClickListener {
@@ -66,7 +74,15 @@ class FragmentChart : Fragment() {
         })
 
 
+        left.setOnClickListener {
+            i -= 1
+            date.text = Days7(i) + " ~ " + Days7(i + 1)
+        }
 
+        right.setOnClickListener {
+            i = i + 1
+            date.text = Days7(i) + " ~ " + Days7(i + 1)
+        }
 
 
         val visitors = ArrayList<BarEntry>()
@@ -93,16 +109,22 @@ class FragmentChart : Fragment() {
     }
 
 
+    fun Days7(i: Int): String? {
+        //주 단위 계산 메서드
+        val week = Calendar.getInstance()
+        week.add(Calendar.DATE, 7 * i)
+        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+    }
+
+    fun toDays(): String? {
+        //오늘 날짜 메서드
+        val week = Calendar.getInstance()
+        week.add(Calendar.DATE, 0)
+        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+    }
+
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentChart.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             FragmentChart().apply {
