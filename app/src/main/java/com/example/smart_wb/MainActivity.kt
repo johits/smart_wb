@@ -4,12 +4,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.example.smart_wb.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 private lateinit var binding: ActivityMainBinding
 
@@ -17,7 +19,11 @@ private lateinit var binding: ActivityMainBinding
 //2020-05-29 joker 메인 클래스 (프래그먼트 메뉴에 대한 코드) .
 
 class MainActivity : AppCompatActivity() {
+    companion object{
+        private val TAG = "MainActivity"
+    }
     private val adapter by lazy {AdapterMainFragment(supportFragmentManager, 4)}
+    private lateinit var stack : Stack<Int>
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 //        configureBottomNavigation()
 
+        stack = Stack<Int>()
+        stack.push(0)//FragmentMainTimer 가 처음 화면 이므로 값을 넣는다.
 
         //전화 제어 퍼미션 얻어오기
         if (checkSelfPermission(Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(
@@ -62,7 +70,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-
+                stack.push(position)
+                for(data in stack){
+                    Log.d(TAG, "데이터 입력 받음 stack:$data")
+                }
                 xml_main_tablayout.getTabAt(0)?.setIcon(R.drawable.mtimer1)
                 xml_main_tablayout.getTabAt(1)?.setIcon(R.drawable.mcalendar1)
                 xml_main_tablayout.getTabAt(2)?.setIcon(R.drawable.mchart1)
@@ -95,6 +106,24 @@ class MainActivity : AppCompatActivity() {
         xml_main_tablayout.getTabAt(3)?.setIcon(R.drawable.mitem1)
 //        xml_main_tablayout.getTabAt(4)?.setIcon(R.drawable.msetting1)
 
+    }
+
+    override fun onBackPressed() {
+        //스택에 값이 없으면
+        if (stack.empty()) {
+            super.onBackPressed()
+        } else {
+            stack.pop()
+            if(stack.empty()){
+                super.onBackPressed()
+            }else{
+                Log.d(TAG, "스택 상단의 값 ${stack.peek()}")
+                for (data in stack) {
+                    Log.d(TAG, "팝하고 남은 데이터 stack:$data")
+                }
+
+            }
+        }
     }
 }
 //
