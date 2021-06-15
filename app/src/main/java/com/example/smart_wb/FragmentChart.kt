@@ -3,10 +3,13 @@ package com.example.smart_wb
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.smart_wb.SQLite.ScreenTimeData
+import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -34,6 +37,8 @@ class FragmentChart : Fragment() {
     private var param2: String? = null
     var i = 0 // 주 단위 계산에 필요한 변수
 
+    private val TAG = "FragmentChart"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,28 +61,45 @@ class FragmentChart : Fragment() {
 
         date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
+        //sqlite 준비
+        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+        var database = screenTimeDbHelper.writableDatabase
+
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
             date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
+
+            var arr = arrayListOf<ScreenTimeData>()
+           arr =screenTimeDbHelper.select() //모든데이터 불러오기
+
         })
+
+
+
 
         chart_month.setOnClickListener(View.OnClickListener {
             chart_month.setTextColor(Color.parseColor("#2FA9FF"))
             chart_week.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
 
-            var timerDbHelper = TimerDbHelper(requireContext(), "timerDb.db", null, 1)
-            var database = timerDbHelper.writableDatabase
 
-            timerDbHelper.selectWeek()
+            //반복문 이용 더미데이터 인서트
+            for (j in 1..10) {
+                screenTimeDbHelper.chartInsert(2021, 1, j, "18:06:00", 7200)
+            }
+
         })
 
         chart_year.setOnClickListener(View.OnClickListener {
             chart_year.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_week.setTextColor(Color.parseColor("#000000"))
+
+
+            screenTimeDbHelper.monthSelect(2021,4) //월간단위로 데이터 불러오기
+
         })
 
 
@@ -95,11 +117,11 @@ class FragmentChart : Fragment() {
         val visitors = ArrayList<BarEntry>()
 
         //예시 더미데이터
-        visitors.add(BarEntry(2015f,10f))
-        visitors.add(BarEntry(2016f,30f))
-        visitors.add(BarEntry(2017f,89f))
-        visitors.add(BarEntry(2018f,92f))
-        visitors.add(BarEntry(2019f,73f))
+        visitors.add(BarEntry(2015f, 10f))
+        visitors.add(BarEntry(2016f, 30f))
+        visitors.add(BarEntry(2017f, 89f))
+        visitors.add(BarEntry(2018f, 92f))
+        visitors.add(BarEntry(2019f, 73f))
 
         val barDataSet = BarDataSet(visitors, "사용량")
         barDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
