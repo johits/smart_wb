@@ -8,16 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.smart_wb.SQLite.ScreenTimeData
+import com.example.smart_wb.SQLite.ScreenTimeDbHelper
+import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.utils.ColorTemplate
+
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.timer
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,15 +45,13 @@ class FragmentChart : Fragment() {
 
     var type = "week" // 주, 월, 년 타입 변수 (default : "week")
 
-    lateinit var timerDataList: ArrayList<TimerData>
+    private val TAG = "FragmentChart"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-
-            screenTimeData()
         }
     }
 
@@ -65,13 +69,24 @@ class FragmentChart : Fragment() {
 
         date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
+        //sqlite 준비
+        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+        var database = screenTimeDbHelper.writableDatabase
+
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
             type = "week"
             date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
+
+            var arr = arrayListOf<ScreenTimeData>()
+           arr =screenTimeDbHelper.select() //모든데이터 불러오기
+
         })
+
+
+
 
         chart_month.setOnClickListener(View.OnClickListener {
             chart_month.setTextColor(Color.parseColor("#2FA9FF"))
@@ -103,6 +118,13 @@ class FragmentChart : Fragment() {
             chart.description.text = ""
             chart.animateY(2000)
 
+
+
+            //반복문 이용 더미데이터 인서트
+            for (j in 1..10) {
+                screenTimeDbHelper.chartInsert(2021, 1, j, "18:06:00", 7200)
+            }
+
         })
 
         chart_year.setOnClickListener(View.OnClickListener {
@@ -111,6 +133,10 @@ class FragmentChart : Fragment() {
             chart_week.setTextColor(Color.parseColor("#000000"))
             type = "year"
             date.text = Year(0)
+
+            //월간단위로 데이터 불러오기
+            screenTimeDbHelper.monthSelect(2021,4)
+
         })
 
 
@@ -198,34 +224,6 @@ class FragmentChart : Fragment() {
     }
 
 
-    //스크린타임 결과 데이터 가져오기 //도전 기록이 있는 날짜에 점찍기
-    fun screenTimeData() {
-
-        var timerDbHelper = TimerDbHelper(context, "timerDb.db", null, 1)
-        var database = timerDbHelper.writableDatabase
-
-        //  timer 테이블 데이터 불러오기
-        timerDataList = timerDbHelper.select()
-
-        var dateList = ArrayList<String>()
-        // 데이터 확인용 로그
-        for (data in timerDataList) {
-            var date: String = data.date
-            dateList.add(date)
-            Log.d(
-                "차트",
-                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-            )
-        }
-        //중복값 지우기
-        val linkedHashSet = LinkedHashSet<String>()
-        for (item in dateList) {
-            linkedHashSet.add(item)
-        }
-
-
-    }
-
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -236,7 +234,6 @@ class FragmentChart : Fragment() {
                 }
             }
     }
-
 }
 
 
