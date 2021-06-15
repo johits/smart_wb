@@ -85,7 +85,7 @@ class ScreenTimeDbHelper(
     }
 
     //월간 단위로 불러오기 성공한 데이터 만
-    //같은 날짜면 시간 합친다.
+    //같은 날짜면 설정시간 합친다.
     fun monthSelect(year: Int, month: Int){
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
