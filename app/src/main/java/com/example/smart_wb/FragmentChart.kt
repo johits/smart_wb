@@ -97,8 +97,8 @@ class FragmentChart : Fragment() {
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_week.setTextColor(Color.parseColor("#000000"))
 
-
-            screenTimeDbHelper.monthSelect(2021,4) //월간단위로 데이터 불러오기
+            //월간단위로 데이터 불러오기
+            screenTimeDbHelper.monthSelect(2021,4)
 
         })
 
