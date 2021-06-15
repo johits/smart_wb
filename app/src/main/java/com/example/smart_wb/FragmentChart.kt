@@ -79,6 +79,30 @@ class FragmentChart : Fragment() {
             chart_year.setTextColor(Color.parseColor("#000000"))
             type = "month"
             date.text = Month(0)
+
+            val visitors2 = ArrayList<String>()
+
+            //예시 더미데이터
+            visitors2.add(0,"1월")
+            visitors2.add(1,"2월")
+            visitors2.add(2,"3월")
+            visitors2.add(3,"4월")
+            visitors2.add(4,"5월")
+            visitors2.add(5,"6월")
+            visitors2.add(6,"7월")
+            visitors2.add(7,"8월")
+            val barDataSet = BarDataSet(visitors2, "사용량")
+            barDataSet.setColors(Color.parseColor("#2FA9FF"))
+            barDataSet.valueTextColor = Color.BLACK
+            barDataSet.valueTextSize = 16f
+
+            val barData = BarData(barDataSet)
+
+            chart.setFitBars(true)
+            chart.data = barData
+            chart.description.text = ""
+            chart.animateY(2000)
+
         })
 
         chart_year.setOnClickListener(View.OnClickListener {
