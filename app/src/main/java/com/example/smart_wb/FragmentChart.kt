@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 
 import kotlinx.android.synthetic.main.fragment_chart.*
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,7 +36,12 @@ class FragmentChart : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
     var i = 0 // 주 단위 계산에 필요한 변수
+    var m = 0 // 월 단위 계산에 필요한 변수
+    var y = 0 // 년 단위 계산에 필요한 변수
+
+    var type = "week" // 주, 월, 년 타입 변수 (default : "week")
 
     private val TAG = "FragmentChart"
 
@@ -69,6 +75,7 @@ class FragmentChart : Fragment() {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
+            type = "week"
             date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
             var arr = arrayListOf<ScreenTimeData>()
@@ -83,6 +90,8 @@ class FragmentChart : Fragment() {
             chart_month.setTextColor(Color.parseColor("#2FA9FF"))
             chart_week.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
+            type = "month"
+            date.text = Month(0)
 
 
             //반복문 이용 더미데이터 인서트
@@ -96,6 +105,8 @@ class FragmentChart : Fragment() {
             chart_year.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_week.setTextColor(Color.parseColor("#000000"))
+            type = "year"
+            date.text = Year(0)
 
             //월간단위로 데이터 불러오기
             screenTimeDbHelper.monthSelect(2021,4)
@@ -104,24 +115,42 @@ class FragmentChart : Fragment() {
 
 
         left.setOnClickListener {
-            i -= 1
-            date.text = Days7(i) + " ~ " + Days7(i + 1)
+            if (type.equals("week")){
+                i -= 1
+                date.text = Days7(i) + " ~ " + Days7(i + 1)
+            }else if(type.equals("month")){
+                m -= 1
+                date.text = Month(m)
+            }else if(type.equals("year")){
+                y -= 1
+                date.text = Year(y)
+            }
+
         }
 
         right.setOnClickListener {
-            i = i + 1
-            date.text = Days7(i) + " ~ " + Days7(i + 1)
+            if (type == "week") {
+                i += 1
+                date.text = Days7(i) + " ~ " + Days7(i + 1)
+            } else if (type == "month") {
+                m += 1
+                date.text = Month(m)
+            } else if (type == "year") {
+                y += 1
+                date.text = Year(y)
+            }
+
         }
 
 
         val visitors = ArrayList<BarEntry>()
 
         //예시 더미데이터
-        visitors.add(BarEntry(2015f, 10f))
-        visitors.add(BarEntry(2016f, 30f))
-        visitors.add(BarEntry(2017f, 89f))
-        visitors.add(BarEntry(2018f, 92f))
-        visitors.add(BarEntry(2019f, 73f))
+        visitors.add(BarEntry(2015f,10f))
+        visitors.add(BarEntry(2016f,30f))
+        visitors.add(BarEntry(2017f,89f))
+        visitors.add(BarEntry(2018f,92f))
+        visitors.add(BarEntry(2019f,73f))
 
         val barDataSet = BarDataSet(visitors, "사용량")
         barDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
@@ -142,14 +171,30 @@ class FragmentChart : Fragment() {
         //주 단위 계산 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 7 * i)
-        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+        return SimpleDateFormat("yyyy년 MM월 dd일").format(week.time)
     }
 
     fun toDays(): String? {
         //오늘 날짜 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 0)
-        return SimpleDateFormat("yyyy-MM-dd").format(week.time)
+        return SimpleDateFormat("yyyy년 MM월 dd일").format(week.time)
+    }
+
+    fun Month(m: Int): String? {
+        // 월 단위 계산 메서드
+        val df: DateFormat = SimpleDateFormat("yyyy년 MM월")
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.MONTH, m)
+        return df.format(cal.time)
+    }
+
+    fun Year(y: Int): String? {
+        // 년 단위 계산 메서드
+        val df: DateFormat = SimpleDateFormat("yyyy년")
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.YEAR, y)
+        return df.format(cal.time)
     }
 
 
