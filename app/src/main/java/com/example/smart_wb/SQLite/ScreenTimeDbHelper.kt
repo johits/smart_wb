@@ -88,18 +88,19 @@ class ScreenTimeDbHelper(
     }
 
 
+/**    2021-06-16
+    joker
+    막대 그래프 주, 월, 년 데이터 불러오기 메서드*/
+
+
+
     //년도 그래프 데이터 모두 불러오기 (월별로)
-    fun year(y: Int, s:Int): ArrayList<ScreenTimeData> {
+    fun year(y: Int): ArrayList<ScreenTimeData> {
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
 
-//        val sql ="SELECT * FROM screenTime;"
-//        val sql ="SELECT id, year, month,day,time,sum(settingTime),success,flower FROM screenTime WHERE success='1' and year=$y group by year, month;"
-//        val sql ="SELECT * FROM screenTime WHERE year = $y AND success=1 AND month ='10';"
         val sql ="SELECT year, month, sum(settingTime) FROM screenTime WHERE success='1' and year=$y group by year,month;"
 
-
-//        var cursor: Cursor = db.rawQuery(sql, null)
         val cursor = writableDatabase.rawQuery(sql, null)
 
 
@@ -117,14 +118,69 @@ class ScreenTimeDbHelper(
                 var data: ScreenTimeData =
                     ScreenTimeData(null, year, month, null, null, settingTime, null, null)
                 result?.add(data)
-                Log.d(
-                    "성공한 연도만 가지고 오기",
-                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
-                )
+//                Log.d(
+//                    "성공한 연도만 가지고 오기",
+//                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+//                )
             }
         db.close()
         return result
     }
+
+
+
+    //월별 그래프 데이터 모두 불러오기 (일별로)
+    fun month(y: Int, m:Int): ArrayList<ScreenTimeData> {
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+        val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m group by day;"
+        val cursor = writableDatabase.rawQuery(sql, null)
+        while (cursor.moveToNext()) {
+                val day: Int = cursor.getInt(0)
+            val settingTime: Int =
+                cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+
+            var data: ScreenTimeData =
+                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+            result?.add(data)
+                Log.d(
+                    "성공한 월만 가지고 오기",
+                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+                )
+        }
+        db.close()
+        return result
+    }
+
+
+    //주 단위 그래프 데이터 모두 불러오기
+    fun week(y: Int, m:Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y = year, m = month, s = start(시작날짜)), e = end(끝날짜)
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+
+        Log.d(TAG, "week: s $s e $e")
+        val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m and day>=$s and day<=$e group by day;"
+
+        val cursor = writableDatabase.rawQuery(sql, null)
+
+        while (cursor.moveToNext()) {
+            val day: Int = cursor.getInt(0)
+            val settingTime: Int =
+                cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+
+            var data: ScreenTimeData =
+                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+            result?.add(data)
+            Log.d(
+                "일주일만 가지고 오기",
+                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+            )
+        }
+        db.close()
+        return result
+    }
+
+
 
     //월간 단위로 불러오기 성공한 데이터 만
     //같은 날짜면 설정시간 합친다.
