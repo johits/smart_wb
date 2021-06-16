@@ -17,8 +17,8 @@
 
     <ImageView
         android:id="@+id/l_timer"
-        android:layout_width="480dp"
-        android:layout_height="280dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@+id/tvWatch"
         app:layout_constraintEnd_toEndOf="@+id/tvWatch"
@@ -44,16 +44,13 @@
         android:id="@+id/btStop"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="230dp"
+        android:layout_marginBottom="48dp"
         android:background="@drawable/rb"
-        android:fontFamily="@font/recipe"
         android:text="종료"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWatch" />
+        app:layout_constraintStart_toStartOf="parent"  />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
