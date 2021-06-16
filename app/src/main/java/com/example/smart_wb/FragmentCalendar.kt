@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smart_wb.SQLite.ScreenTimeData
+import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.databinding.FragmentCalendarBinding
@@ -206,37 +208,39 @@ class FragmentCalendar : Fragment() {
 //        var date = TimerSetShared.getDate(mContext)
 //        var time = TimerSetShared.getTime(mContext)
 
-        var timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
-        var database = timerDbHelper.writableDatabase
-
+//        var timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
+//        var database = timerDbHelper.writableDatabase
         //  timer 테이블 데이터 불러오기
-        timerDataList = timerDbHelper.select()
-//
-        var dateList = ArrayList<String>()
+//        timerDataList = timerDbHelper.select()
+//        var dateList = ArrayList<String>()
         // 데이터 확인용 로그
-        for (data in timerDataList) {
-            var date: String = data.date
-            dateList.add(date)
-//            Log.d(
-//                TAG,
-//                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-//            )
-        }
-        //중복값 지우기
-        val linkedHashSet = LinkedHashSet<String>()
-        for (item in dateList) {
-            linkedHashSet.add(item)
-        }
+//        for (data in timerDataList) {
+//            var date: String = data.date
+//            dateList.add(date)
+////            Log.d(
+////                TAG,
+////                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+////            )
+//        }
+//        //중복값 지우기
+//        val linkedHashSet = LinkedHashSet<String>()
+//        for (item in dateList) {
+//            linkedHashSet.add(item)
+//        }
+
+        val screenTimeDbHelper = ScreenTimeDbHelper(mContext,"screenTimeDb.db", null,1)
+        var dataList = screenTimeDbHelper.calendarDecoSelect()
+//
 
         //도전 기록이 있는 날짜에 점찍기
-        for (item in linkedHashSet) {
-            var parts = item.split("-").toTypedArray()
-            Log.d(TAG, "중복 제거된 날짜:" + item)
-            var year: Int = parts[0].toInt()
-            var month: Int = parts[1].toInt()
-            var date: Int = parts[2].toInt()
-            var calDay = CalendarDay.from(year, month, date)
-            binding.calendar.addDecorator(CalendarDecoratorpDotSpan(requireActivity(), calDay))
+        for (item in dataList) {
+            val year = item.year
+            val month = item.month
+            val day = item.day
+            if(year!=null&&month!=null&&day!=null){
+                val calDay = CalendarDay.from(year, month, day)
+                binding.calendar.addDecorator(CalendarDecoratorpDotSpan(requireActivity(), calDay))
+            }
         }
 
     }

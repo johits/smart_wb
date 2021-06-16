@@ -1,5 +1,6 @@
 package com.example.smart_wb.SQLite
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -96,8 +97,32 @@ class ScreenTimeDbHelper(
         return result
     }
 
+    //달력 데이터 불러오기//도전 기록이 있는 날짜에 점찍기용
+    @SuppressLint("Recycle")
+    fun calendarDecoSelect():ArrayList<ScreenTimeData>{
+        val result = arrayListOf<ScreenTimeData>()
+        val db:SQLiteDatabase = writableDatabase
+        //distinct 중복값 제거
+        val sql = "SELECT distinct year, month, day FROM screenTime;"
+
+        var cursor:Cursor = db.rawQuery(sql, null)
+        while (cursor.moveToNext()){
+            val year:Int = cursor.getInt(0)
+            val month:Int = cursor.getInt(1)
+            val day:Int = cursor.getInt(2)
+            val data = ScreenTimeData(null,year,month,day,null,null,null,null)
+            Log.d("chart", "year:$year , month:$month , day:$day")
+            result.add(data)
+//            val day:Int = cursor.getInt(0)
+//            Log.d("cal", "day:$day")
+        }
+        db.close()
+        return result
+    }
+
     //월간 단위로 불러오기 성공한 데이터 만
     //같은 날짜면 설정시간 합친다.
+    @SuppressLint("Recycle")
     fun monthSelect(year: Int, month: Int){
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
