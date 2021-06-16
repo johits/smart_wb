@@ -109,8 +109,10 @@ class FragmentChart : Fragment() {
             date.text = Year(0)
 
             //월간단위로 데이터 불러오기
-            screenTimeDbHelper.monthSelect(2021,4)
+//            screenTimeDbHelper.monthSelect(2021,4)
 
+            //년기준 월별 총 성공시간 데이터 불러오기
+            screenTimeDbHelper.yearSelect(2021)
         })
 
 

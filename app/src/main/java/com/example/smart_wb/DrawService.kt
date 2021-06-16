@@ -41,6 +41,7 @@ class DrawService : Service() {
     //타이머 동작 위한 핸들러, 쓰레드
     var handler: Handler? = null
     var thread: Thread? = null
+    val timerDelay:Long = 10
     //설정시간
     var settingTime = 0
 
@@ -160,7 +161,7 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
                 } else {
                     watch.text = calTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
-                    handler?.postDelayed(this, 10)
+                    handler?.postDelayed(this, timerDelay)
                 }
                 settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
 //                Log.d(TAG, "settingTime:" + settingTime)

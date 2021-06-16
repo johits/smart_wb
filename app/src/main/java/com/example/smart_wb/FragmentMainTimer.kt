@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.smart_wb.SQLite.ScreenTimeData
+import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.Shared.GuideShowCheckShared
@@ -48,8 +50,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     //sqlite
-    private lateinit var timerDbHelper: TimerDbHelper
-    private lateinit var database: SQLiteDatabase
+//    private lateinit var timerDbHelper: TimerDbHelper
+//    private lateinit var database: SQLiteDatabase
 
     companion object {
         @JvmStatic
@@ -204,32 +206,42 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     @SuppressLint("SimpleDateFormat")
     fun insertSettingTime(settingTime: Int) {
 //        Log.d(TAG, "insertSettingTime: ")
+
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
+
         // 날짜, 시간을 가져오고 싶은 형태 선언
         val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
+        val dateFormatYear = SimpleDateFormat("yyyy")
+        val dateFormatMonth = SimpleDateFormat("MM")
+        val dateFormatDay = SimpleDateFormat("dd")
         val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+
         // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+        // year, month, day 는 Int 로 변환
         val date = dateFormatDate.format(dateType)
+        val year = dateFormatYear.format(dateType).toInt()
+        val month = dateFormatMonth.format(dateType).toInt()
+        val day = dateFormatDay.format(dateType).toInt()
         val time = dateFormatTime.format(dateType)
 
         //타이머 데이터 인서트
-        timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
-        database = timerDbHelper.writableDatabase
+//        timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
+//        database = timerDbHelper.writableDatabase
+//        timerDbHelper.insert(date, time, settingTime)
+       val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db",null,1)
+        val database = screenTimeDbHelper.writableDatabase
         //데이터 삽입
-        timerDbHelper.insert(date, time, settingTime)
+        screenTimeDbHelper.insert(year, month, day, time, settingTime)
+
         //데이터 모두 불러오기
-        var arr: ArrayList<TimerData> = timerDbHelper.select()
+        var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
         //데이터 확인용 로그
-//        for (data in arr) {
-//            Log.d(
-//                TAG,
-//                "id:" + data.id + " date:" + data.date + " " +
-//                        "time:" + data.time + " settingTime:" + data.settingTime + "" +
-//                        " success:" + data.success+" flower:"+data.flower
-//            )
-//        }
+        for (data in arr) {
+            Log.d(TAG,"id:${data.id}, year:${data.year}, month:${data.month}, :${data.id}, " +
+                    "id:${data.id}, id:${data.id}, id:${data.id}, id:${data.id},")
+        }
         //설정시간 쉐어드에 저장
         TimerSetShared.setDate(mContext, date)
         TimerSetShared.setTime(mContext, time)
@@ -242,13 +254,13 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     //스크린 타임 시작
     private fun startScreenTime(settingTime: Int) {
-        val intent = Intent(mContext, LockScreenActivity::class.java)
-        intent.putExtra("settingTime", settingTime.toString())
-        startActivity(intent)
+//        val intent = Intent(mContext, LockScreenActivity::class.java)
+//        intent.putExtra("settingTime", settingTime.toString())
+//        startActivity(intent)
         //설정시간 데이터 삽입
         insertSettingTime(settingTime)
         //액티비티 종료
-        activity?.finish()
+        //activity?.finish()
 
     }
 }

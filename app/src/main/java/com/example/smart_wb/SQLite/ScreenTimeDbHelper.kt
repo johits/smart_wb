@@ -105,4 +105,23 @@ class ScreenTimeDbHelper(
             )
         }
     }
+
+    //년기준 월별 총 성공시간 데이터터 불러기
+    fun yearSelect(year: Int){
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+        val sql = "SELECT  year, month, sum(settingTime) FROM screenTime" +
+                " WHERE success=1 and year=$year  group by month;"
+
+        val cursor: Cursor = db.rawQuery(sql, null)
+        while(cursor.moveToNext()) {
+            val year: Int = cursor.getInt(0)
+            val month: Int = cursor.getInt(1)
+            val settingTime: Int = cursor.getInt(2)
+
+            Log.d(
+                "chart", "year:$year , month:$month , settingTime:$settingTime"
+            )
+        }
+    }
 }
