@@ -1,7 +1,9 @@
 package com.example.smart_wb
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -367,7 +369,7 @@ class FragmentChart : Fragment() {
 
 
     //그래프 새로고침 메서드
-    @RequiresApi(Build.VERSION_CODES.N)
+
     fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
 
         val entries = ArrayList<BarEntry>()
@@ -567,7 +569,6 @@ class FragmentChart : Fragment() {
     //시간 변환
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun changeTime(settingTime: Int): Float {
         val result: Float?
         var test = settingTime / 60
