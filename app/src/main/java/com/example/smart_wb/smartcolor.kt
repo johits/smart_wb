@@ -28,6 +28,10 @@ class smartcolor {
         Color.rgb(42, 109, 130)
     )
 
+    val MATERIAL_COLORS = intArrayOf(
+        rgb("#2ecc71"), rgb("#f1c40f"), rgb("#e74c3c"), rgb("#3498db")
+    )
+
     /**
      * Converts the given hex-color-string to rgb.
      *
@@ -51,7 +55,14 @@ class smartcolor {
         return Color.rgb(51, 181, 229)
     }
 
-    fun getColorWithAlphaComponent(color: Int, alpha: Int): Int {
+    /**
+     * Sets the alpha component of the given color.
+     *
+     * @param color
+     * @param alpha 0 - 255
+     * @return
+     */
+    fun colorWithAlpha(color: Int, alpha: Int): Int {
         return color and 0xffffff or (alpha and 0xff shl 24)
     }
 

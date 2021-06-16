@@ -1,27 +1,33 @@
 package com.example.smart_wb
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
-import com.example.smart_wb.SQLite.TimerDbHelper
+import com.example.smart_wb.databinding.FragmentChartBinding
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.utils.ColorTemplate
-
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.concurrent.timer
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,7 +49,53 @@ class FragmentChart : Fragment() {
 
     var type = "week" // 주, 월, 년 타입 변수 (default : "week")
 
+    var year: Int = 0 //이용자가 현재 보고 있는 년
+    var month: Int = 0 //이용자가 현재 보고 있는 월
+    var start: Int = 0 //이용자가 현재 보고 있는 주 시작 날짜
+    var end: Int = 0 //이용자가 현재 보고 있는 주 끝 날짜
+
+
     private val TAG = "FragmentChart"
+
+    private lateinit var cContext: Context
+
+    lateinit var yearlist: ArrayList<ScreenTimeData>
+    lateinit var monthlist: ArrayList<ScreenTimeData>
+    lateinit var weeklist: ArrayList<ScreenTimeData>
+
+    //뷰바인딩 위한 변수
+    private var _binding: FragmentChartBinding? = null
+    private val binding get() = _binding!!
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            cContext = context
+        }
+    }
+
+    inner class MyXAxisFormatter : ValueFormatter() {
+        private val days = arrayOf("월", "화", "수", "목", "금", "토", "일")
+        private val year =
+            arrayOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
+        private val month = arrayOf("")
+
+//            var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+//        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
+//        var b = Integer.parseInt(date.text.toString().slice(ran))
+
+//            for (i in 1 until alldate)arrayOf(""){}
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            if (type.equals("week")) {
+                return days.getOrNull(value.toInt() - 1) ?: value.toString()
+            } else if (type.equals("month")) {
+                return month.getOrNull(value.toInt() - 1) ?: value.toString()
+            } else {
+                return year.getOrNull(value.toInt() - 1) ?: value.toString()
+            }
+
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,15 +113,14 @@ class FragmentChart : Fragment() {
         return inflater.inflate(R.layout.fragment_chart, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
-        //sqlite 준비
-        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
-        var database = screenTimeDbHelper.writableDatabase
+
 
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
@@ -77,9 +128,8 @@ class FragmentChart : Fragment() {
             chart_year.setTextColor(Color.parseColor("#000000"))
             type = "week"
             date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
-
-            var arr = arrayListOf<ScreenTimeData>()
-           arr =screenTimeDbHelper.select() //모든데이터 불러오기
+            weekParse() // 주 날짜 파싱
+            Refresh(type, year, month,start,end) // 그래프 새로고침
 
         })
 
@@ -92,12 +142,54 @@ class FragmentChart : Fragment() {
             chart_year.setTextColor(Color.parseColor("#000000"))
             type = "month"
             date.text = Month(0)
+            monthParse() // 월 날짜 파싱
+            Refresh(type, year, month,0,0) // 그래프 새로고침
 
+            //sqlite 준비
+            val screenTimeDbHelper =
+                ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+            var database = screenTimeDbHelper.writableDatabase
+//
+//
+//
+//            //반복문 이용 더미데이터 인서트
 
-            //반복문 이용 더미데이터 인서트
-            for (j in 1..10) {
-                screenTimeDbHelper.chartInsert(2022, 1, j, "01:06:00", 7200)
-            }
+//            screenTimeDbHelper.chartInsert(2020, 1, 13, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 4800)
+//            screenTimeDbHelper.chartInsert(2019, 3, 15, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 18, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2021, 7, 20, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 7, 23, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 8, 13, "18:06:00", 100)
+//            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 200)
+//            screenTimeDbHelper.chartInsert(2021, 12, 15, "18:06:00", 300)
+//            screenTimeDbHelper.chartInsert(2022, 5, 18, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2022, 10, 20, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2022, 10, 23, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 1, 13, "18:06:00", 100)
+//            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 200)
+//            screenTimeDbHelper.chartInsert(2021, 2, 15, "18:06:00", 300)
+//            screenTimeDbHelper.chartInsert(2022, 1, 18, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2022, 3, 20, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2022, 4, 23, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 1, 13, "18:06:00", 200)
+//            screenTimeDbHelper.chartInsert(2021, 1, 13, "18:06:00", 300)
+//            screenTimeDbHelper.chartInsert(2021, 1, 13, "18:06:00", 200)
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 5, "18:06:00", 5)
+//            screenTimeDbHelper.chartInsert(2021, 6, 10, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 10, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 15)
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 10)
+//            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 10)
+
 
         })
 
@@ -107,25 +199,33 @@ class FragmentChart : Fragment() {
             chart_week.setTextColor(Color.parseColor("#000000"))
             type = "year"
             date.text = Year(0)
+            yearParse() // 년 날짜 파싱
+            Refresh(type, year, 0,0,0) // 그래프 새로고침
 
-            //월간단위로 데이터 불러오기
-//            screenTimeDbHelper.monthSelect(2021,4)
+//            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
+//            chart.invalidate() // 새로 고침
 
-            //년기준 월별 총 성공시간 데이터 불러오기
-            screenTimeDbHelper.yearSelect(2021)
         })
 
 
         left.setOnClickListener {
-            if (type.equals("week")){
+            if (type.equals("week")) {
                 i -= 1
                 date.text = Days7(i) + " ~ " + Days7(i + 1)
-            }else if(type.equals("month")){
+                weekParse() // 주 날짜 파싱
+                Refresh(type, year, month,start,end) // 그래프 새로고침
+
+            } else if (type.equals("month")) {
                 m -= 1
                 date.text = Month(m)
-            }else if(type.equals("year")){
+                monthParse()
+                Refresh(type, year, month,0,0)
+
+            } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
+                yearParse()
+                Refresh(type, year, 0,0,0)
             }
 
         }
@@ -134,37 +234,105 @@ class FragmentChart : Fragment() {
             if (type == "week") {
                 i += 1
                 date.text = Days7(i) + " ~ " + Days7(i + 1)
+                weekParse() // 주 날짜 파싱
+                Refresh(type, year, month,start,end) // 그래프 새로고침
+
             } else if (type == "month") {
                 m += 1
                 date.text = Month(m)
+                monthParse()
+                Refresh(type, year, month,0,0)
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
+                yearParse()
+                Refresh(type, year, 0,0,0)
             }
 
         }
 
 
-        val visitors = ArrayList<BarEntry>()
+//        val entries = ArrayList<BarEntry>()
+//        entries.add(BarEntry(1f,20.0f)) //x:x축 값 놓이는 위치 y:성공시간량
+//        entries.add(BarEntry(2f,70.0f))
+//        entries.add(BarEntry(3f,30.0f))
+//        entries.add(BarEntry(4f,90.0f))
+//        entries.add(BarEntry(5f,70.0f))
+//        entries.add(BarEntry(6f,30.0f))
+//        entries.add(BarEntry(7f,90.0f))
 
-        //예시 더미데이터
-        visitors.add(BarEntry(2015f,10f))
-        visitors.add(BarEntry(2016f,30f))
-        visitors.add(BarEntry(2017f,89f))
-        visitors.add(BarEntry(2018f,92f))
-        visitors.add(BarEntry(2019f,73f))
 
-        val barDataSet = BarDataSet(visitors, "사용량")
-        barDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
-        barDataSet.valueTextColor = Color.BLACK
-        barDataSet.valueTextSize = 16f
+//        val barDataSet = BarDataSet(visitors, "성공 시간")
+//        barDataSet.setColors(Color.parseColor("#2FA9FF"))
+//        barDataSet.valueTextColor = Color.BLACK
+//        barDataSet.valueTextSize = 16f
+//
+//        val barData = BarData(barDataSet)
+//
+//        chart.setFitBars(true)
+//        chart.data = barData
+//        chart.description.text = ""
+//        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM //x축을 하단으로 내린다
+//        chart.axisRight.isEnabled = false //오른쪽 y축 숨기기
 
-        val barData = BarData(barDataSet)
 
-        chart.setFitBars(true)
-        chart.data = barData
-        chart.description.text = ""
-        chart.animateY(2000)
+//        chart.run{
+//            setDrawGridBackground(false) //격자 숨기기
+//
+//            axisLeft.run { //왼쪽 축. 즉 Y방향 축을 뜻한다.
+//                setDrawGridLines(true) // 격자(가로줄) 라인 활용
+//                setDrawAxisLine(false) // 축 그리기 설정
+//            }
+//
+//            xAxis.run {
+//                position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
+//                setDrawAxisLine(true) // 축 그림
+//                setDrawGridLines(false) // 격자
+//                valueFormatter = MyXAxisFormatter() // 축 라벨 값 바꿔주기 위함
+//                textSize = 14f // 텍스트 크기
+//            }
+//            axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
+//            setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
+//            animateY(1000) // 밑에서부터 올라오는 애니매이션 적용
+//            legend.isEnabled = false //차트 범례 설정
+//
+//        }
+
+
+//        var set = BarDataSet(entries,"DataSet")//데이터셋 초기화 하기
+//        set.color = ContextCompat.getColor(requireContext(),R.color.mainclolor)
+//
+//        val dataSet :ArrayList<IBarDataSet> = ArrayList()
+//        dataSet.add(set)
+//        val data = BarData(dataSet)
+//        data.barWidth = 0.3f//막대 너비 설정하기
+
+//        chart.run{
+//            this.data = data //차트의 데이터를 data로 설정해줌.
+//            setFitBars(true)
+//            invalidate()
+//            setDrawGridBackground(false) //격자 숨기기
+//            description.text = "" //라벨 숨기기
+//
+//            axisLeft.run { //왼쪽 축. 즉 Y방향 축을 뜻한다.
+//                setDrawGridLines(true) // 격자(가로줄) 라인 활용
+//                setDrawAxisLine(false) // 축 그리기 설정
+//            }
+//
+//            xAxis.run {
+//                position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
+//                setDrawAxisLine(true) // 축 그림
+//                setDrawGridLines(false) // 격자
+//                    valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
+//
+////                textSize = 14f // 텍스트 크기
+//            }
+//            axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
+//            setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
+//            animateY(1000) // 밑에서부터 올라오는 애니매이션 적용
+//            legend.isEnabled = false //차트 범례 설정(차트 밑에 막대가 무엇인지 설명하는 것)
+//            chart.invalidate();                                 // 새로 고침
+//        }
 
     }
 
@@ -200,6 +368,279 @@ class FragmentChart : Fragment() {
     }
 
 
+    //그래프 새로고침 메서드
+
+    fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
+
+        val entries = ArrayList<BarEntry>()
+
+        if (type.equals("week")) {
+            entries.add(BarEntry(1f, 20.0f)) //x:x축 값 놓이는 위치 y:성공시간량
+            entries.add(BarEntry(2f, 70.0f))
+            entries.add(BarEntry(3f, 30.0f))
+            entries.add(BarEntry(4f, 90.0f))
+            entries.add(BarEntry(5f, 70.0f))
+            entries.add(BarEntry(6f, 30.0f))
+            entries.add(BarEntry(7f, 90.0f))
+
+            for (week in WeekSelectData(year,month,start,end)) {
+                var t = week.settingTime?.let { changeTime(it) }
+                Log.d(TAG, "Refresh 티값: $t")
+            }
+        } else if (type.equals("month")) {
+            MonthSelectData(year, month) //DB 데이터 가져오기
+            for (month in MonthSelectData(year,month)) {
+                var t = month.settingTime?.let { changeTime(it) }
+                Log.d(TAG, "Refresh 티값: $t")
+            }
+        } else if (type.equals("year")) {
+
+            for (year in YearSelectData(year)) {
+                var m = year.month
+                var t = year.settingTime?.let { changeTime(it) }
+
+                for(i in 1 until 12){
+                    if(i==m){
+                        entries.add(BarEntry(1f*i, 1f* t!!))
+                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
+                    }else{
+//                        entries.add(BarEntry(1f*i, 0f))
+//                        Log.d(TAG, "Refresh: 없음 월 $i")
+
+                    }
+                }
+
+//                entries.add(BarEntry(1f* m!!, 1f *t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+            }
+
+//            entries.add(BarEntry(1, 1.5f))
+
+//            if (m==1)
+//            entries.add(BarEntry(1f*m, 1f*t))
+//            entries.add(BarEntry(2f, 1f*m))
+//            entries.add(BarEntry(3f, 1f*m))
+//            entries.add(BarEntry(4f, 1f*m))
+//            entries.add(BarEntry(5f, 1f*m))
+//            entries.add(BarEntry(6f, 1f*m))
+//            entries.add(BarEntry(7f, 1f*m))
+//            entries.add(BarEntry(8f, 1f*m))
+//            entries.add(BarEntry(9f, 1f*m))
+//            entries.add(BarEntry(10f, 1f*m))
+//            entries.add(BarEntry(11f, 1f*m))
+//            entries.add(BarEntry(12f, 1f*m))
+
+//            // 데이터 확인용 로그
+//
+//
+//            for (year in YearSelectData(year)) {
+//                mMonthSelect = year.month
+//                mTimeSeletc = year.settingTime
+//
+//                Log.d(TAG, "중간 $mMonthSelect : $mTimeSeletc")
+//
+//                entries.add(
+//                    BarEntry(
+//                        1f * this!!.mMonthSelect!!,
+//                        1f * mTimeSeletc!!
+//                    )
+//                ) //x:x축 값 놓이는 위치 y:성공시간량
+//
+////                for (data in timerDataList) {
+////                    var date: String = data.date
+////                    dateList.add(date)
+//////            Log.d(
+//////                TAG,
+//////                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
+//////            )
+////                }
+//
+////                for (mm in 1 until 12){
+////                    if(mMonthSelect==mm) {
+////                        Log.d(TAG, "month는: $mMonthSelect")
+////                        entries.add(BarEntry(1f, 1f * mTimeSeletc!!)) //x:x축 값 놓이는 위치 y:성공시간량
+////                    }
+////                }
+//            }
+//
+
+
+        }
+        var set = BarDataSet(entries, "DataSet")//데이터셋 초기화 하기
+        set.color = ContextCompat.getColor(requireContext(), R.color.mainclolor)
+
+        val dataSet: ArrayList<IBarDataSet> = ArrayList()
+        dataSet.add(set)
+        val data = BarData(dataSet)
+
+        chart.run {
+            this.data = data //차트의 데이터를 data로 설정해줌.
+            setFitBars(true)
+            invalidate()
+            setDrawGridBackground(false) //격자 숨기기
+            description.isEnabled = false //차트 옆에 별도로 표기되는 description이다. false로 설정하여 안보이게 했다.
+
+            if(type.equals("week")){
+                barData.setBarWidth(0.5f) //막대너비
+            }else if(type.equals("year")){
+                barData.setBarWidth(0.3f)
+            }else if(type.equals("month")){
+                barData.setBarWidth(0.1f)
+            }
+            axisLeft.run { //왼쪽 축. 즉 Y방향 축을 뜻한다.
+//                setDrawGridLines(true) // 격자(가로줄) 라인 활용
+//                setDrawAxisLine(false) // 축 그리기 설정
+//                axisMaximum = 25f  //24 위치에 선을 그리기 위해 25f로 맥시멈을 정해주었다
+//                axisMinimum = 0f // 최소값 0
+//                granularity = 0.5f // 0.5 단위마다 선을 그리려고 granularity 설정 해 주었다.
+
+                if(type.equals("week")||type.equals("month")){
+                    axisMaximum = 24f //24시x31일(한달 최대일수) =744시간이라는 시간이 나와 최대 시간 750으로 설정해줌
+                    axisMinimum = 0f // 최소값 0
+                    granularity = 1f // 1 단위마다 선을 그리려고 granularity 설정 해 주었다.
+                }else if(type.equals("year")){
+                    axisMaximum = 750f //24시x31일(한달 최대일수) =744시간이라는 시간이 나와 최대 시간 750으로 설정해줌
+                    axisMinimum = 0f // 최소값 0
+                    granularity = 50f // 50 단위마다 선을 그리려고 granularity 설정 해 주었다.
+
+                }
+
+
+            }
+
+            xAxis.run {
+                position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
+                setDrawAxisLine(true) // 축 그림
+                setDrawGridLines(false) // 격자
+                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
+
+                if(type.equals("week")){
+                    axisMaximum = 7f
+                    granularity = 0.3f //1일 간격
+                    labelCount = 7  //x축 라벨 나타내는 개수
+                }else if(type.equals("month")){
+                    axisMaximum = 31f
+                    granularity = 1f
+                    labelCount = 31 //x축 라벨 나타내는 개수
+                }else if(type.equals("year")) {
+                    Log.d(TAG, "Refresh: 축바꾸자 엑스")
+                    axisMaximum = 12f
+                    granularity = 1f
+                    labelCount = 12 //x축 라벨 나타내는 개수
+               }
+//                textSize = 14f // 텍스트 크기
+            }
+
+
+
+
+            axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
+            setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
+            animateY(1000) // 밑에서부터 올라오는 애니매이션 적용
+            legend.isEnabled = false //차트 범례 설정(차트 밑에 막대가 무엇인지 설명하는 것)
+            chart.invalidate();                                 // 새로 고침
+        }
+    }
+
+
+    //년 날짜 파싱
+    fun yearParse(){
+        year = Integer.parseInt(date.text.toString().replace("년", "")) //ex)2021년 -> 년 제거
+    }
+
+    //월 날짜 파싱
+    fun monthParse(){
+        Log.d(TAG, "날짜 파싱 작동")
+        year = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
+        month = Integer.parseInt(date.text.toString().slice(ran))
+    }
+
+    //주 날짜 파싱
+    fun weekParse(){
+        year = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
+        month = Integer.parseInt(date.text.toString().slice(ran))
+        var s = IntRange(10, 11)
+        start = Integer.parseInt(date.text.toString().slice(s))
+        var e = IntRange(26, 27)
+        end = Integer.parseInt(date.text.toString().slice(e))
+    }
+
+    //시간 변환
+
+
+    fun changeTime(settingTime: Int): Float {
+        val result: Float?
+        var test = settingTime / 60
+        Log.d(TAG, "테스트 $test")
+        result = test.toFloat()/ 60
+        Log.d(TAG, "changeTime: reseult $result")
+
+        return result
+    }
+
+
+    //년도 sqlite data 불러오기 메서드
+    fun YearSelectData(y: Int): ArrayList<ScreenTimeData> {
+
+        //sqlite 준비
+        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+        var database = screenTimeDbHelper.writableDatabase
+        //  timer 테이블 데이터 불러오기
+        yearlist = screenTimeDbHelper.year(y) // y=year 불러올 연도 입력
+        return yearlist
+
+    }
+
+
+    //월별 sqlite data 불러오기 메서드
+    fun MonthSelectData(y: Int, m: Int): ArrayList<ScreenTimeData> {
+        //sqlite 준비
+        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+        var database = screenTimeDbHelper.writableDatabase
+        //  timer 테이블 데이터 불러오기
+        monthlist = screenTimeDbHelper.month(y, m) // y=year 불러올 연도 입력, m=month 불러올 월 입력
+        return monthlist
+
+    }
+
+
+
+    //주별 sqlite data 불러오기 메서드
+    fun WeekSelectData(y: Int, m: Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y=year, m=month, s=start(시작날짜), e=end(끝날짜)
+
+        //sqlite 준비
+        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+        var database = screenTimeDbHelper.writableDatabase
+        //  timer 테이블 데이터 불러오기
+        weeklist = screenTimeDbHelper.week(y,m,s,e)
+        return weeklist
+
+    }
+
+    //일수 구하기 메서드
+    fun alldate(): ArrayList<String> {
+        var result : Int = 0
+        var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
+        var b = Integer.parseInt(date.text.toString().slice(ran))
+
+
+        val ad = Calendar.getInstance()
+        ad.add(Calendar.MONTH, b-1)
+        var dayOfMonth:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
+
+        Log.d(TAG, "막날 $dayOfMonth")
+//        reseult = Integer.parseInt(ad.set(Calendar.DAY_OF_MONTH, dayOfMonth))
+
+        val month = arrayListOf<String>()
+        for(i in 1 until dayOfMonth){
+           month[i-1]=i.toString()
+        }
+        return month
+    }
+
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -211,5 +652,8 @@ class FragmentChart : Fragment() {
             }
     }
 }
+
+
+
 
 

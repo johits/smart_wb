@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.smart_wb.LockScreenActivity.Companion.TAG
 
 /**
 * 2021-06-14 yama screenTime 테이블 SQLiteOpenHelper
@@ -49,6 +50,8 @@ class ScreenTimeDbHelper(
                     "VALUES(${year}, ${month}, ${day}, '${time}', ${settingTime});"
         db.execSQL(sql)
         db.close()
+
+        Log.d(TAG, "insert: 저장이 되냐")
     }
 
     //스크린타임 성공시 데이터 업데이트
@@ -144,6 +147,101 @@ class ScreenTimeDbHelper(
         db.close()
         return result
     }
+
+
+/**    2021-06-16
+    joker
+    막대 그래프 주, 월, 년 데이터 불러오기 메서드*/
+
+
+
+    //년도 그래프 데이터 모두 불러오기 (월별로)
+    fun year(y: Int): ArrayList<ScreenTimeData> {
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+
+        val sql ="SELECT year, month, sum(settingTime) FROM screenTime WHERE success='1' and year=$y group by year,month;"
+
+        val cursor = writableDatabase.rawQuery(sql, null)
+
+
+        while (cursor.moveToNext()) {
+//                val id: Int = cursor.getInt(0) //pk
+                val year: Int = cursor.getInt(0)
+                val month: Int = cursor.getInt(1)
+//                val day: Int = cursor.getInt(3)
+//                val time: String = cursor.getString(4) //ex 11:11:00
+                val settingTime: Int =
+                    cursor.getInt(2)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+//                val success: Int = cursor.getInt(3) //디폴트가 0 = 실패, 1 = 성공
+//                val flower: Int = cursor.getInt(7) //디폴트가 0
+
+                var data: ScreenTimeData =
+                    ScreenTimeData(null, year, month, null, null, settingTime, null, null)
+                result?.add(data)
+//                Log.d(
+//                    "성공한 연도만 가지고 오기",
+//                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+//                )
+            }
+        db.close()
+        return result
+    }
+
+
+
+    //월별 그래프 데이터 모두 불러오기 (일별로)
+    fun month(y: Int, m:Int): ArrayList<ScreenTimeData> {
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+        val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m group by day;"
+        val cursor = writableDatabase.rawQuery(sql, null)
+        while (cursor.moveToNext()) {
+                val day: Int = cursor.getInt(0)
+            val settingTime: Int =
+                cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+
+            var data: ScreenTimeData =
+                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+            result?.add(data)
+                Log.d(
+                    "성공한 월만 가지고 오기",
+                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+                )
+        }
+        db.close()
+        return result
+    }
+
+
+    //주 단위 그래프 데이터 모두 불러오기
+    fun week(y: Int, m:Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y = year, m = month, s = start(시작날짜)), e = end(끝날짜)
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+
+        Log.d(TAG, "week: s $s e $e")
+        val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m and day>=$s and day<=$e group by day;"
+
+        val cursor = writableDatabase.rawQuery(sql, null)
+
+        while (cursor.moveToNext()) {
+            val day: Int = cursor.getInt(0)
+            val settingTime: Int =
+                cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+
+            var data: ScreenTimeData =
+                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+            result?.add(data)
+            Log.d(
+                "일주일만 가지고 오기",
+                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+            )
+        }
+        db.close()
+        return result
+    }
+
+
 
     //월간 단위로 불러오기 성공한 데이터 만
     //같은 날짜면 설정시간 합친다.
