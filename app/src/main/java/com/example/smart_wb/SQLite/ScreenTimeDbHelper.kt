@@ -99,7 +99,7 @@ class ScreenTimeDbHelper(
 
     //달력 데이터 불러오기//도전 기록이 있는 날짜에 점찍기용
     @SuppressLint("Recycle")
-    fun calendarDecoSelect():ArrayList<ScreenTimeData>{
+    fun calendarSelect():ArrayList<ScreenTimeData>{
         val result = arrayListOf<ScreenTimeData>()
         val db:SQLiteDatabase = writableDatabase
         //distinct 중복값 제거
@@ -115,6 +115,31 @@ class ScreenTimeDbHelper(
             result.add(data)
 //            val day:Int = cursor.getInt(0)
 //            Log.d("cal", "day:$day")
+        }
+        db.close()
+        return result
+    }
+
+    //달력 데이터 불러오기//선택한 날짜 데이터
+    @SuppressLint("Recycle")
+    fun calendarSelect(inputYear: Int, inputMonth: Int, inputDay: Int):ArrayList<ScreenTimeData>{
+        val result = arrayListOf<ScreenTimeData>()
+        val db:SQLiteDatabase = writableDatabase
+        val sql = "SELECT * FROM screenTime where year=$inputYear and month=$inputMonth and day=$inputDay;"
+
+        val cursor:Cursor = db.rawQuery(sql,null)
+        while (cursor.moveToNext()) {
+            val id: Int = cursor.getInt(0) //pk
+            val year: Int = cursor.getInt(1)
+            val month: Int = cursor.getInt(2)
+            val day: Int = cursor.getInt(3)
+            val time: String = cursor.getString(4) //ex 11:11:00
+            val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+            val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
+            val flower:Int =cursor.getInt(7) //디폴트가 0
+            val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            result.add(data)
+            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result

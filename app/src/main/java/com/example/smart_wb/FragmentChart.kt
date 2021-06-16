@@ -96,7 +96,7 @@ class FragmentChart : Fragment() {
 
             //반복문 이용 더미데이터 인서트
             for (j in 1..10) {
-                screenTimeDbHelper.chartInsert(2021, 1, j, "18:06:00", 7200)
+                screenTimeDbHelper.chartInsert(2022, 1, j, "01:06:00", 7200)
             }
 
         })

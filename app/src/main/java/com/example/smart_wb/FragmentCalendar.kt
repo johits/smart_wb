@@ -38,7 +38,7 @@ class FragmentCalendar : Fragment() {
     }
 
     lateinit var calendarAdapter: CalendarAdapter //상세기록 표시 리사이클러뷰 어답터
-    var dataList = mutableListOf<TimerData>() //상세기록 데이터 리스트
+    var dataList = mutableListOf<ScreenTimeData>() //상세기록 데이터 리스트
 
     lateinit var timerDataList: ArrayList<TimerData>
 
@@ -88,23 +88,11 @@ class FragmentCalendar : Fragment() {
 //            binding.calendar.state().edit()
 //                .setCalendarDisplayMode(CalendarMode.MONTHS)
 //                .commit()
-            val year: String = date.year.toString()
-            val month: String
-            val day: String //2021-06-07
-            //ex String 06 과 6 은 다르다
-            if (date.month < 10) {
-                month = "0" + date.month
-            } else {
-                month = date.month.toString()
-            }
-            if (date.day < 10) {
-                day = "0" + date.day
-            } else {
-                day = date.day.toString()
-            }
-            val result: String = year + "-" + month + "-" + day
-            dataList.clear()
-            dataList = selectDate(result)
+            val year: Int = date.year
+            val month: Int = date.month
+            val day: Int = date.day
+
+            dataList = selectDate(year,month,day)
             if (dataList.size == 0) {//데이터 없을 때
                 binding.linearParent.visibility = View.GONE//8
                 binding.tvNoData.visibility = View.VISIBLE//0
@@ -202,38 +190,13 @@ class FragmentCalendar : Fragment() {
     // 현재 Day
     fun getCurrentDay(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-    //스크린타임 결과 데이터 가져오기 //도전 기록이 있는 날짜에 점찍기
+    //ekff데이터 가져오기 //도전 기록이 있는 날짜에 점찍기
     fun screenTimeData() {
-        Log.d(TAG, "screenTimeData: ")
-//        var date = TimerSetShared.getDate(mContext)
-//        var time = TimerSetShared.getTime(mContext)
-
-//        var timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
-//        var database = timerDbHelper.writableDatabase
-        //  timer 테이블 데이터 불러오기
-//        timerDataList = timerDbHelper.select()
-//        var dateList = ArrayList<String>()
-        // 데이터 확인용 로그
-//        for (data in timerDataList) {
-//            var date: String = data.date
-//            dateList.add(date)
-////            Log.d(
-////                TAG,
-////                "id:" + data.id + " date:" + data.date + " time:" + data.time + " settingTime:" + data.settingTime + " success:" + data.success
-////            )
-//        }
-//        //중복값 지우기
-//        val linkedHashSet = LinkedHashSet<String>()
-//        for (item in dateList) {
-//            linkedHashSet.add(item)
-//        }
-
         val screenTimeDbHelper = ScreenTimeDbHelper(mContext,"screenTimeDb.db", null,1)
-        var dataList = screenTimeDbHelper.calendarDecoSelect()
-//
+        val dateList = screenTimeDbHelper.calendarSelect()
 
         //도전 기록이 있는 날짜에 점찍기
-        for (item in dataList) {
+        for (item in dateList) {
             val year = item.year
             val month = item.month
             val day = item.day
@@ -245,29 +208,27 @@ class FragmentCalendar : Fragment() {
 
     }
 
-    //날짜 클릭시 데이터 가져오기
-    private fun selectDate(date: String): MutableList<TimerData> {
+    //선택한 날짜 데이터 불러오기
+    private fun selectDate(year:Int, month:Int, day:Int): MutableList<ScreenTimeData> {
         Log.d(TAG, "selectDate: ")
         dataList.clear()
-        val timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
-        var database = timerDbHelper.writableDatabase
+        val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db", null, 1)
 
-        var arr: MutableList<TimerData> = timerDbHelper.select(date)
-        val settingTimeSum: String
-        return arr;
+        var result: MutableList<ScreenTimeData> = screenTimeDbHelper.calendarSelect(year,month,day)
+        return result;
     }
 
     //날짜에 해당하는 총도전시간,성공시간,꽃 계산기 및 setText
     @RequiresApi(Build.VERSION_CODES.N)
     private fun calculateSum() {
-        var settingTimeSum = 0
-        var successTimeSum = 0
-        var flowerSum = 0
+        var settingTimeSum = 0 //총 설정시간
+        var successTimeSum = 0 //총 성공시간
+        var flowerSum = 0 //받은 꽃 합계
         for (data in dataList) {
-            settingTimeSum += data.settingTime
+            settingTimeSum += data.settingTime!!
             if (data.success == 1) {
                 successTimeSum += data.settingTime
-                flowerSum += data.flower
+                flowerSum += data.flower!!
             }
         }
         Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")

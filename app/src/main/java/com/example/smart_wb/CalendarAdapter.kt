@@ -13,12 +13,13 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.TimerData
 import kotlin.math.log
 
 class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     val TAG = "CalendarAdapter"
-    var dataList = mutableListOf<TimerData>()
+    var dataList = mutableListOf<ScreenTimeData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarAdapter.ViewHolder {
        // Log.d(TAG, "onCreateViewHolder: ")
             val view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false)
@@ -36,7 +37,7 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
         }
     }
 
-    fun replaceList(newList: MutableList<TimerData>) {
+    fun replaceList(newList: MutableList<ScreenTimeData>) {
         dataList.clear()
         dataList = newList.toMutableList()
         //어댑터의 데이터가 변했다는 notify를 날린다
@@ -57,7 +58,7 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
 
         @SuppressLint("ResourceAsColor")
         @RequiresApi(Build.VERSION_CODES.N)
-        fun bind(item: TimerData) {
+        fun bind(item: ScreenTimeData) {
             //성공 0->실패, 1->성공
             if (item.success == 0) {
                 tvSuccess.setText(R.string.calendar_time_fail)
@@ -65,7 +66,7 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
                 tvSuccess.setText(R.string.calendar_time_success)
             }
             tvStartTime.text = item.time
-            tvSettingTime.text = changeTime(item.settingTime)
+            tvSettingTime.text = item.settingTime?.let { changeTime(it) }
             tvFlower.text = item.flower.toString()
         }
 
