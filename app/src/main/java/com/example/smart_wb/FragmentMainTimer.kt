@@ -239,17 +239,17 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
         //데이터 확인용 로그
         for (data in arr) {
-            Log.d(TAG,"id:${data.id}, year:${data.year}, month:${data.month}, :${data.id}, " +
-                    "id:${data.id}, id:${data.id}, id:${data.id}, id:${data.id},")
+            Log.d(TAG,"id:${data.id}, year:${data.year}, month:${data.month}, day:${data.day}, " +
+                    "time:${data.time}, settingTime:${data.settingTime}, success:${data.success}, flower:${data.flower},")
         }
         //설정시간 쉐어드에 저장
         TimerSetShared.setDate(mContext, date)
         TimerSetShared.setTime(mContext, time)
         TimerSetShared.setSettingTime(mContext, settingTime)
         //쉐어드 저장 확인용 로그
-//        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
-//                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
-//                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
+        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
+                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
+                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
     }
 
     //스크린 타임 시작
