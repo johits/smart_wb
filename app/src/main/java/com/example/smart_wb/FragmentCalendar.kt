@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerData
-import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
@@ -39,6 +38,7 @@ class FragmentCalendar : Fragment() {
 
     lateinit var calendarAdapter: CalendarAdapter //상세기록 표시 리사이클러뷰 어답터
     var dataList = mutableListOf<ScreenTimeData>() //상세기록 데이터 리스트
+    var decoList = mutableListOf<ScreenTimeData>() //도전 기록 있는 날짜 데코용 데이터 리스트
 
     lateinit var timerDataList: ArrayList<TimerData>
 
@@ -71,18 +71,25 @@ class FragmentCalendar : Fragment() {
 
         //오늘날짜 표시
         decorateToday()
+        //도전 기록 있는 날짜 데코하기
+        screenTimeDataDeco()
+
+        binding.calendar.setHeaderTextAppearance(getCurrentDay())
 
         //달력표시제한
-//        binding.calendar.setHeaderTextAppearance(getCurrentDay())
-//        binding.calendar.state().edit()
-//            .setMaximumDate(
-//                CalendarDay.from(
-//                    getCurrentYear(),
-//                    getCurrentMonth(),
-//                    getCurrentDay()
-//                )
-//            )
-//            .commit()
+        val firstYear: Int? = decoList[0].year
+        val firstMonth: Int? = decoList[0].month
+        val firstDay: Int = 1
+        binding.calendar.state().edit()
+            .setMinimumDate(
+                CalendarDay.from(
+                    firstYear!!,
+                    firstMonth!!,
+                    firstDay
+                )
+            )
+            .commit()
+
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
 //            binding.calendar.state().edit()
@@ -145,7 +152,7 @@ class FragmentCalendar : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        screenTimeData()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -191,12 +198,12 @@ class FragmentCalendar : Fragment() {
     fun getCurrentDay(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
     //ekff데이터 가져오기 //도전 기록이 있는 날짜에 점찍기
-    fun screenTimeData() {
+    fun screenTimeDataDeco() {
         val screenTimeDbHelper = ScreenTimeDbHelper(mContext,"screenTimeDb.db", null,1)
-        val dateList = screenTimeDbHelper.calendarSelect()
+        decoList = screenTimeDbHelper.calendarSelect()
 
         //도전 기록이 있는 날짜에 점찍기
-        for (item in dateList) {
+        for (item in decoList) {
             val year = item.year
             val month = item.month
             val day = item.day

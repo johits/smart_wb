@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="">
 
             <TableLayout
                 android:layout_width="wrap_content"
@@ -116,6 +116,7 @@
                 android:gravity="center"
                 android:background="@drawable/bt2"
                 android:text="@string/calendar_btn_detail_show"
+                android:layout_margin="12dp"
                 android:textColor="@color/colorWhite"/>
 
             <View style="@style/Divider" />
@@ -141,7 +142,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="3"
                     android:gravity="center"
                     android:text="설정시간"
                     android:textColor="@color/colorBlack"
@@ -150,7 +151,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:gravity="center"
                     android:text="성공유무"
                     android:textColor="@color/colorBlack"
