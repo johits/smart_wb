@@ -50,6 +50,18 @@ class ScreenTimeDbHelper(
         db.close()
     }
 
+    //스크린타임 성공시 데이터 업데이트
+    fun update(flower:Int ){
+        val db: SQLiteDatabase = writableDatabase
+//        val sql="UPDATE screenTime SET success=1, flower=$flower " +
+//                "WHERE year=$year and month=$month and day=$day and time=$time and settingTime"
+        //마지막행 불러와서 업데이트 한다.
+        val sql = "UPDATE screenTime set success = 1, flower=$flower WHERE id = (SELECT MAX(id) FROM screenTime);"
+
+        db.execSQL(sql)
+        db.close()
+    }
+
     //차트 더미데이터 인서트용
     fun chartInsert(year: Int, month:Int, day:Int, time: String, settingTime: Int) {
         val db: SQLiteDatabase = writableDatabase

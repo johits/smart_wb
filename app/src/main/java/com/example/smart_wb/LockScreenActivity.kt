@@ -21,10 +21,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.smart_wb.SQLite.ScreenTimeData
+import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.SQLite.TimerDbHelper
 import com.example.smart_wb.Shared.PointItemShared
 import com.example.smart_wb.Shared.TimerSetShared
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -168,7 +171,7 @@ class LockScreenActivity : AppCompatActivity() {
 
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp() //핸드폰화면 켜짐
-                    successUpdate(setTime, flower)//성공시//sqlite 업데이트
+                    successUpdate(flower)//성공시//sqlite 업데이트
 
                     showDialog(
                         getString(R.string.success_dialog_title_success),
@@ -345,37 +348,25 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
-    //성공시 sqlite timer table 에 success 업데이트//쉐어드에 받은 꽃 더하기
-    private fun successUpdate(settingTime: Int, flower: Int) {
-        Log.d(TAG, "successUpdate: ")
-        var date = TimerSetShared.getDate(this) //시작날짜
-        var time = TimerSetShared.getTime(this) //시작시간
-//        var settingTime = TimerSetShared.getSettingTime(this)
-//        var flower = settingTime / 600 //꽃 갯수 10분당 1개 받는다.
-
-        Log.d(TAG, "$date , $time , $settingTime , $flower")
-
-        var timerDbHelper = TimerDbHelper(this, "timerDb.db", null, 1)
-        var database = timerDbHelper.writableDatabase
-
+    //성공시 sqlite screenTimeDb table 에 success 0->1, flower 업데이트
+    // 쉐어드에 받은 꽃 더하기
+    private fun successUpdate( flower: Int) {
         //데이터 업데이트
-        timerDbHelper.upDate(date, time, flower)
+        val screenTimeDbHelper = ScreenTimeDbHelper(this, "screenTimeDb.db", null, 1)
+        screenTimeDbHelper.update(flower)
+
         //   데이터 불러오기
-        var arr: ArrayList<TimerData> = timerDbHelper.select()
+        var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
         // 데이터 확인용 로그
-//        for (data in arr) {
-//            Log.d(
-//                TAG,
-//                "id:" + data.id + " date:" + data.date + " " +
-//                        "time:" + data.time + " settingTime:" + data.settingTime + " " +
-//                        "success:" + data.success + " flower:" + data.flower
-//            )
-//        }
+        for (data in arr) {
+            Log.d(
+                TAG,
+                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+            )
+        }
 
         //받은 꽃 쉐어드에 더한다.
         PointItemShared.sumFlower(this, flower)
-
-        Log.d(TAG, "현재 꽃 갯수" + PointItemShared.getFlower(this))
     }
 
     //남은시간 계산기 //남은시간 리턴
@@ -384,6 +375,7 @@ class LockScreenActivity : AppCompatActivity() {
     //남은시간 양수 스크린타임 계속
     //남은시간 0or음수 스크린타임 이미 종료
     //날짜가 바뀌면 보정을 해야한다. 어떻게?
+    @SuppressLint("SimpleDateFormat")
     private fun calRemainTime(): Int {
         var result = 0
         val timeStamp = System.currentTimeMillis()
@@ -431,7 +423,7 @@ class LockScreenActivity : AppCompatActivity() {
         //  val sec = Math.floorMod(setTime, 3600) % 60
         if (hour > 0 && min > 0) {
             result = "%1$02d시간%2$02d분".format(hour, min)
-        } else if(hour>0 && min==0) {
+        } else if (hour > 0 && min == 0) {
             result = "%1$02d시간".format(hour)
         } else {
             result = "%1$02d분".format(min)
