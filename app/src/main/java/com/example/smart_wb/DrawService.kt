@@ -41,7 +41,7 @@ class DrawService : Service() {
     //타이머 동작 위한 핸들러, 쓰레드
     var handler: Handler? = null
     var thread: Thread? = null
-    val timerDelay:Long = 10
+    val timerDelay:Long = 1000
     //설정시간
     var settingTime = 0
 
