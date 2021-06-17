@@ -75,7 +75,7 @@ class FragmentCalendar : Fragment() {
         screenTimeDataDeco()
 
         binding.calendar.setHeaderTextAppearance(getCurrentDay())
-
+            
         //달력표시제한
         val firstYear: Int? = decoList[0].year
         val firstMonth: Int? = decoList[0].month
