@@ -10,6 +10,7 @@ import android.content.*
 import android.media.RingtoneManager
 import android.os.*
 import android.os.VibrationEffect.DEFAULT_AMPLITUDE
+import android.provider.CallLog
 import android.text.format.Time
 import android.util.Log
 import android.view.LayoutInflater
@@ -163,6 +164,30 @@ class LockScreenActivity : AppCompatActivity() {
                 val message = msg.data.getString("message") //사용안함
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
+
+                val callLog = CallLog.Calls.CONTENT_URI
+
+                var proj = arrayOf(
+                    CallLog.Calls.PHONE_ACCOUNT_ID,
+                    CallLog.Calls.CACHED_NAME,
+                    CallLog.Calls.NUMBER,
+                    CallLog.Calls.DATE
+                )
+
+                this.run {
+                    val cursor=contentResolver.query(callLog,proj,null,null,null)
+                    if (cursor != null) {
+                        while(cursor.moveToNext()){
+                            val id = cursor.getString(0)
+                            val name = cursor.getString(1)
+                            val number = cursor.getString(2)
+                            val date = cursor.getString(3)
+
+                            Log.d(TAG, "id:$id , name:$name , number:$number , date:$date")
+                        }
+                    }
+                }
+
 
                 val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
                 val setTime = TimerSetShared.getSettingTime(this)//설정시간
@@ -350,7 +375,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     //성공시 sqlite screenTimeDb table 에 success 0->1, flower 업데이트
     // 쉐어드에 받은 꽃 더하기
-    private fun successUpdate( flower: Int) {
+    private fun successUpdate(flower: Int) {
         //데이터 업데이트
         val screenTimeDbHelper = ScreenTimeDbHelper(this, "screenTimeDb.db", null, 1)
         screenTimeDbHelper.update(flower)

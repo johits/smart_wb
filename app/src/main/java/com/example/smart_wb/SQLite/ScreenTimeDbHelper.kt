@@ -19,6 +19,9 @@ class ScreenTimeDbHelper(
     factory: SQLiteDatabase.CursorFactory?,
     version: Int
 ) : SQLiteOpenHelper(context, name, factory, version) {
+    companion object{
+        const val TAG = "ScreenTimerDbHelper"
+    }
     //테이블생성
     override fun onCreate(db: SQLiteDatabase) {
         var sql: String = "CREATE TABLE if not exists screenTime (" +
@@ -215,6 +218,7 @@ class ScreenTimeDbHelper(
 
 
     //주 단위 그래프 데이터 모두 불러오기
+    @SuppressLint("Recycle")
     fun week(y: Int, m:Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y = year, m = month, s = start(시작날짜)), e = end(끝날짜)
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
@@ -223,7 +227,7 @@ class ScreenTimeDbHelper(
         val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m and day>=$s and day<=$e group by day;"
 
         val cursor = writableDatabase.rawQuery(sql, null)
-
+        Log.d(TAG, "week: ${cursor.count}")
         while (cursor.moveToNext()) {
             val day: Int = cursor.getInt(0)
             val settingTime: Int =
