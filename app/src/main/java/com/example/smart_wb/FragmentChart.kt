@@ -336,22 +336,37 @@ class FragmentChart : Fragment() {
                     wd = w.toString()
                 }
 
-            if(whatDay("$year$month$w").equals("월")){
-                entries.add(BarEntry(0f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }else if(whatDay("$year$month$w").equals("화")){
-                entries.add(BarEntry(1f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }else if(whatDay("$year$month$w").equals("수")){
-                entries.add(BarEntry(2f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }else if(whatDay("$year$month$w").equals("목")){
-                entries.add(BarEntry(3f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }else if(whatDay("$year$month$w").equals("금")){
-                entries.add(BarEntry(4f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }else if(whatDay("$year$month$w").equals("토")){
-                entries.add(BarEntry(5f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }else if(whatDay("$year$month$w").equals("일")){
-                entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-            }
+//            if(whatDay("$year$month$w").equals("월")){
+//                entries.add(BarEntry(0f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            } else if(whatDay("$year$month$w").equals("화")){
+//                entries.add(BarEntry(1f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            }else if(whatDay("$year$month$w").equals("수")){
+//                entries.add(BarEntry(2f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            }else if(whatDay("$year$month$w").equals("목")){
+//                entries.add(BarEntry(3f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            }else if(whatDay("$year$month$w").equals("금")){
+//                entries.add(BarEntry(4f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            }else if(whatDay("$year$month$w").equals("토")){
+//                entries.add(BarEntry(5f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            }else if(whatDay("$year$month$w").equals("일")){
+//                entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//            }
 
+                if(whatDay("$year$month$w").equals("월")){
+                    entries.add(BarEntry(0f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }else if(whatDay("$year$month$w").equals("화")){
+                    entries.add(BarEntry(1f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }else if(whatDay("$year$month$w").equals("수")){
+                    entries.add(BarEntry(2f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }else if(whatDay("$year$month$w").equals("목")){
+                    entries.add(BarEntry(3f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }else if(whatDay("$year$month$w").equals("금")){
+                    entries.add(BarEntry(4f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }else if(whatDay("$year$month$w").equals("토")){
+                    entries.add(BarEntry(5f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }else if(whatDay("$year$month$w").equals("일")){
+                    entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                }
 
 
             }
