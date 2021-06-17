@@ -220,6 +220,8 @@ class ScreenTimeDbHelper(
     //주 단위 그래프 데이터 모두 불러오기
     @SuppressLint("Recycle")
     fun week(y: Int, m:Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y = year, m = month, s = start(시작날짜)), e = end(끝날짜)
+
+        Log.d(TAG, "주 데이터 가져오기2")
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
 
