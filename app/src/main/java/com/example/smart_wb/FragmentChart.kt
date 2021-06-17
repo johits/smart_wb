@@ -73,12 +73,12 @@ class FragmentChart : Fragment() {
         }
     }
 
-    inner class MyXAxisFormatter(arr: Array<String>) : ValueFormatter() {
+    inner class MyXAxisFormatter : ValueFormatter() {
         private val days = arrayOf("월", "화", "수", "목", "금", "토", "일")
         private val year =
             arrayOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
-        //        private var month = arrayListOf<String>()
-        private var month = arr
+        private var month = arrayListOf<String>()
+
 
 //            var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
 //        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
@@ -153,24 +153,21 @@ class FragmentChart : Fragment() {
                 ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
             var database = screenTimeDbHelper.writableDatabase
 
-//            for(i in 14 until 20){
-//                screenTimeDbHelper.chartInsert(2021, 6,i,"02:00:00",i*3000)
-//            }
 
         })
 
         chart_year.setOnClickListener(View.OnClickListener {
             alldate()
-//            chart_year.setTextColor(Color.parseColor("#2FA9FF"))
-//            chart_month.setTextColor(Color.parseColor("#000000"))
-//            chart_week.setTextColor(Color.parseColor("#000000"))
-//            type = "year"
-//            date.text = Year(0)
-//            yearParse() // 년 날짜 파싱
-//            Refresh(type, year, 0, 0, 0) // 그래프 새로고침
+            chart_year.setTextColor(Color.parseColor("#2FA9FF"))
+            chart_month.setTextColor(Color.parseColor("#000000"))
+            chart_week.setTextColor(Color.parseColor("#000000"))
+            type = "year"
+            date.text = Year(0)
+            yearParse() // 년 날짜 파싱
+            Refresh(type, year, 0, 0, 0) // 그래프 새로고침
 
-//            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
-//            chart.invalidate() // 새로 고침
+            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
+            chart.invalidate() // 새로 고침
 
         })
 
@@ -350,9 +347,8 @@ class FragmentChart : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
                 setDrawAxisLine(true) // 축 그림
                 setDrawGridLines(false) // 격자
-                val xDay = arrayOf("하이","친구","빡빡")
 
-                valueFormatter = MyXAxisFormatter(xDay) // X축 값 바꿔주기 위함
+                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
 
                 if (type.equals("week")) {
