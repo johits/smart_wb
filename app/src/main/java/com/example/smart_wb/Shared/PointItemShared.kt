@@ -63,7 +63,8 @@ object PointItemShared {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         var result = getFlower(context)+count
-        editor.putInt("flower", result)
+//        editor.putInt("flower", result) //실제 코드
+        editor.putInt("flower", 3000) //테스트
         editor.commit()
         Log.d(TAG, "sumFlower: 쉐어드 저장 완료 // 저장된 값:"+result)
     }

@@ -201,10 +201,31 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                                 "둘다 트루 타이머여야함 ${itemList[position].tcheck} // ${itemList[position].timer}"
                             )
                         }
-                        notifyItemChanged(position)
+
+                        for (i in 0 until itemList.size) {
+                            if(type.equals("bg")){
+                                itemList[i].bg = false
+                                itemList[i].bcheck = false
+                                PointItemShared.setBg(context , 0)
+                            }else if(type.equals("timer")){
+                                itemList[i].timer = false
+                                itemList[i].tcheck = false
+                                PointItemShared.setTimer(context, 0)
+                            }
+                        }
                         loop(type, position)
                         ck(type, position)
+                        if (type.equals("bg")) {
+                            itemList[position].bcheck = true
+                            itemList[position].bg= true
+                            PointItemShared.setBg(context, item)
+                        } else if (type.equals("timer")) {
+                            itemList[position].tcheck = true
+                            itemList[position].timer = true
+                            PointItemShared.setTimer(context, item)
+                        }
                         itemClickListener.onClick(it, position)
+                        notifyItemChanged(position)
                         Toast.makeText(context, "구매한 아이템이 적용되었습니다.", Toast.LENGTH_SHORT).show()
 
                     }
