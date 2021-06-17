@@ -160,25 +160,91 @@ class FragmentChart : Fragment() {
                 ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
             var database = screenTimeDbHelper.writableDatabase
 
-//            whatDay("2021년 06월 23일")
-//            Log.d(TAG, "그래서 몇요일이냐고 "+whatDay("2021년 06월 23일"))
-//
-//
-//
-            //반복문 이용 더미데이터 인서트
 
-//            screenTimeDbHelper.chartInsert(2021, 6, 13, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 13, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 14400)
+//            //반복문 이용 더미데이터 인서트
+//            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
+//            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
+//            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
+//            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
+//            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
+//            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
+//            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
+//            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
+//            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
+//            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
+//            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
+//            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
 //
+//
+//            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
+//            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
+//            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
+//            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
+//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
+//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
+//            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
+//            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
+//            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
+//            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 7, 14, "18:06:00", 3600*7)
+//
+//            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
+//            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
+//            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
+//            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
+//            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
+//
+//            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
+//            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
+//            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
+//            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
+//            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
+//            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
+//            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
+//            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
+//            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
+//            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
+//            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
+//            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
+////
 
 
         })
@@ -352,19 +418,19 @@ class FragmentChart : Fragment() {
 //                entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
 //            }
 
-                if(whatDay("$year$month$w").equals("월")){
+                if(whatDay("$year$md$wd").equals("월")){
                     entries.add(BarEntry(0f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$month$w").equals("화")){
+                }else if(whatDay("$year$md$wd").equals("화")){
                     entries.add(BarEntry(1f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$month$w").equals("수")){
+                }else if(whatDay("$year$md$wd").equals("수")){
                     entries.add(BarEntry(2f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$month$w").equals("목")){
+                }else if(whatDay("$year$md$wd").equals("목")){
                     entries.add(BarEntry(3f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$month$w").equals("금")){
+                }else if(whatDay("$year$md$wd").equals("금")){
                     entries.add(BarEntry(4f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$month$w").equals("토")){
+                }else if(whatDay("$year$md$wd").equals("토")){
                     entries.add(BarEntry(5f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$month$w").equals("일")){
+                }else if(whatDay("$year$md$wd").equals("일")){
                     entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                 }
 
@@ -384,7 +450,7 @@ class FragmentChart : Fragment() {
                 var m = year.month
                 var t = year.settingTime?.let { changeTime(it) }
 
-                for(i in 1 until 12){
+                for(i in 1 until 13){
                     if(i==m){
                         entries.add(BarEntry(1f*(i-1), 1f* t!!))
                         Log.d(TAG, "Refresh: 있음 월 $i t $t")
@@ -413,7 +479,7 @@ class FragmentChart : Fragment() {
             if(type.equals("week")){
                 barData.setBarWidth(0.7f) //막대너비
             }else if(type.equals("year")){
-                barData.setBarWidth(0.3f)
+                barData.setBarWidth(0.4f)
             }else if(type.equals("month")){
                 barData.setBarWidth(0.1f)
             }
@@ -448,16 +514,18 @@ class FragmentChart : Fragment() {
                     setGranularity(1f)
                     setGranularityEnabled(true)
                 }else if(type.equals("month")){
-                    axisMaximum = 31f
-                    granularity = 1f
-                    labelCount = 31 //x축 라벨 나타내는 개수
+//                    axisMaximum = 31f
+//                    granularity = 1f
+//                    labelCount = 31 //x축 라벨 나타내는 개수
+                    setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
+                    setGranularity(1f)
                 }else if(type.equals("year")) {
                     Log.d(TAG, "Refresh: 축바꾸자 엑스")
 //                    axisMaximum = 12f
 //                    granularity = 1f
 //                    labelCount = 12 //x축 라벨 나타내는 개수
                     setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
-                    setGranularity(1f)
+                    setGranularity(0.5f)
                }
 //                textSize = 14f // 텍스트 크기
 //                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
@@ -611,13 +679,13 @@ class FragmentChart : Fragment() {
 
 
         when (calendar[Calendar.DAY_OF_WEEK]) {
-            1 -> dayresult = "월"
-            2 -> dayresult = "화"
-            3 -> dayresult = "수"
-            4 -> dayresult = "목"
-            5 -> dayresult = "금"
-            6 -> dayresult = "토"
-            7 -> dayresult = "일"
+            1 -> dayresult = "일"
+            2 -> dayresult = "월"
+            3 -> dayresult = "화"
+            4 -> dayresult = "수"
+            5 -> dayresult = "목"
+            6 -> dayresult = "금"
+            7 -> dayresult = "토"
         }
         println("몇요일" + dayresult)
         return dayresult

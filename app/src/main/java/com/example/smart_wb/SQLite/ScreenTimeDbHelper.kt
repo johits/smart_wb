@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.smart_wb.LockScreenActivity.Companion.TAG
 
 /**
 * 2021-06-14 yama screenTime 테이블 SQLiteOpenHelper
