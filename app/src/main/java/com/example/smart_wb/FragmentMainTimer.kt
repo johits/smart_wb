@@ -207,7 +207,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     fun insertSettingTime(settingTime: Int) {
 //        Log.d(TAG, "insertSettingTime: ")
 
-        val timeStamp = System.currentTimeMillis()
+        val timeStamp:Long = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
 
