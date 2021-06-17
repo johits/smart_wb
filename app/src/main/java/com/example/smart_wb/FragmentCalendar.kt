@@ -18,9 +18,7 @@ import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import java.text.SimpleDateFormat
-
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -77,18 +75,18 @@ class FragmentCalendar : Fragment() {
         binding.calendar.setHeaderTextAppearance(getCurrentDay())
 
         //달력표시제한
-        val firstYear: Int? = decoList[0].year
-        val firstMonth: Int? = decoList[0].month
-        val firstDay: Int = 1
-        binding.calendar.state().edit()
-            .setMinimumDate(
-                CalendarDay.from(
-                    firstYear!!,
-                    firstMonth!!,
-                    firstDay
-                )
-            )
-            .commit()
+//        val firstYear: Int? = decoList[0].year
+//        val firstMonth: Int? = decoList[0].month
+//        val firstDay: Int = 1
+//        binding.calendar.state().edit()
+//            .setMinimumDate(
+//                CalendarDay.from(
+//                    firstYear!!,
+//                    firstMonth!!,
+//                    firstDay
+//                )
+//            )
+//            .commit()
 
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
