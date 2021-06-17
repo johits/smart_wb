@@ -162,89 +162,89 @@ class FragmentChart : Fragment() {
 
 
 //            //반복문 이용 더미데이터 인서트
-//            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
-//            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
-//            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
-//            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
-//            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
-//            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
-//            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
-//            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
-//            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
-//            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
-//            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
-//            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
+            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
+            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
+            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
+            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
+            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
+            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
+            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
+            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
+            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
+            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
+            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
+            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
+
+
+            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
+            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
+            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
+            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
+
+
+            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
+            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
+
+
+            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
+
+
+            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
+            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
+
+
+            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
+            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
+            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
+
+            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
+            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
+            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
+            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
+
+            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
+            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
+
+
+            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 7, 14, "18:06:00", 3600*7)
+
+            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
+            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
+            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
+            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
+            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
+
+            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
+            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
+            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
+            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
+            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
+            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
+            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
+            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
+            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
+            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
+            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
+            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
 //
-//
-//            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
-//            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
-//            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
-//            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
-//            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
-//            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
-//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
-//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
-//            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
-//            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
-//            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
-//            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 7, 14, "18:06:00", 3600*7)
-//
-//            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
-//            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
-//            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
-//            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
-//            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
-//
-//            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
-//            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
-//            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
-//            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
-//            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
-//            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
-//            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
-//            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
-//            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
-//            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
-//            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
-//            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
-////
 
 
         })
