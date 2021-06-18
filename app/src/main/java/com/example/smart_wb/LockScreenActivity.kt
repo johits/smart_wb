@@ -223,7 +223,7 @@ class LockScreenActivity : AppCompatActivity() {
                     showDialog(
                         getString(R.string.success_dialog_title_fail),
                         setTimeString,
-                        flower,
+                        0,
                         missedCall
                     )
                     //부재중 전화가 있으면 노티피케이션
