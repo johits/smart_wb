@@ -15,13 +15,11 @@ import androidx.fragment.app.Fragment
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.databinding.FragmentChartBinding
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.DateFormat
@@ -91,29 +89,6 @@ class FragmentChart : Fragment() {
         super.onAttach(context)
         if (context is MainActivity) {
             cContext = context
-        }
-    }
-
-    inner class MyXAxisFormatter : ValueFormatter() {
-        private val days = arrayOf("월", "화", "수", "목", "금", "토", "일")
-        private val year =
-            arrayOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
-        private val month = arrayOf("")
-
-//            var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
-//        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
-//        var b = Integer.parseInt(date.text.toString().slice(ran))
-
-//            for (i in 1 until alldate)arrayOf(""){}
-        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-            if (type.equals("week")) {
-                return days.getOrNull(value.toInt()-1) ?: value.toString()
-            } else if (type.equals("month")) {
-                return month.getOrNull(value.toInt() - 1) ?: value.toString()
-            } else {
-                return year.getOrNull(value.toInt() - 1) ?: value.toString()
-            }
-
         }
     }
 
@@ -634,7 +609,7 @@ class FragmentChart : Fragment() {
             }else if(type.equals("year")){
                 barData.setBarWidth(0.4f)
             }else if(type.equals("month")){
-                barData.setBarWidth(0.1f)
+                barData.setBarWidth(0.5f)
             }
             axisLeft.run { // Y축에 대한 속성
                 if(type.equals("week")||type.equals("month")){
@@ -655,7 +630,7 @@ class FragmentChart : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
                 setDrawAxisLine(true) // 축 그림
                 setDrawGridLines(false) // 격자
-                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
+//                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
                 if(type.equals("week")){
                     axisMaximum = 7f
@@ -680,13 +655,10 @@ class FragmentChart : Fragment() {
                     axisMaximum = 12f
 //                    granularity = 1f
 //                    labelCount = 12 //x축 라벨 나타내는 개수
-//                    setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
+                    setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
                     setGranularity(0.5f)
                }
             }
-
-
-
 
             axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
             setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
