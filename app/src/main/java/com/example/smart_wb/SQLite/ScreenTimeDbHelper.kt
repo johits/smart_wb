@@ -155,7 +155,7 @@ class ScreenTimeDbHelper(
     fun firstRow():ArrayList<ScreenTimeData>{
         val result = arrayListOf<ScreenTimeData>()
         val db :SQLiteDatabase = writableDatabase
-        val sql = "SELECT * FROM screenTime ORDER BY ROWID LIMIT 1;"
+        val sql = "SELECT * FROM screenTime WHERE success=1 ORDER BY ROWID LIMIT 1;"
 
         val cursor:Cursor = db.rawQuery(sql,null)
         while (cursor.moveToNext()) {
@@ -179,7 +179,7 @@ class ScreenTimeDbHelper(
     fun lastRow():ArrayList<ScreenTimeData>{
         val result = arrayListOf<ScreenTimeData>()
         val db :SQLiteDatabase = writableDatabase
-        val sql = "SELECT * FROM screenTime ORDER BY ROWID DESC LIMIT 1;"
+        val sql = "SELECT * FROM screenTime WHERE success=1 ORDER BY ROWID DESC LIMIT 1;"
 
         val cursor:Cursor = db.rawQuery(sql,null)
         while (cursor.moveToNext()) {

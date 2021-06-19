@@ -369,7 +369,7 @@ class FragmentChart : Fragment() {
                     if (day == i) {
                         entries.add(BarEntry(i * 1f, y))
                     } else {
-                        entries.add(BarEntry(i * 1f, null))
+                        entries.add(BarEntry(i * 1f, 0f))
                     }
                 }
 
@@ -484,6 +484,10 @@ class FragmentChart : Fragment() {
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
 
+//        screenTimeDbHelper.chartInsert(2020, 1,1, "12:00:00", 7200)
+//        screenTimeDbHelper.chartInsert(2021, 7,1, "12:00:00", 7200)
+//        screenTimeDbHelper.chartInsert(2022, 12,1, "12:00:00", 7200)
+
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
         val lastRow = screenTimeDbHelper.lastRow()
@@ -500,7 +504,7 @@ class FragmentChart : Fragment() {
 
     //왼쪽버튼 데이터 유무에 따른 visible or gone
     fun leftVisible() {
-        Log.d(TAG, "첫번째 달:$firstRowMonth , 현재 달:$month")
+//        Log.d(TAG, "첫번째 달:$firstRowMonth , 현재 달:$month")
         if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
             if (firstRowYear < year) {
                 left.visibility = View.VISIBLE
@@ -512,12 +516,14 @@ class FragmentChart : Fragment() {
                 }
             }
 
+        }else{
+            left.visibility = View.GONE
         }
     }
 
     //오른쪽버튼 데이터 유무에 따른 visible or gone
     fun rightVisible() {
-        Log.d(TAG, "마지막 달:$lastRowMonth , 현재 달:$month")
+//        Log.d(TAG, "마지막 달:$lastRowMonth , 현재 달:$month")
         if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
             if (lastRowYear > year) {
                 right.visibility = View.VISIBLE
@@ -528,6 +534,8 @@ class FragmentChart : Fragment() {
                     right.visibility = View.GONE
                 }
             }
+        }else{
+            right.visibility=View.GONE
         }
 
     }
