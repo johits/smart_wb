@@ -168,7 +168,7 @@ class ScreenTimeDbHelper(
             val flower:Int =cursor.getInt(7) //디폴트가 0
             val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
             result.add(data)
-//            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+            Log.d("첫번째 행 가져오기 // chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result
@@ -192,7 +192,7 @@ class ScreenTimeDbHelper(
             val flower:Int =cursor.getInt(7) //디폴트가 0
             val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
             result.add(data)
-//            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+            Log.d("마지막행 가져오기 //chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result
@@ -202,6 +202,7 @@ class ScreenTimeDbHelper(
 /**    2021-06-16
     joker
     막대 그래프 주, 월, 년 데이터 불러오기 메서드*/
+
 
 
 

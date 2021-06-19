@@ -57,6 +57,10 @@ class FragmentChart : Fragment() {
     var eMonth: Int = 0 //이용자가 현재 보고 있는 주 끝 월
     var sYear: Int = 0 //이용자가 현재 보고 있는 주 시작 년
     var eYear: Int = 0 //이용자가 현재 보고 있는 주 끝 년
+    var sDay: Int = 0 //이용자가 현재 보고 있는 주 첫 날짜
+    var eDay: Int = 0 //이용자가 현재 보고 있는 주 끝 날짜
+
+    var value: Int = 0 //왼쪽, 오른쪽 버튼 비활성화시 데이터 남아있는지 확인하기 위해 주눈 구분값
 
     var lastDayF: Float = 0f //달의 마지막 날짜 float
     var lastDayI : Int = 0 //달의 마지막 날짜 Int
@@ -281,8 +285,6 @@ class FragmentChart : Fragment() {
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse() // 주 날짜 파싱
                 Refresh(type, year, month,start,end) // 그래프 새로고침
-
-
                 //2021-06-17 기존코드 joker
 //                i -= 1
 //                date.text = Days7(i) + " ~ " + Days7(i + 1)
@@ -298,8 +300,9 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-                leftVisible()
-                rightVisible()
+                leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
+                rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
+
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
@@ -307,6 +310,8 @@ class FragmentChart : Fragment() {
                 Refresh(type, year, 0,0,0)
             }
 
+            rightVisible()
+            leftVisible()
         }
 
         right.setOnClickListener {
@@ -332,15 +337,16 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-                rightVisible()
-                leftVisible()
+//                rightVisible()
+//                leftVisible()
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
                 yearParse()
                 Refresh(type, year, 0,0,0)
             }
-
+            leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
+            rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
         }
 
 
@@ -579,7 +585,7 @@ class FragmentChart : Fragment() {
                 for(i in 1 until 13){
                     if(i==m){
                         entries.add(BarEntry(1f*(i-1), 1f* t!!))
-                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
+//                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
                     }else{
 
                     }
@@ -680,11 +686,12 @@ class FragmentChart : Fragment() {
     //첫번째행 년,월,일 , 마지막행 년,월,일 불러오기
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
-
+        Log.d(TAG, "첫,끝 데이터 가져오기 로드")
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
         val lastRow = screenTimeDbHelper.lastRow()
         if (firstRow.size > 0 && lastRow.size > 0) {
+            Log.d(TAG, "가져온 첫 데이터 확인 $firstRow , 마지막 데이터 $lastRow")
             firstRowYear = firstRow[0].year!!
             firstRowMonth = firstRow[0].month!!
             firstRowDay = firstRow[0].day!!
@@ -692,44 +699,120 @@ class FragmentChart : Fragment() {
             lastRowMonth = lastRow[0].month!!
             lastRowDay = lastRow[0].day!!
         }
-        //Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
+//        Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
     }
 
     //왼쪽버튼 데이터 유무에 따른 visible or gone
     fun leftVisible() {
-//        Log.d(TAG, "첫번째 달:$firstRowMonth , 현재 달:$month")
-        if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
-            if (firstRowYear < year) {
-                left.visibility = View.VISIBLE
-            } else if (firstRowYear == year) {
-                if (firstRowMonth < month) {
-                    left.visibility = View.VISIBLE
-                } else if (firstRowMonth == month) {
-                    left.visibility = View.GONE
-                }
-            }
 
-        }else{
-            left.visibility = View.GONE
+        if(type.equals("week")){
+            if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+                Log.d(TAG, "leftVisible: 첫년 $firstRowYear 첫달 $firstRowMonth 첫 일 $firstRowDay")
+                if (firstRowYear < sYear) {
+                    Log.d(TAG, "leftVisible: 첫년 $firstRowYear 현재년 $sYear")
+                    left.visibility = View.VISIBLE
+                } else if (firstRowYear == sYear) {
+                    Log.d(TAG, "leftVisible: 첫년 $firstRowYear 현재년2 $sYear")
+                    if (firstRowMonth < sMonth) {
+                        Log.d(TAG, "leftVisible: 첫달 $firstRowMonth 현재달3 $sMonth")
+                        left.visibility = View.VISIBLE
+                    } else if (firstRowMonth == sMonth) {
+                        Log.d(TAG, "leftVisible: 첫달 $firstRowMonth 현재달4 $sMonth")
+                        left.visibility = View.GONE
+                        if (firstRowDay < sDay && value ==0) {
+                            Log.d(TAG, "leftVisible: 첫달 $firstRowDay 현재날짜 $sDay")
+                            left.visibility = View.VISIBLE
+                            value = 1
+                            Log.d(TAG, "leftVisible: 비활성화 전")
+                        }else if(firstRowDay < sDay&&value==1){
+                            left.visibility = View.GONE
+                            Log.d(TAG, "leftVisible: 비활성화성공")
+                        }
+                    }
+                }
+
+            }else{
+                left.visibility = View.GONE
+            }
         }
+        else if(type.equals("year")){
+            if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+            if (firstRowYear == year) {
+                        left.visibility = View.GONE
+                }else{
+                right.visibility = View.VISIBLE
+            }
+            }else{
+                left.visibility = View.GONE
+            }
+        }else if(type.equals("month")){
+            Log.d(TAG, "왼쪽 버튼// 첫번째 달:$firstRowMonth , 현재 달:$month")
+            if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+                if (firstRowYear < year) {
+                    left.visibility = View.VISIBLE
+                } else if (firstRowYear == year) {
+                    if (firstRowMonth < month) {
+                        left.visibility = View.VISIBLE
+                    } else if (firstRowMonth == month) {
+                        left.visibility = View.GONE
+                    }
+                }
+
+            }else{
+                left.visibility = View.GONE
+            }
+        }
+
     }
 
     //오른쪽버튼 데이터 유무에 따른 visible or gone
     fun rightVisible() {
-//        Log.d(TAG, "마지막 달:$lastRowMonth , 현재 달:$month")
-        if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
-            if (lastRowYear > year) {
-                right.visibility = View.VISIBLE
-            } else {
-                if (lastRowMonth > month) {
+
+        if(type.equals("week")){
+            left.visibility = View.VISIBLE
+            if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
+                if (lastRowYear < eYear) {
+                    right.visibility = View.VISIBLE
+                } else if (lastRowYear == eYear) {
+                    if (lastRowMonth < eMonth) {
+                        right.visibility = View.VISIBLE
+                    } else if (lastRowMonth == eMonth) {
+                        right.visibility = View.GONE
+                    }
+                }
+
+            }else{
+                right.visibility = View.GONE
+            }
+        }else if(type.equals("year")){
+            if (lastRowYear != 0) {
+                if (lastRowYear == year) {
+                    right.visibility = View.GONE
+                }else{
+                    left.visibility = View.VISIBLE
+                }
+            }else{
+                right.visibility = View.GONE
+            }
+        }else if(type.equals("month")){
+            Log.d(TAG, "오른쪽 버튼 // 마지막 달:$lastRowMonth , 현재 달:$month")
+            if (lastRowYear != 0) {
+                if (lastRowYear > year) {
                     right.visibility = View.VISIBLE
                 } else {
-                    right.visibility = View.GONE
+                    if (lastRowMonth > month) {
+                        right.visibility = View.VISIBLE
+                    } else {
+                        right.visibility = View.GONE
+                    }
                 }
+            }else{
+                right.visibility=View.GONE
             }
-        }else{
-            right.visibility=View.GONE
         }
+
+
+
 
     }
 
@@ -765,6 +848,10 @@ class FragmentChart : Fragment() {
         sYear = Integer.parseInt(date.text.toString().slice(sy))
         var ey = IntRange(16, 19)
         eYear = Integer.parseInt(date.text.toString().slice(ey))
+        var sd = IntRange(10, 11)
+        sDay = Integer.parseInt(date.text.toString().slice(sd))
+        var ed = IntRange(26, 27)
+        eDay = Integer.parseInt(date.text.toString().slice(ed))
     }
 
     //시간 변환
