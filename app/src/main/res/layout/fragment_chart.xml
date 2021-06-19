@@ -15,81 +15,92 @@
             android:id="@+id/chart_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="32dp"
             android:text="나의 스마트웰빙 성공량"
             android:textColor="#000000"
-            android:textSize="25sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/chart_week"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="주"
-            android:textColor="#2FA9FF"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/chart_month"
-            app:layout_constraintEnd_toStartOf="@+id/chart_month"
-            app:layout_constraintStart_toStartOf="@+id/left"
-            app:layout_constraintTop_toTopOf="@+id/chart_month" />
 
-        <TextView
-            android:id="@+id/chart_month"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="월"
-            android:textColor="#000000"
-            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart_text" />
+            app:layout_constraintTop_toBottomOf="@+id/date">
 
-        <TextView
-            android:id="@+id/chart_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="년"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/chart_month"
-            app:layout_constraintEnd_toEndOf="@+id/right"
-            app:layout_constraintStart_toEndOf="@+id/chart_month"
-            app:layout_constraintTop_toTopOf="@+id/chart_month" />
+            <TextView
+                android:id="@+id/chart_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="주"
+                android:textColor="#2FA9FF"
+                android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/chart_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="월"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/chart_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="년"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/left"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/left"
             app:layout_constraintBottom_toBottomOf="@+id/date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/date" />
 
+
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="24dp"
             android:padding="10dp"
             android:textColor="#000000"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/chart"
+            android:textSize="13sp"
             app:layout_constraintEnd_toStartOf="@+id/right"
-            app:layout_constraintStart_toEndOf="@+id/left" />
-
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toEndOf="@+id/left"
+            app:layout_constraintTop_toBottomOf="@+id/chart_text" />
 
         <Button
             android:id="@+id/right"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
@@ -101,13 +112,15 @@
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="370dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart_month"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_weight="1" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

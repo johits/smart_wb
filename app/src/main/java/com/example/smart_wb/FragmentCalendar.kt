@@ -18,9 +18,7 @@ import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import java.text.SimpleDateFormat
-
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -38,7 +36,7 @@ class FragmentCalendar : Fragment() {
 
     lateinit var calendarAdapter: CalendarAdapter //상세기록 표시 리사이클러뷰 어답터
     var dataList = mutableListOf<ScreenTimeData>() //상세기록 데이터 리스트
-    var decoList = mutableListOf<ScreenTimeData>()//도전 기록 있는 날짜 데코용 데이터 리스트
+    var decoList = mutableListOf<ScreenTimeData>() //도전 기록 있는 날짜 데코용 데이터 리스트
 
     lateinit var timerDataList: ArrayList<TimerData>
 
@@ -199,7 +197,7 @@ class FragmentCalendar : Fragment() {
             val year = item.year
             val month = item.month
             val day = item.day
-            if (year != null && month != null && day != null) {
+            if(year!=null&&month!=null&&day!=null){
                 val calDay = CalendarDay.from(year, month, day)
                 binding.calendar.addDecorator(CalendarDecoratorpDotSpan(requireActivity(), calDay))
             }
