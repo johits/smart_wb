@@ -224,7 +224,7 @@ class ScreenTimeDbHelper(
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
 
-        Log.d(TAG, "week: s $s e $e")
+        Log.d(TAG, "주데이터: y:$y m:$m s $s e $e")
         val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m and day>=$s and day<=$e group by day;"
 
         val cursor = writableDatabase.rawQuery(sql, null)
@@ -246,6 +246,33 @@ class ScreenTimeDbHelper(
         return result
     }
 
+    //주 단위 그래프 데이터 모두 불러오기
+    @SuppressLint("Recycle")
+    fun sMonthweek(y: Int, m:Int, s:Int, ld: Int): ArrayList<ScreenTimeData> { // y = year, m = month, s = start(시작날짜)), e = end(끝날짜)
+
+        val result = arrayListOf<ScreenTimeData>()
+        val db: SQLiteDatabase = writableDatabase
+
+        Log.d(TAG, "sMonthweek: y:$y m:$m s $s e $ld")
+        val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m and day>=$s and day<=$ld group by day;"
+
+        val cursor = writableDatabase.rawQuery(sql, null)
+        while (cursor.moveToNext()) {
+            val day: Int = cursor.getInt(0)
+            val settingTime: Int =
+                cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+
+            var data: ScreenTimeData =
+                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+            result?.add(data)
+            Log.d(
+                "시작날짜에 대한 데이터",
+                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+            )
+        }
+        db.close()
+        return result
+    }
 
 
     //월간 단위로 불러오기 성공한 데이터 만

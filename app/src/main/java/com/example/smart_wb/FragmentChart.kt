@@ -55,6 +55,10 @@ class FragmentChart : Fragment() {
     var month: Int = 0 //이용자가 현재 보고 있는 월
     var start: Int = 0 //이용자가 현재 보고 있는 주 시작 날짜
     var end: Int = 0 //이용자가 현재 보고 있는 주 끝 날짜
+    var sMonth: Int = 0 //이용자가 현재 보고 있는 주 시작 월
+    var eMonth: Int = 0 //이용자가 현재 보고 있는 주 끝 월
+    var sYear: Int = 0 //이용자가 현재 보고 있는 주 시작 년
+    var eYear: Int = 0 //이용자가 현재 보고 있는 주 끝 년
 
     lateinit var startDt : String
     lateinit var endDt : String
@@ -126,6 +130,8 @@ class FragmentChart : Fragment() {
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse()
                 Refresh(type, year, month,start,end)
+
+
 //        date.text =    toDays()?.let { calWeek(it) } + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
 
@@ -162,89 +168,95 @@ class FragmentChart : Fragment() {
 
 
 //            //반복문 이용 더미데이터 인서트
-            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
-            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
-            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
-            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
-            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
-            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
-            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
-            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
-            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
-            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
-            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
-            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
-
-
-            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
-            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
-            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
-            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
-
-
-            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
-            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
-
-
-            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
-
-
-            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
-            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
-
-
-            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
-            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
-            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
-            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
-            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
-            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
-
-            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
-            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
-            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
-            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
-            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
-            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
-            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
-
-            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
-            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
-
-
-            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
-            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
-            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
-            screenTimeDbHelper.chartInsert(2021, 7, 14, "18:06:00", 3600*7)
-
-            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
-            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
-            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
-            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
-            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
-
-            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
-            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
-            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
-            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
-            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
-            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
-            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
-            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
-            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
-            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
-            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
-            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
+//            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
+//            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
+//            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
+//            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
+//            screenTimeDbHelper.chartInsert(2020, 4, 26, "18:06:00", 3600*399)
+//            screenTimeDbHelper.chartInsert(2020, 4, 27, "18:06:00", 3600*399)
+//            screenTimeDbHelper.chartInsert(2020, 4, 30, "18:06:00", 3600*399)
+//            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
+//            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
+//            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
+//            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
+//            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
+//            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
+//            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
+//            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
 //
+//
+//            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
+//            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
+//            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
+//            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
+//            screenTimeDbHelper.chartInsert(2021, 4, 26, "18:06:00", 3600*3)
+//            screenTimeDbHelper.chartInsert(2021, 4, 27, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 4, 30, "18:06:00", 3600*7)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
+//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
+//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
+//            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
+//            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
+//            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
+//
+//            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
+//            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
+//
+//
+//            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 7, 14, "18:06:00", 3600*7)
+//
+//            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
+//            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
+//            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
+//            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
+//            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
+//
+//            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
+//            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
+//            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
+//            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
+//            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
+//            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
+//            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
+//            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
+//            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
+//            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
+//            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
+//            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
+
 
 
         })
@@ -272,6 +284,7 @@ class FragmentChart : Fragment() {
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse() // 주 날짜 파싱
                 Refresh(type, year, month,start,end) // 그래프 새로고침
+
 
                 //2021-06-17 기존코드 joker
 //                i -= 1
@@ -384,60 +397,129 @@ class FragmentChart : Fragment() {
         val entries = ArrayList<BarEntry>()
         var md : String
         var wd : String
+        var sm : String
+        var em : String
+
+
         if (type.equals("week")) {
-//            entries.add(BarEntry(1f, 20.0f)) //x:x축 값 놓이는 위치 y:성공시간량
 
-            if(0<month && month<10){
-                md = "0"+month
-            }else{
-                md = month.toString()
-            }
-            for (week in WeekSelectData(year,month,start,end)) {
-                var w = week.day //날짜
-                var t = week.settingTime?.let { changeTime(it) } //성공시간
+            if(sMonth!=eMonth){
+                Log.d(TAG, "Refresh: 불일치!!!!")
 
-                if(0< w!! && w<10){
-                    wd = "0"+w
-                }else{
-                    wd = w.toString()
+                if (0 < sMonth && sMonth < 10) {
+                    sm = "0" + sMonth
+                } else {
+                    sm = sMonth.toString()
                 }
+                for (sweek in SmonthSelectData(sYear, sMonth, start)) {
+                    var w = sweek.day //날짜
+                    var t = sweek.settingTime?.let { changeTime(it) } //성공시간
 
-//            if(whatDay("$year$month$w").equals("월")){
-//                entries.add(BarEntry(0f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            } else if(whatDay("$year$month$w").equals("화")){
-//                entries.add(BarEntry(1f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            }else if(whatDay("$year$month$w").equals("수")){
-//                entries.add(BarEntry(2f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            }else if(whatDay("$year$month$w").equals("목")){
-//                entries.add(BarEntry(3f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            }else if(whatDay("$year$month$w").equals("금")){
-//                entries.add(BarEntry(4f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            }else if(whatDay("$year$month$w").equals("토")){
-//                entries.add(BarEntry(5f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            }else if(whatDay("$year$month$w").equals("일")){
-//                entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-//            }
+                    if (0 < w!! && w < 10) {
+                        wd = "0" + w
+                    } else {
+                        wd = w.toString()
+                    }
 
-                if(whatDay("$year$md$wd").equals("월")){
-                    entries.add(BarEntry(0f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$md$wd").equals("화")){
-                    entries.add(BarEntry(1f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$md$wd").equals("수")){
-                    entries.add(BarEntry(2f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$md$wd").equals("목")){
-                    entries.add(BarEntry(3f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$md$wd").equals("금")){
-                    entries.add(BarEntry(4f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$md$wd").equals("토")){
-                    entries.add(BarEntry(5f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                }else if(whatDay("$year$md$wd").equals("일")){
-                    entries.add(BarEntry(6f, 1f* t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+
+                    if (whatDay("$sYear$sm$wd").equals("월")) {
+                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$sYear$sm$wd").equals("화")) {
+                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$sYear$sm$wd").equals("수")) {
+                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$sYear$sm$wd").equals("목")) {
+                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$sYear$sm$wd").equals("금")) {
+                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$sYear$sm$wd").equals("토")) {
+                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$sYear$sm$wd").equals("일")) {
+                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    }
+
+
                 }
 
 
+                if (0 < eMonth && eMonth < 10) {
+                    em = "0" + eMonth
+                } else {
+                    em = eMonth.toString()
+                }
+                for (eweek in  WeekSelectData(eYear, eMonth, 1, end)) {
+                    var w = eweek.day //날짜
+                    var t = eweek.settingTime?.let { changeTime(it) } //성공시간
+
+                    if (0 < w!! && w < 10) {
+                        wd = "0" + w
+                    } else {
+                        wd = w.toString()
+                    }
+
+
+                    if (whatDay("$eYear$em$wd").equals("월")) {
+                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$eYear$em$wd").equals("화")) {
+                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$eYear$em$wd").equals("수")) {
+                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$eYear$em$wd").equals("목")) {
+                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$eYear$em$wd").equals("금")) {
+                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$eYear$em$wd").equals("토")) {
+                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$eYear$em$wd").equals("일")) {
+                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    }
+
+
+                }
+
+                Log.d(TAG, "봐봐1: $eYear $sMonth, $eMonth")
+                SmonthSelectData(sYear, sMonth, start)
+                Log.d(TAG, "봐봐2: $eYear")
+                WeekSelectData(eYear, eMonth, 1, end)
+
+
+            }else if(sMonth==eMonth){
+                if (0 < month && month < 10) {
+                    md = "0" + month
+                } else {
+                    md = month.toString()
+                }
+                for (week in WeekSelectData(year, month, start, end)) {
+                    var w = week.day //날짜
+                    var t = week.settingTime?.let { changeTime(it) } //성공시간
+
+                    if (0 < w!! && w < 10) {
+                        wd = "0" + w
+                    } else {
+                        wd = w.toString()
+                    }
+
+
+                    if (whatDay("$year$md$wd").equals("월")) {
+                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$year$md$wd").equals("화")) {
+                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$year$md$wd").equals("수")) {
+                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$year$md$wd").equals("목")) {
+                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$year$md$wd").equals("금")) {
+                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$year$md$wd").equals("토")) {
+                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    } else if (whatDay("$year$md$wd").equals("일")) {
+                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+                    }
+
+
+                }
+
             }
-
-
         } else if (type.equals("month")) {
             MonthSelectData(year, month) //DB 데이터 가져오기
             for (month in MonthSelectData(year,month)) {
@@ -567,6 +649,14 @@ class FragmentChart : Fragment() {
         start = Integer.parseInt(date.text.toString().slice(s))
         var e = IntRange(26, 27)
         end = Integer.parseInt(date.text.toString().slice(e))
+        var sm = IntRange(6, 7)
+        sMonth = Integer.parseInt(date.text.toString().slice(sm))
+        var em = IntRange(22, 23)
+        eMonth = Integer.parseInt(date.text.toString().slice(em))
+        var sy = IntRange(0, 3)
+        sYear = Integer.parseInt(date.text.toString().slice(sy))
+        var ey = IntRange(16, 19)
+        eYear = Integer.parseInt(date.text.toString().slice(ey))
     }
 
     //시간 변환
@@ -615,6 +705,26 @@ class FragmentChart : Fragment() {
         var database = screenTimeDbHelper.writableDatabase
         //  timer 테이블 데이터 불러오기
         weeklist = screenTimeDbHelper.week(y,m,s,e)
+        return weeklist
+
+    }
+
+    //주별 시작 달 끝 달 다를 경우 시작 날짜에 대한 데이터 불러오기 메서드
+    fun SmonthSelectData(y: Int, m: Int, s:Int): ArrayList<ScreenTimeData> { // y=year, sm=start month, s=start(시작날짜)
+
+        val ad = Calendar.getInstance()
+        ad.add(Calendar.MONTH, m-1)
+        var ld:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
+
+        Log.d(TAG, "막날 $ld")
+
+
+
+        //sqlite 준비
+        val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+        var database = screenTimeDbHelper.writableDatabase
+        //  timer 테이블 데이터 불러오기
+        weeklist = screenTimeDbHelper.sMonthweek(y,m,s,ld)
         return weeklist
 
     }
@@ -687,11 +797,10 @@ class FragmentChart : Fragment() {
             6 -> dayresult = "금"
             7 -> dayresult = "토"
         }
-        println("몇요일" + dayresult)
+//        println("몇요일" + dayresult)
         return dayresult
 
     }
-
 
 
 
