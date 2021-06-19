@@ -180,8 +180,8 @@ class FragmentChart : Fragment() {
             Log.d(TAG, "lastDay:$lastDay")
             Refresh(type, year, month, 0, 0) // 그래프 새로고침
 
-            leftVisible()
-            rightVisible()
+//            leftVisible()
+//            rightVisible()
 
         })
 
@@ -225,8 +225,8 @@ class FragmentChart : Fragment() {
                 lastDay = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDay , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-                leftVisible()
-                rightVisible()
+//                leftVisible()
+//                rightVisible()
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
@@ -259,8 +259,8 @@ class FragmentChart : Fragment() {
                 lastDay = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDay , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-                rightVisible()
-                leftVisible()
+//                rightVisible()
+//                leftVisible()
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
