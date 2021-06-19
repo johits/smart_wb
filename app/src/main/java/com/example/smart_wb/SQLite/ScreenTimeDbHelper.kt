@@ -169,7 +169,7 @@ class ScreenTimeDbHelper(
             val flower:Int =cursor.getInt(7) //디폴트가 0
             val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
             result.add(data)
-            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+//            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result
@@ -193,7 +193,7 @@ class ScreenTimeDbHelper(
             val flower:Int =cursor.getInt(7) //디폴트가 0
             val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
             result.add(data)
-            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+//            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result
