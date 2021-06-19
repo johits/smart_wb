@@ -438,7 +438,7 @@ class FragmentChart : Fragment() {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
 
-
+                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries ,  ${entries.toString()}")
                 }
 
 
@@ -474,13 +474,13 @@ class FragmentChart : Fragment() {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
 
-
+                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries ,  ${entries.toString()}")
                 }
 
-                Log.d(TAG, "봐봐1: $eYear $sMonth, $eMonth")
-                SmonthSelectData(sYear, sMonth, start)
-                Log.d(TAG, "봐봐2: $eYear")
-                WeekSelectData(eYear, eMonth, 1, end)
+//                Log.d(TAG, "봐봐1: $eYear $sMonth, $eMonth")
+//                SmonthSelectData(sYear, sMonth, start)
+//                Log.d(TAG, "봐봐2: $eYear")
+//                WeekSelectData(eYear, eMonth, 1, end)
 
 
             }else if(sMonth==eMonth){
@@ -515,7 +515,6 @@ class FragmentChart : Fragment() {
                     } else if (whatDay("$year$md$wd").equals("일")) {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
-
 
                 }
 
@@ -594,7 +593,7 @@ class FragmentChart : Fragment() {
 
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
                     setGranularity(1f)
-                    setGranularityEnabled(true)
+//                    setGranularityEnabled(true)
                 }else if(type.equals("month")){
 //                    axisMaximum = 31f
 //                    granularity = 1f
