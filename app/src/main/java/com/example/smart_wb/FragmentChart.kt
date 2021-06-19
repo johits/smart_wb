@@ -23,7 +23,6 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.DateFormat
 import java.text.ParseException
@@ -61,7 +60,8 @@ class FragmentChart : Fragment() {
     var sYear: Int = 0 //이용자가 현재 보고 있는 주 시작 년
     var eYear: Int = 0 //이용자가 현재 보고 있는 주 끝 년
 
-    var lastDay: Float = 0f //달의 마지막 날짜
+    var lastDayF: Float = 0f //달의 마지막 날짜 float
+    var lastDayI : Int = 0 //달의 마지막 날짜 Int
 
     //db에 들어있는 첫번째행 년,월,일
     var firstRowYear: Int = 0
@@ -176,12 +176,12 @@ class FragmentChart : Fragment() {
             date.text = Month(0)
             monthParse() // 월 날짜 파싱
             val value = calLastDay(year, month)
-            lastDay = value.toFloat()
-            Log.d(TAG, "lastDay:$lastDay")
+            lastDayF = value.toFloat()
+            Log.d(TAG, "lastDay:$lastDayF")
             Refresh(type, year, month, 0, 0) // 그래프 새로고침
 
-//            leftVisible()
-//            rightVisible()
+            leftVisible()
+            rightVisible()
 
         })
 
@@ -219,14 +219,14 @@ class FragmentChart : Fragment() {
             } else if (type.equals("month")) {
                 m -= 1
                 date.text = Month(m)
-                Log.d(TAG, "lastDay:$lastDay , year:$year , month:$month")
+                Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 monthParse()
                 val value = calLastDay(year, month)
-                lastDay = value.toFloat()
-                Log.d(TAG, "lastDay:$lastDay , year:$year , month:$month")
+                lastDayF = value.toFloat()
+                Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-//                leftVisible()
-//                rightVisible()
+                leftVisible()
+                rightVisible()
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
@@ -253,14 +253,14 @@ class FragmentChart : Fragment() {
             } else if (type == "month") {
                 m += 1
                 date.text = Month(m)
-                Log.d(TAG, "lastDay:$lastDay , year:$year , month:$month")
+                Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 monthParse()
                 val value = calLastDay(year, month)
-                lastDay = value.toFloat()
-                Log.d(TAG, "lastDay:$lastDay , year:$year , month:$month")
+                lastDayF = value.toFloat()
+                Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-//                rightVisible()
-//                leftVisible()
+                rightVisible()
+                leftVisible()
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
@@ -326,7 +326,10 @@ class FragmentChart : Fragment() {
         val yearlabels = arrayOf(
             "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"
         )
-
+        val monthLabels = Array(lastDayI,{""})
+        for(i in 0 until lastDayI){
+            monthLabels[i]= (i+1).toString()
+        }
 
 
         val entries = ArrayList<BarEntry>()
@@ -474,7 +477,7 @@ class FragmentChart : Fragment() {
                 val y: Float = t as Float
 
                 val day: Int? = month.day
-                for (i in 1 until lastDay.toInt() + 1) {
+                for (i in 1 until lastDayF.toInt() + 1) {
                     if (day == i) {
                         entries.add(BarEntry(i * 1f, y))
                     } else {
@@ -535,7 +538,7 @@ class FragmentChart : Fragment() {
             }else if(type.equals("year")){
                 barData.setBarWidth(0.4f)
             }else if(type.equals("month")){
-                barData.setBarWidth(0.1f)
+                barData.setBarWidth(0.5f)
             }
             axisLeft.run { // Y축에 대한 속성
                 if(type.equals("week")||type.equals("month")){
@@ -559,23 +562,26 @@ class FragmentChart : Fragment() {
 //                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
                 if(type.equals("week")){
-//                    axisMaximum = 8f
+                    axisMaximum = 7f
 //                    axisMinimum = 0f
 //                    granularity = 0.3f //1일 간격
 //                    labelCount = 7  //x축 라벨 나타내는 개수
 
 
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
-                    setGranularity(1f)
-                    setGranularityEnabled(true)
+//                    setGranularity(1f) //간격
+//                    setGranularityEnabled(true)
                 } else if (type.equals("month")) {
-                    axisMaximum = lastDay
-                    granularity = 1f
+                    axisMaximum = lastDayF
+//                    granularity = 1f
 //                    labelCount =  30//x축 라벨 나타내는 개수
                     Log.d(TAG, "라벨수: $labelCount")
+                    setValueFormatter(IndexAxisValueFormatter(monthLabels))
+//                    setGranularity(1f)
+//                    setGranularityEnabled(true)
                 } else {
                     Log.d(TAG, "Refresh: 축바꾸자 엑스")
-//                    axisMaximum = 12f
+                    axisMaximum = 12f
 //                    granularity = 1f
 //                    labelCount = 12 //x축 라벨 나타내는 개수
                     setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
@@ -601,7 +607,7 @@ class FragmentChart : Fragment() {
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, 15, 0, 0, 0)//month는 -1해줘야 해당월로 인식
         var lastDay: String = cal.getActualMaximum(Calendar.DAY_OF_MONTH).toString() + "f"
-
+        lastDayI = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
         return lastDay
     }
 
