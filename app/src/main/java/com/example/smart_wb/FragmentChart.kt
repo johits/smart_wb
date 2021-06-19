@@ -125,6 +125,8 @@ class FragmentChart : Fragment() {
         //sqlite 준비
         val screenTimeDbHelper =
             ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+
+        //첫번째 데이터 , 마지막 데이터 불러오기
         var database = screenTimeDbHelper.writableDatabase
         val firstRow = screenTimeDbHelper.firstRow()
         val lastRow = screenTimeDbHelper.lastRow()
