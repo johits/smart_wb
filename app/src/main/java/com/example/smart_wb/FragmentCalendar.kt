@@ -211,6 +211,11 @@ class FragmentCalendar : Fragment() {
             val firstYear: Int? = decoList[0].year
             val firstMonth: Int? = decoList[0].month
             val firstDay: Int = 1
+            val lastYear: Int? = decoList[decoList.size-1].year
+            val lastMonth: Int? = decoList[decoList.size-1].month
+            val lastDay: Int = calLastDay(lastYear, lastMonth)
+
+            //첫번쨰 데이터 기준 최소 날짜 제한한다
             binding.calendar.state().edit()
                 .setMinimumDate(
                     CalendarDay.from(
@@ -220,8 +225,30 @@ class FragmentCalendar : Fragment() {
                     )
                 )
                 .commit()
+
+            //마지막 데이터 기준 최대 날짜 제한한다.
+            binding.calendar.state().edit()
+                .setMaximumDate(
+                    CalendarDay.from(
+                        lastYear!!,
+                        lastMonth!!,
+                        lastDay
+                    )
+                )
+                .commit()
         }
 
+    }
+
+    //그 달의 마지막 날짜 구하기
+    fun calLastDay(year: Int?, month: Int?):Int{
+        val cal = Calendar.getInstance()
+        if (year != null&&month!=null) {
+            cal.set(year,month-1, 15, 0,0,0)
+        }//month는 -1해줘야 해당월로 인식
+        var lastDay:Int= cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        return lastDay
     }
 
     //선택한 날짜 데이터 불러오기

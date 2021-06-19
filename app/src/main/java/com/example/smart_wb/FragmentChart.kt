@@ -127,16 +127,16 @@ class FragmentChart : Fragment() {
             ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
 
         //첫번째 데이터 , 마지막 데이터 불러오기
-        var database = screenTimeDbHelper.writableDatabase
-        val firstRow = screenTimeDbHelper.firstRow()
-        val lastRow = screenTimeDbHelper.lastRow()
-        val firstRowYear = firstRow[0].year
-        val firstRowMonth = firstRow[0].month
-        val firstRowDay = firstRow[0].day
-        val lastRowYear = lastRow[0].year
-        val lastRowMonth = lastRow[0].month
-        val lastRowDay = lastRow[0].day
-        Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
+//        var database = screenTimeDbHelper.writableDatabase
+//        val firstRow = screenTimeDbHelper.firstRow()
+//        val lastRow = screenTimeDbHelper.lastRow()
+//        val firstRowYear = firstRow[0].year
+//        val firstRowMonth = firstRow[0].month
+//        val firstRowDay = firstRow[0].day
+//        val lastRowYear = lastRow[0].year
+//        val lastRowMonth = lastRow[0].month
+//        val lastRowDay = lastRow[0].day
+//        Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
 
         date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
