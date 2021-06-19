@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
 
-                stack.push(position)//프래그먼트 포지션값 푸쉬한다.
+                pushStack(position)
 
                 xml_main_tablayout.getTabAt(0)?.setIcon(R.drawable.mtimer1)
                 xml_main_tablayout.getTabAt(1)?.setIcon(R.drawable.mcalendar1)
@@ -123,6 +123,13 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "스택 상단의 값 ${stack.peek()}")
             xml_main_viewpaper.setCurrentItem(stack.peek())//프래그먼트 전환
             stack.pop()
+        }
+    }
+
+    //스택크기 제한한다.
+    private fun pushStack(position:Int){
+        if(stack.size<3){
+            stack.push(position)
         }
     }
 }

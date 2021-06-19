@@ -150,6 +150,54 @@ class ScreenTimeDbHelper(
         return result
     }
 
+    //첫번쨰 행 가져오기
+    fun firstRow():ArrayList<ScreenTimeData>{
+        val result = arrayListOf<ScreenTimeData>()
+        val db :SQLiteDatabase = writableDatabase
+        val sql = "SELECT * FROM screenTime WHERE success=1 ORDER BY ROWID LIMIT 1;"
+
+        val cursor:Cursor = db.rawQuery(sql,null)
+        while (cursor.moveToNext()) {
+            val id: Int = cursor.getInt(0) //pk
+            val year: Int = cursor.getInt(1)
+            val month: Int = cursor.getInt(2)
+            val day: Int = cursor.getInt(3)
+            val time: String = cursor.getString(4) //ex 11:11:00
+            val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+            val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
+            val flower:Int =cursor.getInt(7) //디폴트가 0
+            val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            result.add(data)
+//            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+        }
+        db.close()
+        return result
+    }
+
+    //마지막 행 가져오기
+    fun lastRow():ArrayList<ScreenTimeData>{
+        val result = arrayListOf<ScreenTimeData>()
+        val db :SQLiteDatabase = writableDatabase
+        val sql = "SELECT * FROM screenTime WHERE success=1 ORDER BY ROWID DESC LIMIT 1;"
+
+        val cursor:Cursor = db.rawQuery(sql,null)
+        while (cursor.moveToNext()) {
+            val id: Int = cursor.getInt(0) //pk
+            val year: Int = cursor.getInt(1)
+            val month: Int = cursor.getInt(2)
+            val day: Int = cursor.getInt(3)
+            val time: String = cursor.getString(4) //ex 11:11:00
+            val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
+            val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
+            val flower:Int =cursor.getInt(7) //디폴트가 0
+            val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            result.add(data)
+//            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+        }
+        db.close()
+        return result
+    }
+
 
 /**    2021-06-16
     joker
