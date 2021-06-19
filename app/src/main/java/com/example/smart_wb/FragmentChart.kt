@@ -20,7 +20,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_chart.*
@@ -415,13 +414,25 @@ class FragmentChart : Fragment() {
 
     fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
 
-
-        val weeklabels = arrayOf(
-           "월", "화","수","목","금","토","일"
-        )
-        val yearlabels = arrayOf(
-            "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"
-        )
+//
+//        val weeklabels = arrayOf(
+//           "월", "화","수","목","금","토","일"
+//        )
+//        val month30labels = arrayOf(
+//            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"
+//        )
+//        val month31labels = arrayOf(
+//            "1", "", "", "", "5", "", "", "", "", "10", "", "","","","15","","","","","20","","","","","25","","","","","30",""
+//        )
+//        val month28labels = arrayOf(
+//            "1", "", "", "", "5", "", "", "", "", "10", "", "","","","15","","","","","20","","","","","25","","",""
+//        )
+//        val month29labels = arrayOf(
+//            "1", "", "", "", "5", "", "", "", "", "10", "", "","","","15","","","","","20","","","","","25","","","",""
+//        )
+//        val yearlabels = arrayOf(
+//            "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"
+//        )
 
 
 
@@ -522,10 +533,6 @@ class FragmentChart : Fragment() {
                     Log.d(TAG, "Refresh: 이게 제일 중요 $entries")
                 }
 
-//                Log.d(TAG, "봐봐1: $eYear $sMonth, $eMonth")
-//                SmonthSelectData(sYear, sMonth, start)
-//                Log.d(TAG, "봐봐2: $eYear")
-//                WeekSelectData(eYear, eMonth, 1, end)
 
 
             }else if(sMonth==eMonth){
@@ -565,6 +572,8 @@ class FragmentChart : Fragment() {
 
             }
         } else if (type.equals("month")) {
+
+
             for (month in MonthSelectData(year, month)) {
                 var t: Float? = month.settingTime?.let { changeTime(it) }
                 val y: Float = t as Float
@@ -652,7 +661,7 @@ class FragmentChart : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
                 setDrawAxisLine(true) // 축 그림
                 setDrawGridLines(false) // 격자
-//                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
+                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
                 if(type.equals("week")){
 //                    axisMaximum = 8f
@@ -661,24 +670,34 @@ class FragmentChart : Fragment() {
 //                    labelCount = 7  //x축 라벨 나타내는 개수
 
 
-                    setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
+//                    setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
                     setGranularity(1f)
                     setGranularityEnabled(true)
                 } else if (type.equals("month")) {
-                    axisMaximum = lastDay
-                    granularity = 1f
+//                    axisMaximum = lastDay
+//                    granularity = 1f
+//                                    valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 //                    labelCount =  30//x축 라벨 나타내는 개수
                     Log.d(TAG, "라벨수: $labelCount")
+//                    if(labelCount==28){
+//                        setValueFormatter(IndexAxisValueFormatter(month28labels)) //x축에 들어가는 week 값
+//                    }else if(labelCount==29){
+//                        setValueFormatter(IndexAxisValueFormatter(month29labels)) //x축에 들어가는 week 값
+//                    }else if(labelCount==30){
+//                        setValueFormatter(IndexAxisValueFormatter(month30labels)) //x축에 들어가는 week 값
+//                    }else if(labelCount==31){
+//                        setValueFormatter(IndexAxisValueFormatter(month31labels)) //x축에 들어가는 week 값
+//                    }
+                    setGranularity(1f)
+                    setGranularityEnabled(true)
                 } else {
                     Log.d(TAG, "Refresh: 축바꾸자 엑스")
 //                    axisMaximum = 12f
 //                    granularity = 1f
 //                    labelCount = 12 //x축 라벨 나타내는 개수
-                    setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
+//                    setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
                     setGranularity(0.5f)
                }
-//                textSize = 14f // 텍스트 크기
-//                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
             }
 
 
