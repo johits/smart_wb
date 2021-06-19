@@ -107,7 +107,7 @@ class FragmentChart : Fragment() {
 //            for (i in 1 until alldate)arrayOf(""){}
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             if (type.equals("week")) {
-                return days.getOrNull(value.toInt() - 1) ?: value.toString()
+                return days.getOrNull(value.toInt()-1) ?: value.toString()
             } else if (type.equals("month")) {
                 return month.getOrNull(value.toInt() - 1) ?: value.toString()
             } else {
@@ -242,7 +242,7 @@ class FragmentChart : Fragment() {
                 Days7(i)?.let { it1 -> calWeek(it1) }
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse() // 주 날짜 파싱
-                Refresh(type, year, month, start, end) // 그래프 새로고침
+                Refresh(type, year, month,start,end) // 그래프 새로고침
 
                 //2021-06-17 기존코드 joker
 //                i += 1
@@ -338,6 +338,21 @@ class FragmentChart : Fragment() {
 
         if (type.equals("week")) {
 
+
+            //x축 value 고정 시키기 위함 (x축 세팅)
+//            for (i in 0 until 7){
+//                entries.add(BarEntry(0f*i, null))
+//                Log.d(TAG, "Refresh: 횟수 $i")
+//            }
+            entries.add(BarEntry(0f, null))
+            entries.add(BarEntry(1f, null))
+            entries.add(BarEntry(2f, null))
+            entries.add(BarEntry(3f, null))
+            entries.add(BarEntry(4f, null))
+            entries.add(BarEntry(5f, null))
+            entries.add(BarEntry(6f, null))
+
+
             if(sMonth!=eMonth){
                 Log.d(TAG, "Refresh: 불일치!!!!")
 
@@ -392,7 +407,6 @@ class FragmentChart : Fragment() {
                         wd = w.toString()
                     }
 
-
                     if (whatDay("$eYear$em$wd").equals("월")) {
                         entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     } else if (whatDay("$eYear$em$wd").equals("화")) {
@@ -409,7 +423,7 @@ class FragmentChart : Fragment() {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
 
-                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries ,  ${entries.toString()}")
+                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries")
                 }
 
 //                Log.d(TAG, "봐봐1: $eYear $sMonth, $eMonth")
@@ -470,6 +484,19 @@ class FragmentChart : Fragment() {
 
             }
         } else if (type.equals("year")) {
+            //x축 고정 세팅하기 위함
+            entries.add(BarEntry(0f, null))
+            entries.add(BarEntry(1f, null))
+            entries.add(BarEntry(2f, null))
+            entries.add(BarEntry(3f, null))
+            entries.add(BarEntry(4f, null))
+            entries.add(BarEntry(5f, null))
+            entries.add(BarEntry(6f, null))
+            entries.add(BarEntry(7f, null))
+            entries.add(BarEntry(8f, null))
+            entries.add(BarEntry(9f, null))
+            entries.add(BarEntry(10f, null))
+            entries.add(BarEntry(11f, null))
 
             for (year in YearSelectData(year)) {
                 var m = year.month
@@ -493,7 +520,9 @@ class FragmentChart : Fragment() {
 
         val dataSet: ArrayList<IBarDataSet> = ArrayList()
         dataSet.add(set)
+
         val data = BarData(dataSet)
+        data.setDrawValues(false)
 
         chart.run {
             this.data = data //차트의 데이터를 data로 설정해줌.
@@ -534,6 +563,7 @@ class FragmentChart : Fragment() {
 //                    axisMinimum = 0f
 //                    granularity = 0.3f //1일 간격
 //                    labelCount = 7  //x축 라벨 나타내는 개수
+
 
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
                     setGranularity(1f)
