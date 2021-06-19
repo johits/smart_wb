@@ -20,6 +20,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_chart.*
@@ -664,10 +665,7 @@ class FragmentChart : Fragment() {
 
 
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
-//                    setGranularity(1f) //간격
-//                    setGranularityEnabled(true)
-//                    setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
-                    setGranularity(1f)
+                    setGranularity(1f)//간격
                     setGranularityEnabled(true)
                 } else if (type.equals("month")) {
                     axisMaximum = lastDayF
@@ -675,17 +673,6 @@ class FragmentChart : Fragment() {
 //                    labelCount =  30//x축 라벨 나타내는 개수
                     Log.d(TAG, "라벨수: $labelCount")
                     setValueFormatter(IndexAxisValueFormatter(monthLabels))
-//                    setGranularity(1f)
-//                    setGranularityEnabled(true)
-//                    if(labelCount==28){
-//                        setValueFormatter(IndexAxisValueFormatter(month28labels)) //x축에 들어가는 week 값
-//                    }else if(labelCount==29){
-//                        setValueFormatter(IndexAxisValueFormatter(month29labels)) //x축에 들어가는 week 값
-//                    }else if(labelCount==30){
-//                        setValueFormatter(IndexAxisValueFormatter(month30labels)) //x축에 들어가는 week 값
-//                    }else if(labelCount==31){
-//                        setValueFormatter(IndexAxisValueFormatter(month31labels)) //x축에 들어가는 week 값
-//                    }
                     setGranularity(1f)
                     setGranularityEnabled(true)
                 } else {
@@ -721,10 +708,6 @@ class FragmentChart : Fragment() {
     //첫번째행 년,월,일 , 마지막행 년,월,일 불러오기
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
-
-//        screenTimeDbHelper.chartInsert(2020, 1,1, "12:00:00", 7200)
-//        screenTimeDbHelper.chartInsert(2021, 7,1, "12:00:00", 7200)
-//        screenTimeDbHelper.chartInsert(2022, 12,1, "12:00:00", 7200)
 
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
