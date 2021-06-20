@@ -285,7 +285,7 @@ class FragmentCalendar : Fragment() {
         val result: String?
         val hour = Math.floorDiv(settingTime, 3600)
         val min = Math.floorMod(settingTime, 3600) / 60
-        result = "%1$02d시간%2$02d분".format(hour, min)
+        result = "%1$02d시간 %2$02d분".format(hour, min)
 
         return result
     }
