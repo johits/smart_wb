@@ -470,7 +470,6 @@ class FragmentChart : Fragment() {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
 
-                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries ,  ${entries.toString()}")
                 }
 
 
@@ -657,7 +656,6 @@ class FragmentChart : Fragment() {
                     setGranularity(1f)
                     setGranularityEnabled(true)
                 } else {
-                    Log.d(TAG, "Refresh: 축바꾸자 엑스")
                     axisMaximum = 12f
 //                    granularity = 1f
 //                    labelCount = 12 //x축 라벨 나타내는 개수
@@ -707,26 +705,22 @@ class FragmentChart : Fragment() {
 
         if(type.equals("week")){
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
-                if (firstRowYear < sYear) {
-                    left.visibility = View.VISIBLE
-                } else if (firstRowYear == sYear) {
-                    if (firstRowMonth < sMonth) {
-                        left.visibility = View.VISIBLE
-                    } else if (firstRowMonth == sMonth) {
-                        if (firstRowDay < sDay-7) { //ex sDay =27일 sDay-7 = 20일 fRD= 14일
-                            left.visibility = View.VISIBLE
-                        }else if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){
-                            left.visibility = View.VISIBLE
-                            value==1
-                        }else if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==1){
-                            left.visibility = View.GONE
-                            value==0
-                        } else if(firstRowDay==sDay||firstRowDay==sDay-7){
-                            left.visibility = View.GONE
+                        if (firstRowMonth == sMonth) {
+                            Log.d(TAG, "작동1")
+                            if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
+                                Log.d(TAG, "작동2")
+                                left.visibility = View.VISIBLE
+                                value=1
+                                Log.d(TAG, "활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
+                            }else if(firstRowDay>sDay&& value==1){
+                                left.visibility = View.GONE
+                                value=0
+                                Log.d(TAG, "비활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
+                            } else if(firstRowDay==sDay||firstRowDay==sDay-7){
+                                left.visibility = View.GONE
+                                Log.d(TAG, "leftVisible: 비활성")
+                            }
                         }
-                    }
-                }
-
             }else{
                 left.visibility = View.GONE
             }

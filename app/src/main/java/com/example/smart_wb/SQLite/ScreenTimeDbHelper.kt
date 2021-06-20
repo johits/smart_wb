@@ -268,16 +268,14 @@ class ScreenTimeDbHelper(
     //주 단위 그래프 데이터 모두 불러오기
     @SuppressLint("Recycle")
     fun week(y: Int, m:Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y = year, m = month, s = start(시작날짜)), e = end(끝날짜)
-
-        Log.d(TAG, "주 데이터 가져오기2")
         val result = arrayListOf<ScreenTimeData>()
         val db: SQLiteDatabase = writableDatabase
 
-        Log.d(TAG, "주데이터: y:$y m:$m s $s e $e")
+//        Log.d(TAG, "주데이터: y:$y m:$m s $s e $e")
         val sql ="SELECT day, sum(settingTime) FROM screenTime WHERE success='1' and year=$y and month=$m and day>=$s and day<=$e group by day;"
 
         val cursor = writableDatabase.rawQuery(sql, null)
-        Log.d(TAG, "week: ${cursor.count}")
+//        Log.d(TAG, "week: ${cursor.count}")
         while (cursor.moveToNext()) {
             val day: Int = cursor.getInt(0)
             val settingTime: Int =
@@ -286,10 +284,10 @@ class ScreenTimeDbHelper(
             var data: ScreenTimeData =
                 ScreenTimeData(null, null, null, day, null, settingTime, null, null)
             result?.add(data)
-            Log.d(
-                "일주일만 가지고 오기",
-                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
-            )
+//            Log.d(
+//                "일주일만 가지고 오기",
+//                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+//            )
         }
         db.close()
         return result
