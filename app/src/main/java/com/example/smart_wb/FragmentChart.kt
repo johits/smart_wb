@@ -707,26 +707,22 @@ class FragmentChart : Fragment() {
 
         if(type.equals("week")){
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
-                Log.d(TAG, "leftVisible: 첫년 $firstRowYear 첫달 $firstRowMonth 첫 일 $firstRowDay")
                 if (firstRowYear < sYear) {
-                    Log.d(TAG, "leftVisible: 첫년 $firstRowYear 현재년 $sYear")
                     left.visibility = View.VISIBLE
                 } else if (firstRowYear == sYear) {
-                    Log.d(TAG, "leftVisible: 첫년 $firstRowYear 현재년2 $sYear")
                     if (firstRowMonth < sMonth) {
-                        Log.d(TAG, "leftVisible: 첫달 $firstRowMonth 현재달3 $sMonth")
                         left.visibility = View.VISIBLE
                     } else if (firstRowMonth == sMonth) {
-                        Log.d(TAG, "leftVisible: 첫달 $firstRowMonth 현재달4 $sMonth")
-                        left.visibility = View.GONE
-                        if (firstRowDay < sDay && value ==0) {
-                            Log.d(TAG, "leftVisible: 첫달 $firstRowDay 현재날짜 $sDay")
+                        if (firstRowDay < sDay-7) { //ex sDay =27일 sDay-7 = 20일 fRD= 14일
                             left.visibility = View.VISIBLE
-                            value = 1
-                            Log.d(TAG, "leftVisible: 비활성화 전")
-                        }else if(firstRowDay < sDay&&value==1){
+                        }else if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){
+                            left.visibility = View.VISIBLE
+                            value==1
+                        }else if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==1){
                             left.visibility = View.GONE
-                            Log.d(TAG, "leftVisible: 비활성화성공")
+                            value==0
+                        } else if(firstRowDay==sDay||firstRowDay==sDay-7){
+                            left.visibility = View.GONE
                         }
                     }
                 }
@@ -769,7 +765,6 @@ class FragmentChart : Fragment() {
     fun rightVisible() {
 
         if(type.equals("week")){
-            left.visibility = View.VISIBLE
             if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
                 if (lastRowYear < eYear) {
                     right.visibility = View.VISIBLE
@@ -777,7 +772,11 @@ class FragmentChart : Fragment() {
                     if (lastRowMonth < eMonth) {
                         right.visibility = View.VISIBLE
                     } else if (lastRowMonth == eMonth) {
-                        right.visibility = View.GONE
+                        if (lastRowDay < eDay||lastRowDay==eDay) { //ex eDay =11일 eDay+7 = 18일 lRD= 14일
+                            right.visibility = View.GONE
+                        }else{
+                            right.visibility = View.VISIBLE
+                        }
                     }
                 }
 
