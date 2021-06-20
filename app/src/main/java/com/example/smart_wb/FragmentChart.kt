@@ -117,21 +117,22 @@ class FragmentChart : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadFirstLast()
+        //차트 첫화면 세팅
+        loadFirstLast() //사용자 첫, 끝 데이터 가져오기
+        toDays()?.let { calWeek(it) } //이번 주 시작일자 끝일자 구해주는 메서드
+        date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
+        weekParse() //주 날짜 파싱
+        Refresh(type, year, month, start, end) //그래프 새로고침
+        leftVisible() //이전 버튼 활성화
+        rightVisible() //이후 버튼 활성화
 
 
-//        date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
-                toDays()?.let {calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
-                date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
-                weekParse()
-                Refresh(type, year, month,start,end)
-                leftVisible()
-                rightVisible()
+        //출시 전까지 더미데이터 쌓는 버튼으로 사용
+        chart_text.setOnClickListener {
+        dummy() //더미데이터 쌓는 메서드
+        }
 
-//        date.text =    toDays()?.let { calWeek(it) } + " ~ " + Days7(1) //기본 날짜 세팅 (주)
-
-
-
+        //주 버튼 클릭 이벤트
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
@@ -139,9 +140,8 @@ class FragmentChart : Fragment() {
             type = "week"
             toDays()?.let {calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
             date.text = startDt + " ~ " + endDt
-//            date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
             weekParse() // 주 날짜 파싱
-            Refresh(type, year, month,start,end) // 그래프 새로고침
+            Refresh(type, year, month,start,end) //그래프 새로고침
             leftVisible()
             rightVisible()
 
@@ -174,103 +174,6 @@ class FragmentChart : Fragment() {
             i=0
             m=0
 
-            //sqlite 준비
-            val screenTimeDbHelper =
-                ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
-            var database = screenTimeDbHelper.writableDatabase
-
-
-//            //반복문 이용 더미데이터 인서트
-//            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
-//            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
-//            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
-//            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
-//            screenTimeDbHelper.chartInsert(2020, 4, 26, "18:06:00", 3600*399)
-//            screenTimeDbHelper.chartInsert(2020, 4, 27, "18:06:00", 3600*399)
-//            screenTimeDbHelper.chartInsert(2020, 4, 30, "18:06:00", 3600*399)
-//            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
-//            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
-//            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
-//            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
-//            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
-//            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
-//            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
-//            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
-//            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
-//            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
-//            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
-//            screenTimeDbHelper.chartInsert(2021, 4, 26, "18:06:00", 3600*3)
-//            screenTimeDbHelper.chartInsert(2021, 4, 27, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 4, 30, "18:06:00", 3600*7)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
-//            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
-//            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
-//            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
-//            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
-//            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
-//            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
-//            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
-//
-//            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
-//            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
-
-
-//            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 7, 18, "18:06:00", 3600*7)
-//
-//            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
-//            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
-//            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
-//            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
-//            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
-//
-//            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
-//            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
-//            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
-//            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
-//            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
-//            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
-//            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
-//            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
-//            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
-//            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
-//            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
-//            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
-
-
 
         })
 
@@ -284,8 +187,6 @@ class FragmentChart : Fragment() {
             Refresh(type, year, 0,0,0) // 그래프 새로고침
             leftVisible()
             rightVisible()
-//            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
-//            chart.invalidate() // 새로 고침
 
             //일, 월, 년 인덱스값 초기화
             i=0
@@ -301,11 +202,7 @@ class FragmentChart : Fragment() {
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse() // 주 날짜 파싱
                 Refresh(type, year, month,start,end) // 그래프 새로고침
-                //2021-06-17 기존코드 joker
-//                i -= 1
-//                date.text = Days7(i) + " ~ " + Days7(i + 1)
-//                weekParse() // 주 날짜 파싱
-//                Refresh(type, year, month,start,end) // 그래프 새로고침
+
 
             } else if (type.equals("month")) {
                 m -= 1
@@ -338,11 +235,6 @@ class FragmentChart : Fragment() {
                 weekParse() // 주 날짜 파싱
                 Refresh(type, year, month,start,end) // 그래프 새로고침
 
-                //2021-06-17 기존코드 joker
-//                i += 1
-//                date.text = Days7(i) + " ~ " + Days7(i + 1)
-//                weekParse() // 주 날짜 파싱
-//                Refresh(type, year, month,start,end) // 그래프 새로고침
 
             } else if (type == "month") {
                 m += 1
@@ -363,48 +255,40 @@ class FragmentChart : Fragment() {
                 Refresh(type, year, 0,0,0)
 
             }
-            leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
-            rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
+            leftVisible()
+            rightVisible()
         }
 
 
     }
 
 
-//    fun Days7(i: Int): String? {
-//        //주 단위 계산 메서드
-//        val week = Calendar.getInstance()
-//        week.add(Calendar.DATE, 7 * i)
-//        return SimpleDateFormat("yyyy년 MM월 dd일").format(week.time)
-//    }
 
+    //주 단위 계산 메서드
     fun Days7(i: Int):String?{
-        //주 단위 계산 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 7 * i)
         return SimpleDateFormat("yyyy-MM-dd").format(week.time)
     }
 
-
-
-
+    //오늘 날짜 구하기 메서드
     fun toDays(): String? {
-        //오늘 날짜 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 0)
         return SimpleDateFormat("yyyy-MM-dd").format(week.time)
     }
 
+    // 월 단위 계산 메서드
     fun Month(m: Int): String? {
-        // 월 단위 계산 메서드
         val df: DateFormat = SimpleDateFormat("yyyy년 MM월")
         val cal = Calendar.getInstance()
         cal.add(Calendar.MONTH, m)
         return df.format(cal.time)
     }
 
+
+    // 년 단위 계산 메서드
     fun Year(y: Int): String? {
-        // 년 단위 계산 메서드
         val df: DateFormat = SimpleDateFormat("yyyy년")
         val cal = Calendar.getInstance()
         cal.add(Calendar.YEAR, y)
@@ -413,10 +297,7 @@ class FragmentChart : Fragment() {
 
 
     //그래프 새로고침 메서드
-
     fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
-
-
         val weeklabels = arrayOf(
            "월", "화","수","목","금","토","일"
         )
@@ -428,7 +309,6 @@ class FragmentChart : Fragment() {
             monthLabels[i]= (i+1).toString()
         }
 
-
         val entries = ArrayList<BarEntry>()
         var md : String
         var wd : String
@@ -438,12 +318,7 @@ class FragmentChart : Fragment() {
 
         if (type.equals("week")) {
 
-
             //x축 value 고정 시키기 위함 (x축 세팅)
-//            for (i in 0 until 7){
-//                entries.add(BarEntry(0f*i, null))
-//                Log.d(TAG, "Refresh: 횟수 $i")
-//            }
             entries.add(BarEntry(0f, null))
             entries.add(BarEntry(1f, null))
             entries.add(BarEntry(2f, null))
@@ -454,8 +329,6 @@ class FragmentChart : Fragment() {
 
 
             if(sMonth!=eMonth){
-                Log.d(TAG, "Refresh: 불일치!!!!")
-
                 if (0 < sMonth && sMonth < 10) {
                     sm = "0" + sMonth
                 } else {
@@ -470,7 +343,6 @@ class FragmentChart : Fragment() {
                     } else {
                         wd = w.toString()
                     }
-
 
                     if (whatDay("$sYear$sm$wd").equals("월")) {
                         entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
@@ -571,9 +443,9 @@ class FragmentChart : Fragment() {
                 val y: Float = t as Float
 
                 val day: Int? = month.day
-                for (i in 1 until lastDayF.toInt() + 1) {
-                    if (day == i) {
-                        entries.add(BarEntry(i * 1f, y))
+                for (i in 0 until lastDayF.toInt() + 1) {
+                    if (day == i+1) {
+                        entries.add(BarEntry(i*1f * 1f, y))
                     } else {
                         entries.add(BarEntry(i * 1f, 0f))
                     }
@@ -602,13 +474,10 @@ class FragmentChart : Fragment() {
                 for(i in 1 until 13){
                     if(i==m){
                         entries.add(BarEntry(1f*(i-1), 1f* t!!))
-//                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
                     }else{
 
                     }
                 }
-
-//                entries.add(BarEntry(1f* m!!, 1f *t!!)) //x:x축 값 놓이는 위치 y:성공시간량
             }
 
         }
@@ -619,7 +488,7 @@ class FragmentChart : Fragment() {
         dataSet.add(set)
 
         val data = BarData(dataSet)
-        data.setDrawValues(false)
+        data.setDrawValues(false) //막대 위에 숫자 표시
 
         chart.run {
             this.data = data //차트의 데이터를 data로 설정해줌.
@@ -653,39 +522,29 @@ class FragmentChart : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
                 setDrawAxisLine(true) // 축 그림
                 setDrawGridLines(false) // 격자
-//                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
                 if(type.equals("week")){
                     axisMaximum = 7f
-//                    axisMinimum = 0f
-//                    granularity = 0.3f //1일 간격
-//                    labelCount = 7  //x축 라벨 나타내는 개수
-
-
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
-//                    setGranularity(1f) //간격
-//                    setGranularityEnabled(true)
                 } else if (type.equals("month")) {
                     axisMaximum = lastDayF
-//                    granularity = 1f
-//                    labelCount =  30//x축 라벨 나타내는 개수
-                    Log.d(TAG, "라벨수: $labelCount")
+                        labelCount = 8 //x축 라벨 나타내는 개수
+                        granularity = 4f // x축 라벨 간격 4f면 (ex: 1,5,9,13 ....)
                     setValueFormatter(IndexAxisValueFormatter(monthLabels))
-//                    setGranularity(1f)
-//                    setGranularityEnabled(true)
-                } else {
-                    axisMaximum = 12f
-//                    granularity = 1f
-//                    labelCount = 12 //x축 라벨 나타내는 개수
+
+                } else if(type.equals("year")) {
+                    axisMaximum = 12f //최대 나타낼 막대수
+                    granularity = 1f // 간격 설정
+                    labelCount = 12 //x축 라벨 나타내는 개수
                     setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
-                    setGranularity(0.5f)
                }
             }
 
             axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
-            setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
+            setTouchEnabled(true) // 그래프 터치해도 아무 변화없게 막음
             animateY(1000) // 밑에서부터 올라오는 애니매이션 적용
             legend.isEnabled = false //차트 범례 설정(차트 밑에 막대가 무엇인지 설명하는 것)
+
             chart.invalidate();                                 // 새로 고침
         }
     }
@@ -702,14 +561,6 @@ class FragmentChart : Fragment() {
     //첫번째행 년,월,일 , 마지막행 년,월,일 불러오기
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
-
-//        screenTimeDbHelper.chartInsert(2020,7,15, "22:00:00", 20000)
-//        screenTimeDbHelper.chartInsert(2021,5,15, "22:00:00", 20000)
-//        screenTimeDbHelper.chartInsert(2021,6,20, "22:00:00", 20000)
-//        screenTimeDbHelper.chartInsert(2021,10,21, "22:00:00", 20000)
-
-        Log.d(TAG, "첫,끝 데이터 가져오기 로드")
-        //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
         val lastRow = screenTimeDbHelper.lastRow()
         if (firstRow.size > 0 && lastRow.size > 0) {
@@ -720,10 +571,11 @@ class FragmentChart : Fragment() {
             lastRowMonth = lastRow[0].month!!
             lastRowDay = lastRow[0].day!!
         }
-        //Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
     }
 
-    //왼쪽버튼 데이터 유무에 따른 visible or gone
+
+
+    //왼쪽버튼 데이터 유무에 따른 VISIBLE or INVISIBLE
     fun leftVisible() {
 
         if(type.equals("week")){
@@ -732,20 +584,16 @@ class FragmentChart : Fragment() {
                 left2.visibility = View.INVISIBLE
                         if (firstRowMonth == sMonth) {
                             if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
-                                Log.d(TAG, "작동2")
                                 left.visibility = View.VISIBLE
                                 left2.visibility = View.INVISIBLE
                                 value=1
-                                Log.d(TAG, "활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
                             }else if(firstRowDay>sDay&& value==1){
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                                 value=0
-                                Log.d(TAG, "비활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
                             } else if(firstRowDay==sDay){
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
-                                Log.d(TAG, "leftVisible: 비활성")
                             }
                         }
             }else{
@@ -758,14 +606,12 @@ class FragmentChart : Fragment() {
             if (firstRowYear == year) {
                         left.visibility = View.INVISIBLE
                 left2.visibility = View.VISIBLE
-                Log.d(TAG, "leftVisible: 비활성 년도 왼쪽")
                 }else{
                 left.visibility = View.VISIBLE
                 left2.visibility = View.INVISIBLE
             }
             }
         }else if(type.equals("month")){
-            Log.d(TAG, "왼쪽 버튼// 첫번째 달:$firstRowMonth , 현재 달:$month")
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
                 if (firstRowYear < year) {
                     left.visibility = View.VISIBLE
@@ -819,14 +665,12 @@ class FragmentChart : Fragment() {
                 if (lastRowYear == year) {
                     right.visibility = View.INVISIBLE
                     right2.visibility = View.VISIBLE
-                    Log.d(TAG, "leftVisible: 비활성 년도 오른쪽")
                 }else{
                     right.visibility = View.VISIBLE
                     right2.visibility = View.INVISIBLE
                 }
             }
         }else if(type.equals("month")){
-            Log.d(TAG, "오른쪽 버튼 // 마지막 달:$lastRowMonth , 현재 달:$month")
             if (lastRowYear != 0) {
                 if (lastRowYear > year) {
                     right.visibility = View.VISIBLE
@@ -946,7 +790,6 @@ class FragmentChart : Fragment() {
         ad.add(Calendar.MONTH, m-1)
         var ld:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
 
-        Log.d(TAG, "막날 $ld")
 
 
 
@@ -959,29 +802,6 @@ class FragmentChart : Fragment() {
 
     }
 
-    //일수 구하기 메서드
-    fun alldate(): ArrayList<String> {
-        var result : Int = 0
-        var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
-        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
-        var b = Integer.parseInt(date.text.toString().slice(ran))
-
-
-        val ad = Calendar.getInstance()
-        ad.add(Calendar.MONTH, b-1)
-        var dayOfMonth:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
-
-        Log.d(TAG, "막날 $dayOfMonth")
-//        reseult = Integer.parseInt(ad.set(Calendar.DAY_OF_MONTH, dayOfMonth))
-
-        val month = arrayListOf<String>()
-        for(i in 1 until dayOfMonth){
-           month[i-1]=i.toString()
-        }
-        return month
-    }
-
-
 
 
     //일주일 계산하기(eventDate = "2021-06-07")
@@ -991,15 +811,14 @@ class FragmentChart : Fragment() {
         cal [dateArray[0].toInt(), dateArray[1].toInt() - 1] =
             dateArray[2].toInt()
         var inputDt = cal.getTime() //입력된 날짜
-        Log.d(TAG, "calWeek: 입력된 날짜 ${cal.getTime()}")
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
         var inputSunday = cal.getTime()
-        System.out.println("입력된 날짜의 일요일  : " + cal.getTime());
+//        System.out.println("입력된 날짜의 일요일  : " + cal.getTime());
         if(inputDt==inputSunday){
             cal.add(Calendar.DATE, -7);
             cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
-            System.out.println("입력된 날짜의 이전주의 일요일 : " + cal.getTime());
+//            System.out.println("입력된 날짜의 이전주의 일요일 : " + cal.getTime());
         }
         // 일주일의 첫날을 월요일로 지정한다
          cal.firstDayOfWeek = Calendar.MONDAY
@@ -1014,7 +833,7 @@ class FragmentChart : Fragment() {
          cal.add(Calendar.DAY_OF_MONTH, 6)
         // 해당 주차의 마지막 날짜
          endDt = sf.format(cal.time)
-         Log.d(TAG, "특정 날짜 = [$eventDate] >> 시작 날짜 = [$startDt], 종료 날짜 = [$endDt]")
+//         Log.d(TAG, "특정 날짜 = [$eventDate] >> 시작 날짜 = [$startDt], 종료 날짜 = [$endDt]")
 
 
     }
@@ -1050,7 +869,105 @@ class FragmentChart : Fragment() {
 
     }
 
+fun dummy(){
+    //sqlite 준비
+    val screenTimeDbHelper =
+        ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+    var database = screenTimeDbHelper.writableDatabase
 
+
+            //반복문 이용 더미데이터 인서트
+            screenTimeDbHelper.chartInsert(2020, 1, 14, "18:06:00", 3600*502)
+            screenTimeDbHelper.chartInsert(2020, 2, 14, "18:06:00", 3600*684)
+            screenTimeDbHelper.chartInsert(2020, 3, 14, "18:06:00", 3600*307)
+            screenTimeDbHelper.chartInsert(2020, 4, 14, "18:06:00", 3600*399)
+            screenTimeDbHelper.chartInsert(2020, 4, 26, "18:06:00", 3600*399)
+            screenTimeDbHelper.chartInsert(2020, 4, 27, "18:06:00", 3600*399)
+            screenTimeDbHelper.chartInsert(2020, 4, 30, "18:06:00", 3600*399)
+            screenTimeDbHelper.chartInsert(2020, 5, 14, "18:06:00", 3600*523)
+            screenTimeDbHelper.chartInsert(2020, 6, 14, "18:06:00", 3600*419)
+            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
+            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
+            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
+
+            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
+            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
+            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
+
+
+            screenTimeDbHelper.chartInsert(2021, 1, 14, "18:06:00", 3600*400)
+            screenTimeDbHelper.chartInsert(2021, 2, 14, "18:06:00", 3600*207)
+            screenTimeDbHelper.chartInsert(2021, 3, 14, "18:06:00", 3600*502)
+            screenTimeDbHelper.chartInsert(2021, 4, 14, "18:06:00", 3600*309)
+            screenTimeDbHelper.chartInsert(2021, 4, 26, "18:06:00", 3600*3)
+            screenTimeDbHelper.chartInsert(2021, 4, 27, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 4, 30, "18:06:00", 3600*7)
+
+
+            screenTimeDbHelper.chartInsert(2021, 5, 17, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 20, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 24, "18:06:00", 7200)
+            screenTimeDbHelper.chartInsert(2021, 5, 28, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 30, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 5, 31, "18:06:00", 7200)
+
+
+            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 1, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
+
+
+            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
+            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
+
+
+            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 15, "18:06:00", 3600*2)
+            screenTimeDbHelper.chartInsert(2021, 6, 16, "18:06:00", 3600*3)
+            screenTimeDbHelper.chartInsert(2021, 6, 17, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 6, 18, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 6, 19, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 6, 20, "18:06:00", 3600*7)
+
+            screenTimeDbHelper.chartInsert(2021, 6, 21, "18:06:00", 3600*7)
+            screenTimeDbHelper.chartInsert(2021, 6, 22, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 6, 23, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 6, 24, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 6, 25, "18:06:00", 3600*3)
+            screenTimeDbHelper.chartInsert(2021, 6, 26, "18:06:00", 3600*2)
+            screenTimeDbHelper.chartInsert(2021, 6, 27, "18:06:00", 3600*1)
+
+            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
+            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
+
+
+            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 7, 18, "18:06:00", 3600*7)
+
+            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
+            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
+            screenTimeDbHelper.chartInsert(2021, 10, 14, "18:06:00", 3600*25)
+            screenTimeDbHelper.chartInsert(2021, 11, 14, "18:06:00", 3600*40)
+            screenTimeDbHelper.chartInsert(2021, 12, 14, "18:06:00", 3600*100)
+
+            screenTimeDbHelper.chartInsert(2022, 1, 14, "18:06:00", 3600*130)
+            screenTimeDbHelper.chartInsert(2022, 2, 14, "18:06:00", 3600*330)
+            screenTimeDbHelper.chartInsert(2022, 3, 14, "18:06:00", 3600*230)
+            screenTimeDbHelper.chartInsert(2022, 4, 14, "18:06:00", 3600*425)
+            screenTimeDbHelper.chartInsert(2022, 5, 14, "18:06:00", 3600*255)
+            screenTimeDbHelper.chartInsert(2022, 6, 14, "18:06:00", 3600*600)
+            screenTimeDbHelper.chartInsert(2022, 7, 14, "18:06:00", 3600*702)
+            screenTimeDbHelper.chartInsert(2022, 8, 14, "18:06:00", 3600*458)
+            screenTimeDbHelper.chartInsert(2022, 9, 14, "18:06:00", 3600*432)
+            screenTimeDbHelper.chartInsert(2022, 10, 14, "18:06:00", 3600*297)
+            screenTimeDbHelper.chartInsert(2022, 11, 14, "18:06:00", 3600*683)
+            screenTimeDbHelper.chartInsert(2022, 12, 14, "18:06:00", 3600*702)
+
+}
 
 
 
@@ -1065,6 +982,8 @@ class FragmentChart : Fragment() {
             }
     }
 }
+
+
 
 
 
