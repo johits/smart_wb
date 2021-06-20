@@ -619,10 +619,6 @@ class FragmentChart : Fragment() {
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
 
-        screenTimeDbHelper.chartInsert(2020, 1,1, "12:00:00", 7200)
-        screenTimeDbHelper.chartInsert(2021, 7,1, "12:00:00", 7200)
-        screenTimeDbHelper.chartInsert(2022, 12,1, "12:00:00", 7200)
-
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
         val lastRow = screenTimeDbHelper.lastRow()
