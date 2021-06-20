@@ -11,7 +11,6 @@ class AdapterMainFragment(fm : FragmentManager, private val fragmentCount : Int)
             1 -> FragmentCalendar()
             2 -> FragmentChart()
             3 -> FragmentItem()
-//            4 -> FragmentSetting()
             else -> FragmentMainTimer()
         }
     }
