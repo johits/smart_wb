@@ -1,8 +1,10 @@
 package com.example.smart_wb
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.text.format.DateFormat.format
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +17,12 @@ import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.databinding.FragmentCalendarBinding
+import com.google.gson.internal.bind.util.ISO8601Utils.format
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
+import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter
+import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,6 +65,7 @@ class FragmentCalendar : Fragment() {
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,12 +74,15 @@ class FragmentCalendar : Fragment() {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        initRecycler()//상세보기 리사이클러뷰
+
         //오늘날짜 표시
         decorateToday()
         //도전 기록 있는 날짜 데코하기
         screenTimeDataDeco()
-
-        binding.calendar.setHeaderTextAppearance(getCurrentDay())
+//        val format = SimpleDateFormat("yyyy MM")
+//        val titleFormatter:TitleFormatter
+//        binding.calendar.setTitleFormatter()
 
         binding.calendar.setOnDateChangedListener { widget, date, selected ->
 //            binding.calendar.state().edit()
@@ -131,8 +141,7 @@ class FragmentCalendar : Fragment() {
             binding.calendar.state().edit()
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit()
-            binding.linearParent.visibility = View.GONE
-            binding.tvNoData.visibility = View.GONE
+           decorateToday()
         }
 
         return view
@@ -291,6 +300,7 @@ class FragmentCalendar : Fragment() {
     }
 
     //오늘날짜 표시
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun decorateToday() {
         val timeStamp = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
@@ -302,9 +312,32 @@ class FragmentCalendar : Fragment() {
         val parts = today.split("-").toTypedArray()
         val year: Int = parts[0].toInt()
         val month: Int = parts[1].toInt()
-        val date: Int = parts[2].toInt()
-        val calDay = CalendarDay.from(year, month, date)
+        val day: Int = parts[2].toInt()
+        val calDay = CalendarDay.from(year, month, day)
 
         binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
+
+        //현재날짜 데이터 불러오기
+        dataList = selectDate(year,month,day)
+        if (dataList.size == 0) {//데이터 없을 때
+            binding.linearParent.visibility = View.GONE//8
+            binding.tvNoData.visibility = View.VISIBLE//0
+            binding.linearExplain.visibility = View.GONE
+            if (binding.btnShowDetail.text.toString()
+                    .equals(getString(R.string.calendar_btn_detail_close))
+            ) {
+                binding.calendar.state().edit()
+                    .setCalendarDisplayMode(CalendarMode.MONTHS)
+                    .commit()
+                binding.btnShowDetail.text = getString(R.string.calendar_btn_detail_show)
+            }
+        } else { //데이터 있을 때
+            binding.linearParent.visibility = View.VISIBLE
+            binding.tvNoData.visibility = View.GONE
+            binding.recycler.smoothScrollToPosition(0)
+//                binding.recycler.visibility = View.VISIBLE
+        }
+        calendarAdapter.replaceList(dataList)
+        calculateSum() //날짜에 해당하는 총도전시간, 성공시간, 획득꽃 계산
     }
 }

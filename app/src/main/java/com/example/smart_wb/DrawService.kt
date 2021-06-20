@@ -31,7 +31,7 @@ class DrawService : Service() {
         const val MSG_SEND_TO_SERVICE = 3
         const val MSG_SEND_TO_ACTIVITY = 4
 
-        const val timerDelay: Long = 10 //타이머 속도 상수값
+        const val timerDelay: Long = 1000 //타이머 속도 상수값
     }
 
     private var mClient: Messenger? = null //activity 에서 가져온 메신저
