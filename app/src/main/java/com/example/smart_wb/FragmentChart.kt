@@ -148,6 +148,7 @@ class FragmentChart : Fragment() {
             //월, 년 인덱스값 초기화
             m=0
             y=0
+            i=0
         })
 
 
@@ -171,6 +172,7 @@ class FragmentChart : Fragment() {
             //일, 년 인덱스값 초기화
             y=0
             i=0
+            m=0
 
             //sqlite 준비
             val screenTimeDbHelper =
@@ -285,9 +287,10 @@ class FragmentChart : Fragment() {
 //            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
 //            chart.invalidate() // 새로 고침
 
-            //일, 월 인덱스값 초기화
+            //일, 월, 년 인덱스값 초기화
             i=0
             m=0
+            y=0
         })
 
 //이전 이후
@@ -699,6 +702,12 @@ class FragmentChart : Fragment() {
     //첫번째행 년,월,일 , 마지막행 년,월,일 불러오기
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+
+//        screenTimeDbHelper.chartInsert(2020,7,15, "22:00:00", 20000)
+//        screenTimeDbHelper.chartInsert(2021,5,15, "22:00:00", 20000)
+//        screenTimeDbHelper.chartInsert(2021,6,20, "22:00:00", 20000)
+//        screenTimeDbHelper.chartInsert(2021,10,21, "22:00:00", 20000)
+
         Log.d(TAG, "첫,끝 데이터 가져오기 로드")
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()

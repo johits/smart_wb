@@ -15,7 +15,7 @@
     <string name="guide_dialog_mes2">* 방해금지 모드가 활성화 됩니다.</string>
     <string name="guide_dialog_mes3">* 수신전화가 자동 거절됩니다.</string>
     <string name="guide_dialog_mes4">* 부득이한 경우 종료 버튼을 누르세요.</string>
-    <string name="guide_dialog_mes5">* 성공 시간 10분 당 꽃 1송이가 제공됩니다</string>
+    <string name="guide_dialog_mes5">* 성공 시간 10분 당 꽃 1송이가 제공됩니다.</string>
     <string name="guide_dialog_check">다시보지 않기</string>
     <string name="button_start">시작</string>
     <string name="button_confirm">확인</string>
