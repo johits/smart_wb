@@ -150,9 +150,6 @@ class FragmentChart : Fragment() {
 
 //        date.text =    toDays()?.let { calWeek(it) } + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
-        //왼쪽오른쪽 버튼 비저블//최초 나타나는 차트가 주단위
-//        leftVisible("week")
-//        rightVisible("week")
 
         chart_week.setOnClickListener(View.OnClickListener {
             chart_week.setTextColor(Color.parseColor("#2FA9FF"))
@@ -165,8 +162,6 @@ class FragmentChart : Fragment() {
             weekParse() // 주 날짜 파싱
             Refresh(type, year, month, start, end) // 그래프 새로고침
 
-//            leftVisible("week")
-//            rightVisible("week")
         })
 
 
@@ -184,8 +179,6 @@ class FragmentChart : Fragment() {
             Log.d(TAG, "lastDay:$lastDayF")
             Refresh(type, year, month, 0, 0) // 그래프 새로고침
 
-            leftVisible("month")
-            rightVisible("month")
 
         })
 
@@ -198,8 +191,6 @@ class FragmentChart : Fragment() {
             yearParse() // 년 날짜 파싱
             Refresh(type, year, 0, 0, 0) // 그래프 새로고침
 
-            leftVisible("year")
-            rightVisible("year")
 //            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
 //            chart.invalidate() // 새로 고침
 
@@ -215,8 +206,6 @@ class FragmentChart : Fragment() {
                 weekParse() // 주 날짜 파싱
                 Refresh(type, year, month, start, end) // 그래프 새로고침
 
-//                leftVisible("week")
-//                rightVisible("week")
                 //2021-06-17 기존코드 joker
 //                i -= 1
 //                date.text = Days7(i) + " ~ " + Days7(i + 1)
@@ -232,16 +221,14 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-                leftVisible("month")
-                rightVisible("month")
+
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
                 yearParse()
                 Refresh(type, year, 0, 0, 0)
 
-                leftVisible("year")
-                rightVisible("year")
+
             }
 
         }
@@ -254,8 +241,6 @@ class FragmentChart : Fragment() {
                 weekParse() // 주 날짜 파싱
                 Refresh(type, year, month, start, end) // 그래프 새로고침
 
-//                leftVisible("week")
-//                rightVisible("week")
 
                 //2021-06-17 기존코드 joker
 //                i += 1
@@ -272,16 +257,14 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-                rightVisible("month")
-                leftVisible("month")
+
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
                 yearParse()
                 Refresh(type, year, 0, 0, 0)
 
-                leftVisible("year")
-                rightVisible("year")
+
             }
 
         }
@@ -647,122 +630,6 @@ class FragmentChart : Fragment() {
         //Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
     }
 
-    //왼쪽버튼 데이터 유무에 따른 visible or gone
-    fun leftVisible(value: String) {
-//        Log.d(TAG, "첫번째 달:$firstRowMonth , 현재 달:$month")
-        if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
-            when (value) {
-                "month" -> {
-                    if (firstRowYear < year) {
-                        left.visibility = View.VISIBLE
-                    } else if (firstRowYear == year) {
-                        if (firstRowMonth < month) {
-                            left.visibility = View.VISIBLE
-                        } else if (firstRowMonth == month) {
-                            left.visibility = View.GONE
-                        }
-                    }
-                }
-                "year" -> {
-                    if (firstRowYear < year) {
-                        left.visibility = View.VISIBLE
-                    } else {
-                        left.visibility = View.GONE
-                    }
-                }
-                "week" -> {
-                    if (firstRowYear < year) {
-                        Log.d(TAG, "현재 년보다 적은 데이터있다")
-                        left.visibility = View.VISIBLE
-                    } else if (firstRowYear == year) {
-                        if (firstRowMonth < month) {
-                            Log.d(TAG, "현재 달보다 적은 데이터있다")
-                            left.visibility = View.VISIBLE
-                        } else {
-                            if (firstRowDay < start) {
-                                if (firstRowMonth != month) { //보정 필요하다.
-                                    Log.d(TAG, "주 시작 일보다 적은 데이터 없다.")
-                                    left.visibility = View.GONE
-                                } else {
-                                    left.visibility = View.VISIBLE
-                                }
-                            } else {
-                                if (firstRowMonth != month) { //보정 필요하다.
-                                    Log.d(TAG, "주 시작 일보다 적은 데이터 없다.")
-                                    left.visibility = View.GONE
-                                } else {
-                                    left.visibility = View.GONE
-                                }
-                            }
-                        }
-                    }
-                }
-                else -> {
-                    left.visibility = View.VISIBLE
-                }
-            }
-
-        } else {
-            left.visibility = View.GONE
-        }
-    }
-
-    //오른쪽버튼 데이터 유무에 따른 visible or gone
-    fun rightVisible(value: String) {
-//        Log.d(TAG, "마지막 달:$lastRowMonth , 현재 달:$month")
-        if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
-            when (value) {
-                "month" -> {
-                    if (lastRowYear > year) {
-                        right.visibility = View.VISIBLE
-                    } else {
-                        if (lastRowMonth > month) {
-                            right.visibility = View.VISIBLE
-                        } else {
-                            right.visibility = View.GONE
-                        }
-                    }
-                }
-                "year" -> {
-                    if (lastRowYear > year) {
-                        right.visibility = View.VISIBLE
-                    } else {
-                        right.visibility = View.GONE
-                    }
-                }
-                "week" -> {
-                    if (lastRowYear > year) {
-                        Log.d(TAG, "현재 년보다 큰 데이터있다")
-                        right.visibility = View.VISIBLE
-                    } else if (lastRowYear == year) {
-                        if (lastRowMonth > month) {
-                            Log.d(TAG, "현재 달보다 큰 데이터있다")
-
-                        } else if(lastRowMonth==month) {
-                            if (lastRowDay > end) {
-                                if (lastRowMonth != month) { //보정 필요하다.
-                                    Log.d(TAG, "주 시작 일보다 적은 데이터 없다.")
-                                    right.visibility = View.GONE
-                                } else {
-                                    right.visibility = View.VISIBLE
-                                }
-                            } else {
-                                if (lastRowMonth != month) { //보정 필요하다.
-                                    Log.d(TAG, "주 시작 일보다 적은 데이터 없다.")
-                                    right.visibility = View.GONE
-                                } else {
-                                    right.visibility = View.GONE
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            right.visibility = View.GONE
-        }
-
-    }
 
     //년 날짜 파싱
     fun yearParse() {

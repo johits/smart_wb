@@ -279,7 +279,7 @@ class FragmentCalendar : Fragment() {
         binding.tvFlowerSum.text = flowerSum.toString()
     }
 
-    //설정시간은 초 -> HH:mm:ss 로 변환
+    //설정시간은 초 -> "HH시간 mm분" 으로 변환
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeTime(settingTime: Int): String {
         val result: String?
