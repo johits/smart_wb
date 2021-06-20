@@ -25,13 +25,15 @@ joker
 class DrawService : Service() {
 
     companion object {
-
         //액티비티와 서비스간 데이터전달 위한 상수값
         const val MSG_REGISTER_CLIENT = 1
         const val MSG_UNREGISTER_CLIENT = 3
         const val MSG_SEND_TO_SERVICE = 3
         const val MSG_SEND_TO_ACTIVITY = 4
+
+        const val timerDelay: Long = 1000 //타이머 속도 상수값
     }
+
     private var mClient: Messenger? = null //activity 에서 가져온 메신저
 
     private val TAG = "DrawService"
@@ -41,7 +43,7 @@ class DrawService : Service() {
     //타이머 동작 위한 핸들러, 쓰레드
     var handler: Handler? = null
     var thread: Thread? = null
-    val timerDelay:Long = 10
+
     //설정시간
     var settingTime = 0
 
@@ -103,9 +105,9 @@ class DrawService : Service() {
         val bt = mView!!.findViewById<View>(R.id.btStop) as Button
         bt.setText("종료")
         bt.setOnClickListener {
-            settingTime = -2
+            settingTime = -3
             Log.d(TAG, "종료버튼 클릭")
-            drawServiceStop(false)
+           // drawServiceStop(false)
 
         }
         wm!!.addView(mView, params)
@@ -155,21 +157,27 @@ class DrawService : Service() {
     inner class StartTimer : Thread() {
         @RequiresApi(Build.VERSION_CODES.N)
         override fun run() {
-            if (settingTime >= 0) { //설정시간(초)이 0보다 클떄 동작
                 val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+            if (settingTime >= 0) { //설정시간(초)이 0보다 클떄 동작
                 if (settingTime == 0) {
+//                    watch.text = calTime(settingTime)
                     handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
                 } else {
                     watch.text = calTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
-                    handler?.postDelayed(this, timerDelay)
+                    handler?.postDelayed(this, Companion.timerDelay)
                 }
                 settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
-//                Log.d(TAG, "settingTime:" + settingTime)
-            } else if(settingTime==-1){ //스크린타임 정상적으로 종료
+
+            } else if (settingTime == -1) {
+                watch.text="00초"
+                settingTime--
+                handler?.postDelayed(this, 500)
+            } else if (settingTime == -2) {//스크린타임 정상적으로 종료
                 Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
-            }else if(settingTime==-2){//사용자가 종료버튼 눌렀을때
+            }else if (settingTime == -3) {//사용자가 종료버튼 눌렀을때
                 Log.d(TAG, "스크린타임 강제종료")
+                drawServiceStop(false)
             }
         }
     }
@@ -183,13 +191,13 @@ class DrawService : Service() {
         val sec = Math.floorMod(setTime, 3600) % 60
 
         if (hour > 0) {//1시간 초과 남았을떄 ex 02시22분
-            result="%1$02d시 %2$02d분".format(hour,min)
-        } else if(hour==0&&min>0){ //1시간 이하 남았을 때 ex 22분22초
-          result="%1$02d분 %2$02d초".format(min,sec)
-        }else if(hour==0&&min==0){ // 1분 이하 남았을 때 ex 22초
-            result="%1$02d초".format(sec)
-        }else{ //리턴값 있어서 else 넣어야 한다. ex 22초
-            result="%1$02d초".format(sec)
+            result = "%1$02d시 %2$02d분".format(hour, min)
+        } else if (hour == 0 && min > 0) { //1시간 이하 남았을 때 ex 22분22초
+            result = "%1$02d분 %2$02d초".format(min, sec)
+        } else if (hour == 0 && min == 0) { // 1분 이하 남았을 때 ex 22초
+            result = "%1$02d초".format(sec)
+        } else { //리턴값 있어서 else 넣어야 한다. ex 22초
+            result = "%1$02d초".format(sec)
         }
         return result
     }
@@ -207,7 +215,7 @@ class DrawService : Service() {
     //activity에 메세지 보냄// result true == 성공, false == 종료버튼터치
     private fun sendMsgToActivity(result: Boolean) {
         try {
-            Log.d(TAG, "결과"+result)
+            Log.d(TAG, "결과" + result)
             val bundle = Bundle()
             bundle.putBoolean("result", result)
             bundle.putString("message", "finish")

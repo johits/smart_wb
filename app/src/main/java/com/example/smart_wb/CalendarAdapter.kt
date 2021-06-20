@@ -73,7 +73,7 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
             val min = Math.floorMod(settingTime, 3600) / 60
             val sec = Math.floorMod(settingTime, 3600) % 60
 //            if (hour > 0) {
-                result = "%1$02d:%2$02d:%3$02d".format(hour, min, sec)
+                result = "%1$02d시간 %2$02d분".format(hour, min)
 //            } else {
 //                result = "%1$02d:%2$02d".format(min, sec)
 //            }

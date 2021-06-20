@@ -63,7 +63,7 @@ class FragmentChart : Fragment() {
     var value: Int = 0 //왼쪽, 오른쪽 버튼 비활성화시 데이터 남아있는지 확인하기 위해 주눈 구분값
 
     var lastDayF: Float = 0f //달의 마지막 날짜 float
-    var lastDayI : Int = 0 //달의 마지막 날짜 Int
+    var lastDayI: Int = 0 //달의 마지막 날짜 Int
 
     //db에 들어있는 첫번째행 년,월,일
     var firstRowYear: Int = 0
@@ -122,7 +122,6 @@ class FragmentChart : Fragment() {
 
 //        date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
                 toDays()?.let {calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
-        Log.d(TAG, "onViewCreated: 일주일 구하기 메서드 실행 됨")
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse()
                 Refresh(type, year, month,start,end)
@@ -145,6 +144,11 @@ class FragmentChart : Fragment() {
             Refresh(type, year, month,start,end) // 그래프 새로고침
             leftVisible()
             rightVisible()
+
+            //월, 년 인덱스값 초기화
+            m=0
+            y=0
+            i=0
         })
 
 
@@ -164,6 +168,11 @@ class FragmentChart : Fragment() {
 
             leftVisible()
             rightVisible()
+
+            //일, 년 인덱스값 초기화
+            y=0
+            i=0
+            m=0
 
             //sqlite 준비
             val screenTimeDbHelper =
@@ -279,6 +288,10 @@ class FragmentChart : Fragment() {
 //            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
 //            chart.invalidate() // 새로 고침
 
+            //일, 월, 년 인덱스값 초기화
+            i=0
+            m=0
+            y=0
         })
 
 //이전 이후
@@ -341,13 +354,15 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-//                rightVisible()
-//                leftVisible()
+
+
+
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
                 yearParse()
                 Refresh(type, year, 0,0,0)
+
             }
             leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
             rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
@@ -649,16 +664,16 @@ class FragmentChart : Fragment() {
 
 
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
-                    setGranularity(1f)//간격
-                    setGranularityEnabled(true)
+//                    setGranularity(1f) //간격
+//                    setGranularityEnabled(true)
                 } else if (type.equals("month")) {
                     axisMaximum = lastDayF
 //                    granularity = 1f
 //                    labelCount =  30//x축 라벨 나타내는 개수
                     Log.d(TAG, "라벨수: $labelCount")
                     setValueFormatter(IndexAxisValueFormatter(monthLabels))
-                    setGranularity(1f)
-                    setGranularityEnabled(true)
+//                    setGranularity(1f)
+//                    setGranularityEnabled(true)
                 } else {
                     axisMaximum = 12f
 //                    granularity = 1f
@@ -688,12 +703,17 @@ class FragmentChart : Fragment() {
     //첫번째행 년,월,일 , 마지막행 년,월,일 불러오기
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+
+//        screenTimeDbHelper.chartInsert(2020,7,15, "22:00:00", 20000)
+//        screenTimeDbHelper.chartInsert(2021,5,15, "22:00:00", 20000)
+//        screenTimeDbHelper.chartInsert(2021,6,20, "22:00:00", 20000)
+//        screenTimeDbHelper.chartInsert(2021,10,21, "22:00:00", 20000)
+
         Log.d(TAG, "첫,끝 데이터 가져오기 로드")
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
         val lastRow = screenTimeDbHelper.lastRow()
         if (firstRow.size > 0 && lastRow.size > 0) {
-            Log.d(TAG, "가져온 첫 데이터 확인 $firstRow , 마지막 데이터 $lastRow")
             firstRowYear = firstRow[0].year!!
             firstRowMonth = firstRow[0].month!!
             firstRowDay = firstRow[0].day!!
@@ -701,7 +721,7 @@ class FragmentChart : Fragment() {
             lastRowMonth = lastRow[0].month!!
             lastRowDay = lastRow[0].day!!
         }
-//        Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
+        //Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
     }
 
     //왼쪽버튼 데이터 유무에 따른 visible or gone
