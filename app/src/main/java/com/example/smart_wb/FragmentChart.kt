@@ -144,6 +144,10 @@ class FragmentChart : Fragment() {
             Refresh(type, year, month,start,end) // 그래프 새로고침
             leftVisible()
             rightVisible()
+
+            //월, 년 인덱스값 초기화
+            m=0
+            y=0
         })
 
 
@@ -163,6 +167,10 @@ class FragmentChart : Fragment() {
 
             leftVisible()
             rightVisible()
+
+            //일, 년 인덱스값 초기화
+            y=0
+            i=0
 
             //sqlite 준비
             val screenTimeDbHelper =
@@ -186,6 +194,9 @@ class FragmentChart : Fragment() {
 //            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
 //            chart.invalidate() // 새로 고침
 
+            //일, 월 인덱스값 초기화
+            i=0
+            m=0
         })
 
 //이전 이후
@@ -202,6 +213,7 @@ class FragmentChart : Fragment() {
 //                weekParse() // 주 날짜 파싱
 //                Refresh(type, year, month,start,end) // 그래프 새로고침
 
+
             } else if (type.equals("month")) {
                 m -= 1
                 date.text = Month(m)
@@ -214,11 +226,15 @@ class FragmentChart : Fragment() {
                 leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
                 rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
 
+
+
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
                 yearParse()
                 Refresh(type, year, 0,0,0)
+
+
             }
 
             rightVisible()
@@ -239,6 +255,8 @@ class FragmentChart : Fragment() {
 //                weekParse() // 주 날짜 파싱
 //                Refresh(type, year, month,start,end) // 그래프 새로고침
 
+
+
             } else if (type == "month") {
                 m += 1
                 date.text = Month(m)
@@ -248,13 +266,17 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-//                rightVisible()
-//                leftVisible()
+
+
+
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
                 yearParse()
                 Refresh(type, year, 0,0,0)
+
+
+
             }
             leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
             rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
@@ -597,9 +619,9 @@ class FragmentChart : Fragment() {
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
 
-//        screenTimeDbHelper.chartInsert(2020, 1,1, "12:00:00", 7200)
-//        screenTimeDbHelper.chartInsert(2021, 7,1, "12:00:00", 7200)
-//        screenTimeDbHelper.chartInsert(2022, 12,1, "12:00:00", 7200)
+        screenTimeDbHelper.chartInsert(2020, 1,1, "12:00:00", 7200)
+        screenTimeDbHelper.chartInsert(2021, 7,1, "12:00:00", 7200)
+        screenTimeDbHelper.chartInsert(2022, 12,1, "12:00:00", 7200)
 
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
