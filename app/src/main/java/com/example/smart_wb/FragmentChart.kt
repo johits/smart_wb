@@ -122,6 +122,7 @@ class FragmentChart : Fragment() {
 
 //        date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
                 toDays()?.let {calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
+        Log.d(TAG, "onViewCreated: 일주일 구하기 메서드 실행 됨")
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse()
                 Refresh(type, year, month,start,end)
@@ -210,9 +211,9 @@ class FragmentChart : Fragment() {
 //            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
 //
 //
-            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
-            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
-            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
+//            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
+//            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
+//            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
 //
 //
 //            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
@@ -236,10 +237,10 @@ class FragmentChart : Fragment() {
 //            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
 
 
-            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
-            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
-            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
-            screenTimeDbHelper.chartInsert(2021, 7, 18, "18:06:00", 3600*7)
+//            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
+//            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
+//            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
+//            screenTimeDbHelper.chartInsert(2021, 7, 18, "18:06:00", 3600*7)
 //
 //            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
 //            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
@@ -708,32 +709,39 @@ class FragmentChart : Fragment() {
         if(type.equals("week")){
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
                 left.visibility = View.VISIBLE
+                left2.visibility = View.INVISIBLE
                         if (firstRowMonth == sMonth) {
                             if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
                                 Log.d(TAG, "작동2")
                                 left.visibility = View.VISIBLE
+                                left2.visibility = View.INVISIBLE
                                 value=1
                                 Log.d(TAG, "활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
                             }else if(firstRowDay>sDay&& value==1){
-                                left.visibility = View.GONE
+                                left.visibility = View.INVISIBLE
+                                left2.visibility = View.VISIBLE
                                 value=0
                                 Log.d(TAG, "비활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
                             } else if(firstRowDay==sDay){
-                                left.visibility = View.GONE
+                                left.visibility = View.INVISIBLE
+                                left2.visibility = View.VISIBLE
                                 Log.d(TAG, "leftVisible: 비활성")
                             }
                         }
             }else{
-                left.visibility = View.GONE
+                left.visibility = View.INVISIBLE
+                left2.visibility = View.VISIBLE
             }
         }
         else if(type.equals("year")){
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
             if (firstRowYear == year) {
-                        left.visibility = View.GONE
+                        left.visibility = View.INVISIBLE
+                left2.visibility = View.VISIBLE
                 Log.d(TAG, "leftVisible: 비활성 년도 왼쪽")
                 }else{
                 left.visibility = View.VISIBLE
+                left2.visibility = View.INVISIBLE
             }
             }
         }else if(type.equals("month")){
@@ -741,16 +749,20 @@ class FragmentChart : Fragment() {
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
                 if (firstRowYear < year) {
                     left.visibility = View.VISIBLE
+                    left2.visibility = View.INVISIBLE
                 } else if (firstRowYear == year) {
                     if (firstRowMonth < month) {
                         left.visibility = View.VISIBLE
+                        left2.visibility = View.INVISIBLE
                     } else if (firstRowMonth == month) {
-                        left.visibility = View.GONE
+                        left.visibility = View.INVISIBLE
+                        left2.visibility = View.VISIBLE
                     }
                 }
 
             }else{
                 left.visibility = View.GONE
+                left2.visibility = View.VISIBLE
             }
         }
 
@@ -762,28 +774,35 @@ class FragmentChart : Fragment() {
         if(type.equals("week")){
             if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
                 right.visibility = View.VISIBLE
+                right2.visibility = View.INVISIBLE
                 if (lastRowYear == eYear) {
                     if (lastRowMonth < eMonth) {
                         right.visibility = View.VISIBLE
+                        right2.visibility = View.INVISIBLE
                     } else if (lastRowMonth == eMonth) {
                         if (lastRowDay < eDay||lastRowDay==eDay) { //ex eDay =11일 eDay+7 = 18일 lRD= 14일
-                            right.visibility = View.GONE
+                            right.visibility = View.INVISIBLE
+                            right2.visibility = View.VISIBLE
                         }else{
                             right.visibility = View.VISIBLE
+                            right2.visibility = View.INVISIBLE
                         }
                     }
                 }
 
             }else{
-                right.visibility = View.GONE
+                right.visibility = View.INVISIBLE
+                right2.visibility = View.VISIBLE
             }
         }else if(type.equals("year")){
             if (lastRowYear != 0) {
                 if (lastRowYear == year) {
-                    right.visibility = View.GONE
+                    right.visibility = View.INVISIBLE
+                    right2.visibility = View.VISIBLE
                     Log.d(TAG, "leftVisible: 비활성 년도 오른쪽")
                 }else{
                     right.visibility = View.VISIBLE
+                    right2.visibility = View.INVISIBLE
                 }
             }
         }else if(type.equals("month")){
@@ -791,15 +810,19 @@ class FragmentChart : Fragment() {
             if (lastRowYear != 0) {
                 if (lastRowYear > year) {
                     right.visibility = View.VISIBLE
+                    right2.visibility = View.INVISIBLE
                 } else {
                     if (lastRowMonth > month) {
                         right.visibility = View.VISIBLE
+                        right2.visibility = View.INVISIBLE
                     } else {
-                        right.visibility = View.GONE
+                        right.visibility = View.INVISIBLE
+                        right2.visibility = View.VISIBLE
                     }
                 }
             }else{
-                right.visibility=View.GONE
+                right.visibility=View.INVISIBLE
+                right2.visibility = View.VISIBLE
             }
         }
 
@@ -939,26 +962,44 @@ class FragmentChart : Fragment() {
     }
 
 
+
+
     //일주일 계산하기(eventDate = "2021-06-07")
     fun calWeek(eventDate: String){
         val dateArray = eventDate.split("-").toTypedArray()
         val cal = Calendar.getInstance()
-        cal[dateArray[0].toInt(), dateArray[1].toInt() - 1] =
-            dateArray[2].toInt() // 일주일의 첫날을 일요일로 지정한다
-        cal.firstDayOfWeek = Calendar.MONDAY // 시작일과 특정날짜의 차이를 구한다
-        val dayOfWeek = cal[Calendar.DAY_OF_WEEK] - cal.firstDayOfWeek // 해당 주차의 첫째날을 지정한다
-        cal.add(Calendar.DAY_OF_MONTH, -dayOfWeek)
-        val sf = SimpleDateFormat("yyyy년 MM월 dd일") // 해당 주차의 첫째 날짜
-        startDt = sf.format(cal.time) // 해당 주차의 마지막 날짜 지정
-        cal.add(Calendar.DAY_OF_MONTH, 6) // 해당 주차의 마지막 날짜
-        endDt = sf.format(cal.time) //일주일의 마지막 날짜
-        val dayWeek = cal.get(Calendar.DAY_OF_WEEK)
-        //달력 마지막 날짜 구하기
-        cal.set(2021, 1, 17, 0, 0, 0)
-        var lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-//        Log.d(TAG, "마지막 날짜:$lastDay  특정 날짜 = [$eventDate] >> 시작 날짜 = [$startDt], 종료 날짜 = [$endDt]")
+        cal [dateArray[0].toInt(), dateArray[1].toInt() - 1] =
+            dateArray[2].toInt()
+        var inputDt = cal.getTime() //입력된 날짜
+        Log.d(TAG, "calWeek: 입력된 날짜 ${cal.getTime()}")
+
+        cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+        var inputSunday = cal.getTime()
+        System.out.println("입력된 날짜의 일요일  : " + cal.getTime());
+        if(inputDt==inputSunday){
+            cal.add(Calendar.DATE, -7);
+            cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+            System.out.println("입력된 날짜의 이전주의 일요일 : " + cal.getTime());
+        }
+        // 일주일의 첫날을 월요일로 지정한다
+         cal.firstDayOfWeek = Calendar.MONDAY
+        // 시작일과 특정날짜의 차이를 구한다
+         val dayOfWeek = cal[Calendar.DAY_OF_WEEK] - cal.firstDayOfWeek
+        // 해당 주차의 첫째날을 지정한다
+         cal.add(Calendar.DAY_OF_MONTH, -dayOfWeek)
+        val sf = SimpleDateFormat("yyyy년 MM월 dd일")
+        // 해당 주차의 첫째 날짜
+         startDt = sf.format(cal.time)
+        // 해당 주차의 마지막 날짜 지정
+         cal.add(Calendar.DAY_OF_MONTH, 6)
+        // 해당 주차의 마지막 날짜
+         endDt = sf.format(cal.time)
+         Log.d(TAG, "특정 날짜 = [$eventDate] >> 시작 날짜 = [$startDt], 종료 날짜 = [$endDt]")
+
 
     }
+
+
 
     //요일 구하기
     @SuppressLint("SimpleDateFormat")
