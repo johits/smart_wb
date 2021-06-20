@@ -15,13 +15,11 @@ import androidx.fragment.app.Fragment
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.databinding.FragmentChartBinding
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.DateFormat
@@ -59,6 +57,10 @@ class FragmentChart : Fragment() {
     var eMonth: Int = 0 //이용자가 현재 보고 있는 주 끝 월
     var sYear: Int = 0 //이용자가 현재 보고 있는 주 시작 년
     var eYear: Int = 0 //이용자가 현재 보고 있는 주 끝 년
+    var sDay: Int = 0 //이용자가 현재 보고 있는 주 첫 날짜
+    var eDay: Int = 0 //이용자가 현재 보고 있는 주 끝 날짜
+
+    var value: Int = 0 //왼쪽, 오른쪽 버튼 비활성화시 데이터 남아있는지 확인하기 위해 주눈 구분값
 
     var lastDayF: Float = 0f //달의 마지막 날짜 float
     var lastDayI: Int = 0 //달의 마지막 날짜 Int
@@ -94,29 +96,6 @@ class FragmentChart : Fragment() {
         }
     }
 
-    inner class MyXAxisFormatter : ValueFormatter() {
-        private val days = arrayOf("월", "화", "수", "목", "금", "토", "일")
-        private val year =
-            arrayOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
-        private val month = arrayOf("")
-
-//            var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
-//        var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
-//        var b = Integer.parseInt(date.text.toString().slice(ran))
-
-        //            for (i in 1 until alldate)arrayOf(""){}
-        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-            if (type.equals("week")) {
-                return days.getOrNull(value.toInt() - 1) ?: value.toString()
-            } else if (type.equals("month")) {
-                return month.getOrNull(value.toInt() - 1) ?: value.toString()
-            } else {
-                return year.getOrNull(value.toInt() - 1) ?: value.toString()
-            }
-
-        }
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,13 +121,15 @@ class FragmentChart : Fragment() {
 
 
 //        date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
-        toDays()?.let { calWeek(it) } //이번 주 시작일자 끝일자 구해주는 메서드
-        date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
-        weekParse()
-        Refresh(type, year, month, start, end)
-
+                toDays()?.let {calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
+                date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
+                weekParse()
+                Refresh(type, year, month,start,end)
+                leftVisible()
+                rightVisible()
 
 //        date.text =    toDays()?.let { calWeek(it) } + " ~ " + Days7(1) //기본 날짜 세팅 (주)
+
 
 
         chart_week.setOnClickListener(View.OnClickListener {
@@ -156,12 +137,13 @@ class FragmentChart : Fragment() {
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
             type = "week"
-            toDays()?.let { calWeek(it) } //이번 주 시작일자 끝일자 구해주는 메서드
+            toDays()?.let {calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
             date.text = startDt + " ~ " + endDt
 //            date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
             weekParse() // 주 날짜 파싱
-            Refresh(type, year, month, start, end) // 그래프 새로고침
-
+            Refresh(type, year, month,start,end) // 그래프 새로고침
+            leftVisible()
+            rightVisible()
         })
 
 
@@ -179,6 +161,15 @@ class FragmentChart : Fragment() {
             Log.d(TAG, "lastDay:$lastDayF")
             Refresh(type, year, month, 0, 0) // 그래프 새로고침
 
+            leftVisible()
+            rightVisible()
+
+            //sqlite 준비
+            val screenTimeDbHelper =
+                ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
+            var database = screenTimeDbHelper.writableDatabase
+
+
 
         })
 
@@ -189,8 +180,9 @@ class FragmentChart : Fragment() {
             type = "year"
             date.text = Year(0)
             yearParse() // 년 날짜 파싱
-            Refresh(type, year, 0, 0, 0) // 그래프 새로고침
-
+            Refresh(type, year, 0,0,0) // 그래프 새로고침
+            leftVisible()
+            rightVisible()
 //            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
 //            chart.invalidate() // 새로 고침
 
@@ -199,13 +191,11 @@ class FragmentChart : Fragment() {
 //이전 이후
         left.setOnClickListener {
             if (type.equals("week")) {
-
                 i -= 1
                 Days7(i)?.let { it1 -> calWeek(it1) }
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse() // 주 날짜 파싱
-                Refresh(type, year, month, start, end) // 그래프 새로고침
-
+                Refresh(type, year, month,start,end) // 그래프 새로고침
                 //2021-06-17 기존코드 joker
 //                i -= 1
 //                date.text = Days7(i) + " ~ " + Days7(i + 1)
@@ -221,16 +211,18 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
+                leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
+                rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
 
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = Year(y)
                 yearParse()
-                Refresh(type, year, 0, 0, 0)
-
-
+                Refresh(type, year, 0,0,0)
             }
 
+            rightVisible()
+            leftVisible()
         }
 
         right.setOnClickListener {
@@ -239,8 +231,7 @@ class FragmentChart : Fragment() {
                 Days7(i)?.let { it1 -> calWeek(it1) }
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse() // 주 날짜 파싱
-                Refresh(type, year, month, start, end) // 그래프 새로고침
-
+                Refresh(type, year, month,start,end) // 그래프 새로고침
 
                 //2021-06-17 기존코드 joker
 //                i += 1
@@ -257,16 +248,16 @@ class FragmentChart : Fragment() {
                 lastDayF = value.toFloat()
                 Log.d(TAG, "lastDay:$lastDayF , year:$year , month:$month")
                 Refresh(type, year, month, 0, 0)
-
+//                rightVisible()
+//                leftVisible()
             } else if (type == "year") {
                 y += 1
                 date.text = Year(y)
                 yearParse()
-                Refresh(type, year, 0, 0, 0)
-
-
+                Refresh(type, year, 0,0,0)
             }
-
+            leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
+            rightVisible() //이후 데이트 없으면 오른쪽 버튼 비활성화
         }
 
 
@@ -280,12 +271,14 @@ class FragmentChart : Fragment() {
 //        return SimpleDateFormat("yyyy년 MM월 dd일").format(week.time)
 //    }
 
-    fun Days7(i: Int): String? {
+    fun Days7(i: Int):String?{
         //주 단위 계산 메서드
         val week = Calendar.getInstance()
         week.add(Calendar.DATE, 7 * i)
         return SimpleDateFormat("yyyy-MM-dd").format(week.time)
     }
+
+
 
 
     fun toDays(): String? {
@@ -314,26 +307,26 @@ class FragmentChart : Fragment() {
 
     //그래프 새로고침 메서드
 
-    fun Refresh(type: String, year: Int, month: Int, start: Int, end: Int) {
+    fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
 
 
         val weeklabels = arrayOf(
-            "월", "화", "수", "목", "금", "토", "일"
+           "월", "화","수","목","금","토","일"
         )
         val yearlabels = arrayOf(
             "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"
         )
-        val monthLabels = Array(lastDayI, { "" })
-        for (i in 0 until lastDayI) {
-            monthLabels[i] = (i + 1).toString()
+        val monthLabels = Array(lastDayI,{""})
+        for(i in 0 until lastDayI){
+            monthLabels[i]= (i+1).toString()
         }
 
 
         val entries = ArrayList<BarEntry>()
-        var md: String
-        var wd: String
-        var sm: String
-        var em: String
+        var md : String
+        var wd : String
+        var sm : String
+        var em : String
 
 
         if (type.equals("week")) {
@@ -353,7 +346,7 @@ class FragmentChart : Fragment() {
             entries.add(BarEntry(6f, null))
 
 
-            if (sMonth != eMonth) {
+            if(sMonth!=eMonth){
                 Log.d(TAG, "Refresh: 불일치!!!!")
 
                 if (0 < sMonth && sMonth < 10) {
@@ -388,7 +381,6 @@ class FragmentChart : Fragment() {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
 
-                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries ,  ${entries.toString()}")
                 }
 
 
@@ -397,7 +389,7 @@ class FragmentChart : Fragment() {
                 } else {
                     em = eMonth.toString()
                 }
-                for (eweek in WeekSelectData(eYear, eMonth, 1, end)) {
+                for (eweek in  WeekSelectData(eYear, eMonth, 1, end)) {
                     var w = eweek.day //날짜
                     var t = eweek.settingTime?.let { changeTime(it) } //성공시간
 
@@ -426,13 +418,9 @@ class FragmentChart : Fragment() {
                     Log.d(TAG, "Refresh: 이게 제일 중요 $entries")
                 }
 
-//                Log.d(TAG, "봐봐1: $eYear $sMonth, $eMonth")
-//                SmonthSelectData(sYear, sMonth, start)
-//                Log.d(TAG, "봐봐2: $eYear")
-//                WeekSelectData(eYear, eMonth, 1, end)
 
 
-            } else if (sMonth == eMonth) {
+            }else if(sMonth==eMonth){
                 if (0 < month && month < 10) {
                     md = "0" + month
                 } else {
@@ -469,6 +457,8 @@ class FragmentChart : Fragment() {
 
             }
         } else if (type.equals("month")) {
+
+
             for (month in MonthSelectData(year, month)) {
                 var t: Float? = month.settingTime?.let { changeTime(it) }
                 val y: Float = t as Float
@@ -502,11 +492,11 @@ class FragmentChart : Fragment() {
                 var m = year.month
                 var t = year.settingTime?.let { changeTime(it) }
 
-                for (i in 1 until 13) {
-                    if (i == m) {
-                        entries.add(BarEntry(1f * (i - 1), 1f * t!!))
-                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
-                    } else {
+                for(i in 1 until 13){
+                    if(i==m){
+                        entries.add(BarEntry(1f*(i-1), 1f* t!!))
+//                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
+                    }else{
 
                     }
                 }
@@ -530,19 +520,19 @@ class FragmentChart : Fragment() {
             setDrawGridBackground(false) //격자 숨기기
             description.isEnabled = false //차트 옆에 별도로 표기되는 description이다. false로 설정하여 안보이게 했다.
 
-            if (type.equals("week")) {
+            if(type.equals("week")){
                 barData.setBarWidth(0.7f) //막대너비
-            } else if (type.equals("year")) {
+            }else if(type.equals("year")){
                 barData.setBarWidth(0.4f)
-            } else if (type.equals("month")) {
+            }else if(type.equals("month")){
                 barData.setBarWidth(0.5f)
             }
             axisLeft.run { // Y축에 대한 속성
-                if (type.equals("week") || type.equals("month")) {
+                if(type.equals("week")||type.equals("month")){
                     axisMaximum = 24f //24시x31일(한달 최대일수) =744시간이라는 시간이 나와 최대 시간 750으로 설정해줌
                     axisMinimum = 0f // 최소값 0
                     granularity = 1f // 1 단위마다 선을 그리려고 granularity 설정 해 주었다.
-                } else if (type.equals("year")) {
+                }else if(type.equals("year")){
                     axisMaximum = 750f //24시x31일(한달 최대일수) =744시간이라는 시간이 나와 최대 시간 750으로 설정해줌
                     axisMinimum = 0f // 최소값 0
                     granularity = 50f // 50 단위마다 선을 그리려고 granularity 설정 해 주었다.
@@ -558,7 +548,7 @@ class FragmentChart : Fragment() {
                 setDrawGridLines(false) // 격자
 //                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
-                if (type.equals("week")) {
+                if(type.equals("week")){
                     axisMaximum = 7f
 //                    axisMinimum = 0f
 //                    granularity = 0.3f //1일 간격
@@ -583,13 +573,8 @@ class FragmentChart : Fragment() {
 //                    labelCount = 12 //x축 라벨 나타내는 개수
                     setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
                     setGranularity(0.5f)
-                }
-//                textSize = 14f // 텍스트 크기
-//                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
+               }
             }
-
-
-
 
             axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
             setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
@@ -612,9 +597,9 @@ class FragmentChart : Fragment() {
     fun loadFirstLast() {
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
 
-//        screenTimeDbHelper.chartInsert(2021, 5,1, "12:00:00", 7200)
+//        screenTimeDbHelper.chartInsert(2020, 1,1, "12:00:00", 7200)
 //        screenTimeDbHelper.chartInsert(2021, 7,1, "12:00:00", 7200)
-//        screenTimeDbHelper.chartInsert(2021, 8,1, "12:00:00", 7200)
+//        screenTimeDbHelper.chartInsert(2022, 12,1, "12:00:00", 7200)
 
         //첫번째 데이터 , 마지막 데이터 불러오기
         val firstRow = screenTimeDbHelper.firstRow()
@@ -630,27 +615,130 @@ class FragmentChart : Fragment() {
         //Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
     }
 
+    //왼쪽버튼 데이터 유무에 따른 visible or gone
+    fun leftVisible() {
+
+        if(type.equals("week")){
+            if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+                left.visibility = View.VISIBLE
+                        if (firstRowMonth == sMonth) {
+                            if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
+                                Log.d(TAG, "작동2")
+                                left.visibility = View.VISIBLE
+                                value=1
+                                Log.d(TAG, "활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
+                            }else if(firstRowDay>sDay&& value==1){
+                                left.visibility = View.GONE
+                                value=0
+                                Log.d(TAG, "비활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
+                            } else if(firstRowDay==sDay){
+                                left.visibility = View.GONE
+                                Log.d(TAG, "leftVisible: 비활성")
+                            }
+                        }
+            }else{
+                left.visibility = View.GONE
+            }
+        }
+        else if(type.equals("year")){
+            if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+            if (firstRowYear == year) {
+                        left.visibility = View.GONE
+                Log.d(TAG, "leftVisible: 비활성 년도 왼쪽")
+                }else{
+                left.visibility = View.VISIBLE
+            }
+            }
+        }else if(type.equals("month")){
+            Log.d(TAG, "왼쪽 버튼// 첫번째 달:$firstRowMonth , 현재 달:$month")
+            if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+                if (firstRowYear < year) {
+                    left.visibility = View.VISIBLE
+                } else if (firstRowYear == year) {
+                    if (firstRowMonth < month) {
+                        left.visibility = View.VISIBLE
+                    } else if (firstRowMonth == month) {
+                        left.visibility = View.GONE
+                    }
+                }
+
+            }else{
+                left.visibility = View.GONE
+            }
+        }
+
+    }
+
+    //오른쪽버튼 데이터 유무에 따른 visible or gone
+    fun rightVisible() {
+
+        if(type.equals("week")){
+            if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
+                right.visibility = View.VISIBLE
+                if (lastRowYear == eYear) {
+                    if (lastRowMonth < eMonth) {
+                        right.visibility = View.VISIBLE
+                    } else if (lastRowMonth == eMonth) {
+                        if (lastRowDay < eDay||lastRowDay==eDay) { //ex eDay =11일 eDay+7 = 18일 lRD= 14일
+                            right.visibility = View.GONE
+                        }else{
+                            right.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+            }else{
+                right.visibility = View.GONE
+            }
+        }else if(type.equals("year")){
+            if (lastRowYear != 0) {
+                if (lastRowYear == year) {
+                    right.visibility = View.GONE
+                    Log.d(TAG, "leftVisible: 비활성 년도 오른쪽")
+                }else{
+                    right.visibility = View.VISIBLE
+                }
+            }
+        }else if(type.equals("month")){
+            Log.d(TAG, "오른쪽 버튼 // 마지막 달:$lastRowMonth , 현재 달:$month")
+            if (lastRowYear != 0) {
+                if (lastRowYear > year) {
+                    right.visibility = View.VISIBLE
+                } else {
+                    if (lastRowMonth > month) {
+                        right.visibility = View.VISIBLE
+                    } else {
+                        right.visibility = View.GONE
+                    }
+                }
+            }else{
+                right.visibility=View.GONE
+            }
+        }
+
+
+
+
+    }
 
     //년 날짜 파싱
-    fun yearParse() {
+    fun yearParse(){
         year = Integer.parseInt(date.text.toString().replace("년", "")) //ex)2021년 -> 년 제거
     }
 
     //월 날짜 파싱
-    fun monthParse() {
+    fun monthParse(){
         Log.d(TAG, "날짜 파싱 작동")
-        year =
-            Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+        year = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
         var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
         month = Integer.parseInt(date.text.toString().slice(ran))
     }
 
     //주 날짜 파싱
-    fun weekParse() {
+    fun weekParse(){
         //파싱전 예시 2021년 06월 14일 ~ 2021년 06월 20일
-        Log.d(TAG, "weekParse: " + date.text.toString())
-        year =
-            Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+        Log.d(TAG, "weekParse: "+date.text.toString())
+        year = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
         var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
         month = Integer.parseInt(date.text.toString().slice(ran))
         var s = IntRange(10, 11)
@@ -665,6 +753,10 @@ class FragmentChart : Fragment() {
         sYear = Integer.parseInt(date.text.toString().slice(sy))
         var ey = IntRange(16, 19)
         eYear = Integer.parseInt(date.text.toString().slice(ey))
+        var sd = IntRange(10, 11)
+        sDay = Integer.parseInt(date.text.toString().slice(sd))
+        var ed = IntRange(26, 27)
+        eDay = Integer.parseInt(date.text.toString().slice(ed))
     }
 
     //시간 변환
@@ -673,7 +765,7 @@ class FragmentChart : Fragment() {
     fun changeTime(settingTime: Int): Float {
         val result: Float?
         var test = settingTime / 60
-        result = test.toFloat() / 60
+        result = test.toFloat()/ 60
 
         return result
     }
@@ -704,73 +796,64 @@ class FragmentChart : Fragment() {
     }
 
 
+
     //주별 sqlite data 불러오기 메서드
-    fun WeekSelectData(
-        y: Int,
-        m: Int,
-        s: Int,
-        e: Int
-    ): ArrayList<ScreenTimeData> { // y=year, m=month, s=start(시작날짜), e=end(끝날짜)
+    fun WeekSelectData(y: Int, m: Int, s:Int, e:Int): ArrayList<ScreenTimeData> { // y=year, m=month, s=start(시작날짜), e=end(끝날짜)
 
         //sqlite 준비
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
         var database = screenTimeDbHelper.writableDatabase
         //  timer 테이블 데이터 불러오기
-        weeklist = screenTimeDbHelper.week(y, m, s, e)
+        weeklist = screenTimeDbHelper.week(y,m,s,e)
         return weeklist
 
     }
 
     //주별 시작 달 끝 달 다를 경우 시작 날짜에 대한 데이터 불러오기 메서드
-    fun SmonthSelectData(
-        y: Int,
-        m: Int,
-        s: Int
-    ): ArrayList<ScreenTimeData> { // y=year, sm=start month, s=start(시작날짜)
+    fun SmonthSelectData(y: Int, m: Int, s:Int): ArrayList<ScreenTimeData> { // y=year, sm=start month, s=start(시작날짜)
 
         val ad = Calendar.getInstance()
-        ad.add(Calendar.MONTH, m - 1)
-        var ld: Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
+        ad.add(Calendar.MONTH, m-1)
+        var ld:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
 
         Log.d(TAG, "막날 $ld")
+
 
 
         //sqlite 준비
         val screenTimeDbHelper = ScreenTimeDbHelper(requireContext(), "screenTimeDb.db", null, 1)
         var database = screenTimeDbHelper.writableDatabase
         //  timer 테이블 데이터 불러오기
-        weeklist = screenTimeDbHelper.sMonthweek(y, m, s, ld)
+        weeklist = screenTimeDbHelper.sMonthweek(y,m,s,ld)
         return weeklist
 
     }
 
     //일수 구하기 메서드
     fun alldate(): ArrayList<String> {
-        var result: Int = 0
-        var a =
-            Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
+        var result : Int = 0
+        var a = Integer.parseInt(date.text.toString().substring(0, date.text.toString().indexOf("년")))
         var ran = IntRange(6, 7) // ex 2021년 06월 <-인덱스 6,7값만 포함
         var b = Integer.parseInt(date.text.toString().slice(ran))
 
 
         val ad = Calendar.getInstance()
-        ad.add(Calendar.MONTH, b - 1)
-        var dayOfMonth: Int =
-            ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
+        ad.add(Calendar.MONTH, b-1)
+        var dayOfMonth:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
 
         Log.d(TAG, "막날 $dayOfMonth")
 //        reseult = Integer.parseInt(ad.set(Calendar.DAY_OF_MONTH, dayOfMonth))
 
         val month = arrayListOf<String>()
-        for (i in 1 until dayOfMonth) {
-            month[i - 1] = i.toString()
+        for(i in 1 until dayOfMonth){
+           month[i-1]=i.toString()
         }
         return month
     }
 
 
     //일주일 계산하기(eventDate = "2021-06-07")
-    fun calWeek(eventDate: String) {
+    fun calWeek(eventDate: String){
         val dateArray = eventDate.split("-").toTypedArray()
         val cal = Calendar.getInstance()
         cal[dateArray[0].toInt(), dateArray[1].toInt() - 1] =
@@ -792,8 +875,8 @@ class FragmentChart : Fragment() {
 
     //요일 구하기
     @SuppressLint("SimpleDateFormat")
-    fun whatDay(d: String): String { //ex) date = 20170418
-        var dayresult: String = ""
+    fun whatDay(d:String):String{ //ex) date = 20170418
+        var dayresult : String =""
         val df: DateFormat = SimpleDateFormat("yyyyMMdd")
         var date: Date? = null
         try {
@@ -818,6 +901,9 @@ class FragmentChart : Fragment() {
         return dayresult
 
     }
+
+
+
 
 
     companion object {
