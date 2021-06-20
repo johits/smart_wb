@@ -77,6 +77,7 @@ class LockScreenActivity : AppCompatActivity() {
 
         //스크린타임 시작
         if (intent.hasExtra("settingTime")) {
+            TimerSetShared.clearMissedCall(this)
             var time = intent.getStringExtra("settingTime")?.toInt()
 
             if (time != null) {
@@ -260,8 +261,16 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvTitle.text = title
         tvSettingTime.text = setTime //설정시간표시
-        tvFlower.text = flower.toString() //얻은 꽃 표시
-        tvMissedCall.text = missedCall.toString()// 부재중 전화 표시
+        if(flower==0){
+            tvFlower.text="X"
+        }else{
+            tvFlower.text = flower.toString() +"송이"//얻은 꽃 표시
+        }
+        if(missedCall==0){
+            tvMissedCall.text="X"
+        }else{
+            tvMissedCall.text = missedCall.toString()+ "통화"// 부재중 전화 표시
+        }
 
         btnConfirm.setOnClickListener {
             alertDialog!!.dismiss()

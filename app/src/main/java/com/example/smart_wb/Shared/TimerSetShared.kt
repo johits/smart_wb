@@ -52,6 +52,13 @@ object TimerSetShared {
         editor.putInt("missedCall", getMissedCall(context)+1)
         editor.commit()
     }
+    //부재중전화 클리어
+    fun clearMissedCall(context: Context){
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = prefs.edit()
+        editor.putInt("missedCall", 0)
+        editor.commit()
+    }
     //부재중전화 불러오기
     fun getMissedCall(context: Context):Int{
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)

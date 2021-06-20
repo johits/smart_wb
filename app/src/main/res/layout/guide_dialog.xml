@@ -19,12 +19,11 @@
         android:textColor="@color/colorBlack"
         android:textSize="24sp"
         android:layout_gravity="center"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginBottom="12dp"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/guide_dialog_mes1"
-        android:singleLine="true"
         android:textColor="@color/colorBlack"
         android:layout_marginBottom="4dp"
         android:layout_marginRight="10dp" />
