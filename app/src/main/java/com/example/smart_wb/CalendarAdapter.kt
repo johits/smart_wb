@@ -3,19 +3,14 @@ package com.example.smart_wb
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.provider.Settings.Global.getString
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.TimerData
-import kotlin.math.log
 
 class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     val TAG = "CalendarAdapter"

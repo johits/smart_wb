@@ -184,6 +184,7 @@ class FragmentChart : Fragment() {
 //            screenTimeDbHelper.chartInsert(2020, 7, 14, "18:06:00", 3600*700)
 //            screenTimeDbHelper.chartInsert(2020, 8, 14, "18:06:00", 3600*139)
 //            screenTimeDbHelper.chartInsert(2020, 9, 14, "18:06:00", 3600*385)
+
 //            screenTimeDbHelper.chartInsert(2020, 10, 14, "18:06:00", 3600*573)
 //            screenTimeDbHelper.chartInsert(2020, 11, 14, "18:06:00", 3600*103)
 //            screenTimeDbHelper.chartInsert(2020, 12, 14, "18:06:00", 3600*684)
@@ -235,8 +236,8 @@ class FragmentChart : Fragment() {
 //            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
 //            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
 //            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
-
-
+//
+//
 //            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
 //            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
 //            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
