@@ -572,9 +572,9 @@ class FragmentChart : Fragment() {
                 val y: Float = t as Float
 
                 val day: Int? = month.day
-                for (i in 1 until lastDayF.toInt() + 1) {
-                    if (day == i) {
-                        entries.add(BarEntry(i * 1f, y))
+                for (i in 0 until lastDayF.toInt() + 1) {
+                    if (day == i+1) {
+                        entries.add(BarEntry(i*1f * 1f, y))
                     } else {
                         entries.add(BarEntry(i * 1f, 0f))
                     }
@@ -603,13 +603,10 @@ class FragmentChart : Fragment() {
                 for(i in 1 until 13){
                     if(i==m){
                         entries.add(BarEntry(1f*(i-1), 1f* t!!))
-//                        Log.d(TAG, "Refresh: 있음 월 $i t $t")
                     }else{
 
                     }
                 }
-
-//                entries.add(BarEntry(1f* m!!, 1f *t!!)) //x:x축 값 놓이는 위치 y:성공시간량
             }
 
         }
@@ -620,7 +617,7 @@ class FragmentChart : Fragment() {
         dataSet.add(set)
 
         val data = BarData(dataSet)
-        data.setDrawValues(false)
+        data.setDrawValues(false) //막대 위에 숫자 표시
 
         chart.run {
             this.data = data //차트의 데이터를 data로 설정해줌.
@@ -654,39 +651,29 @@ class FragmentChart : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM//X축을 아래에다가 둔다.
                 setDrawAxisLine(true) // 축 그림
                 setDrawGridLines(false) // 격자
-//                valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함
 
                 if(type.equals("week")){
                     axisMaximum = 7f
-//                    axisMinimum = 0f
-//                    granularity = 0.3f //1일 간격
-//                    labelCount = 7  //x축 라벨 나타내는 개수
-
-
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
-//                    setGranularity(1f) //간격
-//                    setGranularityEnabled(true)
                 } else if (type.equals("month")) {
                     axisMaximum = lastDayF
-//                    granularity = 1f
-//                    labelCount =  30//x축 라벨 나타내는 개수
-                    Log.d(TAG, "라벨수: $labelCount")
+                        labelCount = 8 //x축 라벨 나타내는 개수
+                        granularity = 4f // x축 라벨 간격 4f면 (ex: 1,5,9,13 ....)
                     setValueFormatter(IndexAxisValueFormatter(monthLabels))
-//                    setGranularity(1f)
-//                    setGranularityEnabled(true)
-                } else {
-                    axisMaximum = 12f
-//                    granularity = 1f
-//                    labelCount = 12 //x축 라벨 나타내는 개수
+
+                } else if(type.equals("year")) {
+                    axisMaximum = 12f //최대 나타낼 막대수
+                    granularity = 1f // 간격 설정
+                    labelCount = 12 //x축 라벨 나타내는 개수
                     setValueFormatter(IndexAxisValueFormatter(yearlabels)) //x축에 들어가는 week 값
-                    setGranularity(0.5f)
                }
             }
 
             axisRight.isEnabled = false // 오른쪽 Y축을 안보이게 해줌.
-            setTouchEnabled(false) // 그래프 터치해도 아무 변화없게 막음
+            setTouchEnabled(true) // 그래프 터치해도 아무 변화없게 막음
             animateY(1000) // 밑에서부터 올라오는 애니매이션 적용
             legend.isEnabled = false //차트 범례 설정(차트 밑에 막대가 무엇인지 설명하는 것)
+
             chart.invalidate();                                 // 새로 고침
         }
     }
@@ -723,6 +710,8 @@ class FragmentChart : Fragment() {
         }
         //Log.d(TAG, "첫번째행:${firstRow.size} , 마지막행:${lastRow.size}")
     }
+
+
 
     //왼쪽버튼 데이터 유무에 따른 visible or gone
     fun leftVisible() {
@@ -766,7 +755,6 @@ class FragmentChart : Fragment() {
             }
             }
         }else if(type.equals("month")){
-            Log.d(TAG, "왼쪽 버튼// 첫번째 달:$firstRowMonth , 현재 달:$month")
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
                 if (firstRowYear < year) {
                     left.visibility = View.VISIBLE
@@ -827,7 +815,6 @@ class FragmentChart : Fragment() {
                 }
             }
         }else if(type.equals("month")){
-            Log.d(TAG, "오른쪽 버튼 // 마지막 달:$lastRowMonth , 현재 달:$month")
             if (lastRowYear != 0) {
                 if (lastRowYear > year) {
                     right.visibility = View.VISIBLE
@@ -947,7 +934,7 @@ class FragmentChart : Fragment() {
         ad.add(Calendar.MONTH, m-1)
         var ld:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
 
-        Log.d(TAG, "막날 $ld")
+//        Log.d(TAG, "막날 $ld")
 
 
 
@@ -972,7 +959,7 @@ class FragmentChart : Fragment() {
         ad.add(Calendar.MONTH, b-1)
         var dayOfMonth:Int = ad.getActualMaximum(Calendar.DAY_OF_MONTH);    // 마지막 날짜 반환 (2018년 9월 30일)
 
-        Log.d(TAG, "막날 $dayOfMonth")
+//        Log.d(TAG, "막날 $dayOfMonth")
 //        reseult = Integer.parseInt(ad.set(Calendar.DAY_OF_MONTH, dayOfMonth))
 
         val month = arrayListOf<String>()
@@ -1066,6 +1053,8 @@ class FragmentChart : Fragment() {
             }
     }
 }
+
+
 
 
 

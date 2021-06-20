@@ -255,10 +255,10 @@ class ScreenTimeDbHelper(
             var data: ScreenTimeData =
                 ScreenTimeData(null, null, null, day, null, settingTime, null, null)
             result?.add(data)
-                Log.d(
-                    "성공한 월만 가지고 오기",
-                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
-                )
+//                Log.d(
+//                    "성공한 월만 가지고 오기",
+//                    "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+//                )
         }
         db.close()
         return result
