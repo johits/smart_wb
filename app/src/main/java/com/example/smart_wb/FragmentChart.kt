@@ -125,7 +125,8 @@ class FragmentChart : Fragment() {
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
                 weekParse()
                 Refresh(type, year, month,start,end)
-
+                leftVisible()
+                rightVisible()
 
 //        date.text =    toDays()?.let { calWeek(it) } + " ~ " + Days7(1) //기본 날짜 세팅 (주)
 
@@ -141,7 +142,8 @@ class FragmentChart : Fragment() {
 //            date.text = toDays() + " ~ " + Days7(1) //기본 날짜 세팅 (주)
             weekParse() // 주 날짜 파싱
             Refresh(type, year, month,start,end) // 그래프 새로고침
-
+            leftVisible()
+            rightVisible()
         })
 
 
@@ -208,9 +210,9 @@ class FragmentChart : Fragment() {
 //            screenTimeDbHelper.chartInsert(2021, 6, 3, "18:06:00", 7200)
 //
 //
-//            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
-//            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
-//            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
+            screenTimeDbHelper.chartInsert(2021, 6, 7, "18:06:00", 3600)
+            screenTimeDbHelper.chartInsert(2021, 6, 9, "18:06:00", 7200)
+            screenTimeDbHelper.chartInsert(2021, 6, 11, "18:06:00", 10800)
 //
 //
 //            screenTimeDbHelper.chartInsert(2021, 6, 14, "18:06:00", 3600)
@@ -232,12 +234,12 @@ class FragmentChart : Fragment() {
 //            screenTimeDbHelper.chartInsert(2021, 6, 28, "18:06:00", 3600)
 //            screenTimeDbHelper.chartInsert(2021, 6, 29, "18:06:00", 3600*2)
 //            screenTimeDbHelper.chartInsert(2021, 6, 30, "18:06:00", 3600*3)
-//
-//
-//            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
-//            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
-//            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
-//            screenTimeDbHelper.chartInsert(2021, 7, 14, "18:06:00", 3600*7)
+
+
+            screenTimeDbHelper.chartInsert(2021, 7, 1, "18:06:00", 3600*4)
+            screenTimeDbHelper.chartInsert(2021, 7, 6, "18:06:00", 3600*5)
+            screenTimeDbHelper.chartInsert(2021, 7, 10, "18:06:00", 3600*6)
+            screenTimeDbHelper.chartInsert(2021, 7, 18, "18:06:00", 3600*7)
 //
 //            screenTimeDbHelper.chartInsert(2021, 8, 14, "18:06:00", 3600*30)
 //            screenTimeDbHelper.chartInsert(2021, 9, 14, "18:06:00", 3600*25)
@@ -270,7 +272,8 @@ class FragmentChart : Fragment() {
             date.text = Year(0)
             yearParse() // 년 날짜 파싱
             Refresh(type, year, 0,0,0) // 그래프 새로고침
-
+            leftVisible()
+            rightVisible()
 //            chart.xAxis.valueFormatter = MyXAxisFormatter() // X축 값 바꿔주기 위함 (ex- 월, 화, 수, 목)
 //            chart.invalidate() // 새로 고침
 
@@ -279,7 +282,6 @@ class FragmentChart : Fragment() {
 //이전 이후
         left.setOnClickListener {
             if (type.equals("week")) {
-
                 i -= 1
                 Days7(i)?.let { it1 -> calWeek(it1) }
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
@@ -705,8 +707,8 @@ class FragmentChart : Fragment() {
 
         if(type.equals("week")){
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
+                left.visibility = View.VISIBLE
                         if (firstRowMonth == sMonth) {
-                            Log.d(TAG, "작동1")
                             if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
                                 Log.d(TAG, "작동2")
                                 left.visibility = View.VISIBLE
@@ -716,7 +718,7 @@ class FragmentChart : Fragment() {
                                 left.visibility = View.GONE
                                 value=0
                                 Log.d(TAG, "비활성 fRD $firstRowDay sDay $sDay sDay-7 ${sDay-7} value $value")
-                            } else if(firstRowDay==sDay||firstRowDay==sDay-7){
+                            } else if(firstRowDay==sDay){
                                 left.visibility = View.GONE
                                 Log.d(TAG, "leftVisible: 비활성")
                             }
@@ -729,11 +731,10 @@ class FragmentChart : Fragment() {
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
             if (firstRowYear == year) {
                         left.visibility = View.GONE
+                Log.d(TAG, "leftVisible: 비활성 년도 왼쪽")
                 }else{
-                right.visibility = View.VISIBLE
+                left.visibility = View.VISIBLE
             }
-            }else{
-                left.visibility = View.GONE
             }
         }else if(type.equals("month")){
             Log.d(TAG, "왼쪽 버튼// 첫번째 달:$firstRowMonth , 현재 달:$month")
@@ -760,9 +761,8 @@ class FragmentChart : Fragment() {
 
         if(type.equals("week")){
             if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
-                if (lastRowYear < eYear) {
-                    right.visibility = View.VISIBLE
-                } else if (lastRowYear == eYear) {
+                right.visibility = View.VISIBLE
+                if (lastRowYear == eYear) {
                     if (lastRowMonth < eMonth) {
                         right.visibility = View.VISIBLE
                     } else if (lastRowMonth == eMonth) {
@@ -781,11 +781,10 @@ class FragmentChart : Fragment() {
             if (lastRowYear != 0) {
                 if (lastRowYear == year) {
                     right.visibility = View.GONE
+                    Log.d(TAG, "leftVisible: 비활성 년도 오른쪽")
                 }else{
-                    left.visibility = View.VISIBLE
+                    right.visibility = View.VISIBLE
                 }
-            }else{
-                right.visibility = View.GONE
             }
         }else if(type.equals("month")){
             Log.d(TAG, "오른쪽 버튼 // 마지막 달:$lastRowMonth , 현재 달:$month")
