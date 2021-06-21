@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.View
 
 import android.content.Context
 import android.os.Bundle
@@ -10,8 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smart_wb.LockScreenActivity.Companion.TAG
-import com.example.smart_wb.Shared.PointItemShared
+import com.example.smart_wb.Controller.Adapter.ItemAdapter
+import com.example.smart_wb.View.LockScreenActivity.Companion.TAG
+import com.example.smart_wb.Model.ItemData
+import com.example.smart_wb.R
+import com.example.smart_wb.Controller.Shared.PointItemShared
 import kotlinx.android.synthetic.main.fragment_item.*
 
 
@@ -119,10 +122,38 @@ class FragmentItem : Fragment() {
         //구분선 넣기 (Horizontal 인 경우 0, vertical인 경우 1 설정)
         irv.addItemDecoration(DividerItemDecoration(requireContext(), 0))
 //        itemData.add(ItemData(name = "reset", item = R.drawable.reset, price = 0, lock = true, type = "reset"))
-        itemData.add(ItemData(name = "bg1", item = R.drawable.bg1, price = 100, type = "bg"))
-        itemData.add(ItemData(name = "bg2", item = R.drawable.bg2, price = 200,  type = "bg"))
-        itemData.add(ItemData(name = "timer1", item = R.drawable.timer1, price = 300,  type = "timer"))
-        itemData.add(ItemData(name = "timer2", item = R.drawable.timer2, price = 400,  type = "timer"))
+        itemData.add(
+            ItemData(
+                name = "bg1",
+                item = R.drawable.bg1,
+                price = 100,
+                type = "bg"
+            )
+        )
+        itemData.add(
+            ItemData(
+                name = "bg2",
+                item = R.drawable.bg2,
+                price = 200,
+                type = "bg"
+            )
+        )
+        itemData.add(
+            ItemData(
+                name = "timer1",
+                item = R.drawable.timer1,
+                price = 300,
+                type = "timer"
+            )
+        )
+        itemData.add(
+            ItemData(
+                name = "timer2",
+                item = R.drawable.timer2,
+                price = 400,
+                type = "timer"
+            )
+        )
 
 
 
@@ -151,9 +182,16 @@ class FragmentItem : Fragment() {
 
 
         //Itemadapter 클릭 리스너
-        val itemAdapter = ItemAdapter(iContext,itemData,flower,locker)
+        val itemAdapter =
+            ItemAdapter(
+                iContext,
+                itemData,
+                flower,
+                locker
+            )
 
-        itemAdapter.setItemClickListener(object: ItemAdapter.OnItemClickListener{
+        itemAdapter.setItemClickListener(object:
+            ItemAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 Log.d(TAG, "onClick리스너 tcheck: "+itemData[position].tcheck)
                 Log.d(TAG, "onClick리스너 timer: "+itemData[position].timer)

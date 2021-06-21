@@ -1,4 +1,4 @@
-package com.example.smart_wb.SQLite
+package com.example.smart_wb.Model
 /**
  * 2021-06-14 yama 스크린타이머 테이블 데이터 클래스
  * 타이머 테이블 구조 변경

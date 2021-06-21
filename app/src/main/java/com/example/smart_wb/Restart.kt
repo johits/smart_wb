@@ -3,9 +3,8 @@ package com.example.smart_wb
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.util.Log
-import com.example.smart_wb.Shared.TimerSetShared
+import com.example.smart_wb.Controller.Shared.TimerSetShared
+import com.example.smart_wb.View.LockScreenActivity
 
 class Restart : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

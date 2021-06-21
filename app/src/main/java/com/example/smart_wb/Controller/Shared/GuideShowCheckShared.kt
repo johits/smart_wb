@@ -1,4 +1,4 @@
-package com.example.smart_wb.Shared
+package com.example.smart_wb.Controller.Shared
 
 import android.content.Context
 import android.content.SharedPreferences

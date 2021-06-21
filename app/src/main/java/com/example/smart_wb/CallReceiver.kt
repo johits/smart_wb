@@ -10,7 +10,7 @@ import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.example.smart_wb.Shared.TimerSetShared
+import com.example.smart_wb.Controller.Shared.TimerSetShared
 
 
 /**

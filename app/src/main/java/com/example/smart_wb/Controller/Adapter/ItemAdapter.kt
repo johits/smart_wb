@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.Controller.Adapter
 
 import android.app.AlertDialog
 import android.content.Context
@@ -13,8 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smart_wb.LockScreenActivity.Companion.TAG
-import com.example.smart_wb.Shared.PointItemShared
+import com.example.smart_wb.View.LockScreenActivity.Companion.TAG
+import com.example.smart_wb.Model.ItemData
+import com.example.smart_wb.Controller.Shared.PointItemShared
+import com.example.smart_wb.PayDialog
+import com.example.smart_wb.R
 
 
 /**
@@ -27,9 +30,11 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
 
     // (1) 아이템 레이아웃과 결합
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_item, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     // (2) 리스트 내 아이템 개수
@@ -51,7 +56,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
     }
 
-    override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
         val p: Int = -1 //포지션 상수
@@ -185,7 +190,8 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                     context
                 )
                 //Itemadapter 클릭 리스너
-                dialog.setItemClickListener2(object : PayDialog.OnItemClickListener {
+                dialog.setItemClickListener2(object :
+                    PayDialog.OnItemClickListener {
                     override fun onClick(p: Int) {
                         itemList[position].lock = true //이거 설정해줘야 금액 변경됨
                         holder.lock.visibility = View.GONE
