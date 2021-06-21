@@ -525,7 +525,6 @@ class FragmentChart : Fragment() {
 
                 if(type.equals("week")){
                     axisMaximum = 7f
-                    granularity = 1f
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
                 } else if (type.equals("month")) {
                     axisMaximum = lastDayF
