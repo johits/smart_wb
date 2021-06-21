@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.View
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,8 +12,9 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.ScreenTimeDbHelper
+import com.example.smart_wb.R
+import com.example.smart_wb.Model.ScreenTimeData
+import com.example.smart_wb.Controller.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.databinding.FragmentChartBinding
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -482,7 +483,9 @@ class FragmentChart : Fragment() {
 
         }
         var set = BarDataSet(entries, "DataSet")//데이터셋 초기화 하기
-        set.color = ContextCompat.getColor(requireContext(), R.color.mainclolor)
+        set.color = ContextCompat.getColor(requireContext(),
+            R.color.mainclolor
+        )
 
         val dataSet: ArrayList<IBarDataSet> = ArrayList()
         dataSet.add(set)
@@ -525,7 +528,6 @@ class FragmentChart : Fragment() {
 
                 if(type.equals("week")){
                     axisMaximum = 7f
-                    granularity = 1f
                     setValueFormatter(IndexAxisValueFormatter(weeklabels)) //x축에 들어가는 week 값
                 } else if (type.equals("month")) {
                     axisMaximum = lastDayF

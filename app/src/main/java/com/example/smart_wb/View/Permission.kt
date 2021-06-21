@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.View
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smart_wb.R
 import kotlinx.android.synthetic.main.activity_permission.*
 
 

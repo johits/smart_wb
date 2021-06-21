@@ -1,10 +1,10 @@
-package com.example.smart_wb.Shared
+package com.example.smart_wb.Controller.Shared
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
-import com.example.smart_wb.LockScreenActivity.Companion.TAG
+import com.example.smart_wb.View.LockScreenActivity.Companion.TAG
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.*

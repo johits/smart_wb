@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.Model
 
 data class ItemData(
     val item : Int,

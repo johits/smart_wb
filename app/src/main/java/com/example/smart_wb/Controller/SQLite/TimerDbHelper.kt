@@ -1,10 +1,11 @@
-package com.example.smart_wb.SQLite
+package com.example.smart_wb.Controller.SQLite
 
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.smart_wb.Model.TimerData
 
 /**
  * 2021-06-06 yama 타이머 테이블 SQLiteOpenHelper
@@ -75,7 +76,15 @@ class TimerDbHelper
             val settingTime: Int = cursor.getInt(3)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
             val success: Int = cursor.getInt(4) //디폴트가 0 = 실패, 1 = 성공
             val flower:Int =cursor.getInt(5) //디폴트가 0
-            var data: TimerData = TimerData(id, date, time, settingTime, success, flower)
+            var data: TimerData =
+                TimerData(
+                    id,
+                    date,
+                    time,
+                    settingTime,
+                    success,
+                    flower
+                )
             result?.add(data)
         }
         db.close()
@@ -99,7 +108,15 @@ class TimerDbHelper
             val settingTime: Int = cursor.getInt(3)
             val success: Int = cursor.getInt(4)
             val flower:Int =cursor.getInt(5)
-            var data: TimerData = TimerData(id, date, time, settingTime, success, flower)
+            var data: TimerData =
+                TimerData(
+                    id,
+                    date,
+                    time,
+                    settingTime,
+                    success,
+                    flower
+                )
             result?.add(data)
 
         }

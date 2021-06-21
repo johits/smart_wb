@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.text.format.DateFormat.format
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,16 +12,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.ScreenTimeDbHelper
-import com.example.smart_wb.SQLite.TimerData
+import com.example.smart_wb.Controller.Adapter.CalendarAdapter
+import com.example.smart_wb.Model.ScreenTimeData
+import com.example.smart_wb.Controller.SQLite.ScreenTimeDbHelper
+import com.example.smart_wb.Model.TimerData
+import com.example.smart_wb.View.MainActivity
 import com.example.smart_wb.databinding.FragmentCalendarBinding
-import com.google.gson.internal.bind.util.ISO8601Utils.format
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
-import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter
-import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -172,7 +169,8 @@ class FragmentCalendar : Fragment() {
             )
         )
 
-        calendarAdapter = CalendarAdapter(mContext)
+        calendarAdapter =
+            CalendarAdapter(mContext)
         binding.recycler.adapter = calendarAdapter
 
     }

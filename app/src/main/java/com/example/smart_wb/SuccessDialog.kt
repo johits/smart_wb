@@ -4,10 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import com.example.smart_wb.Shared.TimerSetShared
+import com.example.smart_wb.Controller.Shared.TimerSetShared
 
 /**
  * 21-06-12 yama 스크린타임 성공시 성공축하 다이얼로그

@@ -6,8 +6,9 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.smart_wb.LockScreenActivity.Companion.TAG
-import com.example.smart_wb.Shared.PointItemShared
+import com.example.smart_wb.Controller.Shared.PointItemShared
+import com.example.smart_wb.Model.ItemData
+import com.example.smart_wb.View.LockScreenActivity.Companion.TAG
 import java.util.*
 
 

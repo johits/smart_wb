@@ -27,10 +27,10 @@
         android:roundIcon="@mipmap/ic_launcher2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Permission2"></activity>
-        <activity android:name=".LockScreenActivity" />
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".Permission">
+        <activity android:name=".View.Permission2"></activity>
+        <activity android:name=".View.LockScreenActivity" />
+        <activity android:name=".View.MainActivity"/>
+        <activity android:name=".View.Permission">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

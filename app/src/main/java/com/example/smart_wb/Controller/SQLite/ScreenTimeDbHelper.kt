@@ -1,4 +1,4 @@
-package com.example.smart_wb.SQLite
+package com.example.smart_wb.Controller.SQLite
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.smart_wb.Model.ScreenTimeData
 
 /**
 * 2021-06-14 yama screenTime 테이블 SQLiteOpenHelper
@@ -94,7 +95,17 @@ class ScreenTimeDbHelper(
             val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
             val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
             val flower:Int =cursor.getInt(7) //디폴트가 0
-            var data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            var data: ScreenTimeData =
+                ScreenTimeData(
+                    id,
+                    year,
+                    month,
+                    day,
+                    time,
+                    settingTime,
+                    success,
+                    flower
+                )
             result?.add(data)
 //            Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
@@ -115,7 +126,16 @@ class ScreenTimeDbHelper(
             val year:Int = cursor.getInt(0)
             val month:Int = cursor.getInt(1)
             val day:Int = cursor.getInt(2)
-            val data = ScreenTimeData(null,year,month,day,null,null,null,null)
+            val data = ScreenTimeData(
+                null,
+                year,
+                month,
+                day,
+                null,
+                null,
+                null,
+                null
+            )
             Log.d("chart", "year:$year , month:$month , day:$day")
             result.add(data)
 //            val day:Int = cursor.getInt(0)
@@ -142,7 +162,17 @@ class ScreenTimeDbHelper(
             val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
             val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
             val flower:Int =cursor.getInt(7) //디폴트가 0
-            val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            val data: ScreenTimeData =
+                ScreenTimeData(
+                    id,
+                    year,
+                    month,
+                    day,
+                    time,
+                    settingTime,
+                    success,
+                    flower
+                )
             result.add(data)
             Log.d("chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
@@ -166,7 +196,17 @@ class ScreenTimeDbHelper(
             val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
             val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
             val flower:Int =cursor.getInt(7) //디폴트가 0
-            val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            val data: ScreenTimeData =
+                ScreenTimeData(
+                    id,
+                    year,
+                    month,
+                    day,
+                    time,
+                    settingTime,
+                    success,
+                    flower
+                )
             result.add(data)
             Log.d("첫번째 행 가져오기 // chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
@@ -190,7 +230,17 @@ class ScreenTimeDbHelper(
             val settingTime: Int = cursor.getInt(5)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
             val success: Int = cursor.getInt(6) //디폴트가 0 = 실패, 1 = 성공
             val flower:Int =cursor.getInt(7) //디폴트가 0
-            val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
+            val data: ScreenTimeData =
+                ScreenTimeData(
+                    id,
+                    year,
+                    month,
+                    day,
+                    time,
+                    settingTime,
+                    success,
+                    flower
+                )
             result.add(data)
             Log.d("마지막행 가져오기 //chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
@@ -228,7 +278,16 @@ class ScreenTimeDbHelper(
 //                val flower: Int = cursor.getInt(7) //디폴트가 0
 
                 var data: ScreenTimeData =
-                    ScreenTimeData(null, year, month, null, null, settingTime, null, null)
+                    ScreenTimeData(
+                        null,
+                        year,
+                        month,
+                        null,
+                        null,
+                        settingTime,
+                        null,
+                        null
+                    )
                 result?.add(data)
 //                Log.d(
 //                    "성공한 연도만 가지고 오기",
@@ -253,7 +312,16 @@ class ScreenTimeDbHelper(
                 cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
 
             var data: ScreenTimeData =
-                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+                ScreenTimeData(
+                    null,
+                    null,
+                    null,
+                    day,
+                    null,
+                    settingTime,
+                    null,
+                    null
+                )
             result?.add(data)
 //                Log.d(
 //                    "성공한 월만 가지고 오기",
@@ -282,7 +350,16 @@ class ScreenTimeDbHelper(
                 cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
 
             var data: ScreenTimeData =
-                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+                ScreenTimeData(
+                    null,
+                    null,
+                    null,
+                    day,
+                    null,
+                    settingTime,
+                    null,
+                    null
+                )
             result?.add(data)
 //            Log.d(
 //                "일주일만 가지고 오기",
@@ -310,7 +387,16 @@ class ScreenTimeDbHelper(
                 cursor.getInt(1)//초로 저장된다. ex 설정시간 1시간이면 -> 1*3600(sec)-> 3600 으로 저장
 
             var data: ScreenTimeData =
-                ScreenTimeData(null, null, null, day, null, settingTime, null, null)
+                ScreenTimeData(
+                    null,
+                    null,
+                    null,
+                    day,
+                    null,
+                    settingTime,
+                    null,
+                    null
+                )
             result?.add(data)
             Log.d(
                 "시작날짜에 대한 데이터",
