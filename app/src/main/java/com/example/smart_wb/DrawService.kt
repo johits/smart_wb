@@ -21,6 +21,7 @@ joker
 타이머 동작
  */
 
+//초기화
 
 class DrawService : Service() {
 
