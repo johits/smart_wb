@@ -12,7 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import com.example.smart_wb.Shared.PointItemShared
+import com.example.smart_wb.Controller.Shared.PointItemShared
 
 
 /**2021-06-01

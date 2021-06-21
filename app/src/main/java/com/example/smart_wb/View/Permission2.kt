@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.View
 
 import android.app.NotificationManager
 import android.content.ContentValues.TAG
@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smart_wb.R
 import kotlinx.android.synthetic.main.activity_permission2.*
 
 
@@ -62,7 +63,9 @@ class Permission2 : AppCompatActivity() {
             pbt2.setOnClickListener(){
                 val intent =
                     Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                startActivityForResult(intent, ON_DO_NOT_DISTURB_CALLBACK_CODE)
+                startActivityForResult(intent,
+                    ON_DO_NOT_DISTURB_CALLBACK_CODE
+                )
             }
 
         }

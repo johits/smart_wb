@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.View
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
-import com.example.smart_wb.databinding.ActivityMainBinding
+import com.example.smart_wb.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -24,7 +24,12 @@ class MainActivity : AppCompatActivity() {
 //    private val binding get() = _binding!!
     private lateinit var stack: Stack<Int>//프래그먼트트 전환는 순서대로 스택에 푸시한다.
 
-    private val adapter by lazy { AdapterMainFragment(supportFragmentManager, 4) }
+    private val adapter by lazy {
+        AdapterMainFragment(
+            supportFragmentManager,
+            4
+        )
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.Controller.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,25 +10,32 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smart_wb.SQLite.ScreenTimeData
+import com.example.smart_wb.Model.ScreenTimeData
+import com.example.smart_wb.R
 
 class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     val TAG = "CalendarAdapter"
     var dataList = mutableListOf<ScreenTimeData>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
        // Log.d(TAG, "onCreateViewHolder: ")
             val view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false)
-            return ViewHolder(view)
+            return ViewHolder(
+                view
+            )
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onBindViewHolder(holder: CalendarAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
        // Log.d(TAG, "onBindViewHolder: ")
         holder.bind(dataList[position])
         if(dataList[position].success==0){
-            holder.tvSuccess.setTextColor(ContextCompat.getColor(context,R.color.colorRed))
+            holder.tvSuccess.setTextColor(ContextCompat.getColor(context,
+                R.color.colorRed
+            ))
         }else{
-            holder.tvSuccess.setTextColor(ContextCompat.getColor(context,R.color.colorBlue))
+            holder.tvSuccess.setTextColor(ContextCompat.getColor(context,
+                R.color.colorBlue
+            ))
         }
     }
 

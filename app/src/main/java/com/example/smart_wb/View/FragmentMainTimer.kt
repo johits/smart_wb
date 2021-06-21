@@ -1,9 +1,9 @@
-    package com.example.smart_wb
+package com.example.smart_wb.View
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
+import android.graphics.ColorSpace
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
@@ -15,13 +15,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.ScreenTimeDbHelper
-import com.example.smart_wb.SQLite.TimerData
-import com.example.smart_wb.SQLite.TimerDbHelper
-import com.example.smart_wb.Shared.GuideShowCheckShared
-import com.example.smart_wb.Shared.PointItemShared
-import com.example.smart_wb.Shared.TimerSetShared
+import com.example.smart_wb.Controller.SQLite.ScreenTimeDbHelper
+import com.example.smart_wb.Controller.Shared.GuideShowCheckShared
+import com.example.smart_wb.Controller.Shared.PointItemShared
+import com.example.smart_wb.Controller.Shared.TimerSetShared
+import com.example.smart_wb.GuideDialog
+import com.example.smart_wb.Model.TimerModel
+import com.example.smart_wb.R
 import com.example.smart_wb.databinding.FragmentMainTimerBinding
 import kotlinx.android.synthetic.main.fragment_main_timer.view.*
 import java.text.SimpleDateFormat
@@ -36,7 +36,12 @@ private const val ARG_PARAM2 = "param2"
 /**
  * 21/05/31 yama 스크린타임 타이머 시간 설정하는 프래그먼트
  */
-class FragmentMainTimer : Fragment(), View.OnClickListener {
+class FragmentMainTimer : Fragment(), Observer, View.OnClickListener {
+
+    // Model 클래스의 객체 생성
+    var myModel: TimerModel ? = null
+
+
     private val TAG = "FragmentMainTimer"
     private var param1: String? = null
     private var param2: String? = null
@@ -75,6 +80,11 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 사이에 관계 생성
+        // 관측 가능한 모델 및
+        // 관찰자 활동
+        myModel = TimerModel()
+        myModel!!.addObserver(this)
     }
 
     //view를 구성
@@ -150,7 +160,8 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
                         val dialog = GuideDialog(mContext)
                         dialog.showDialog()
 
-                        dialog.setItemClickListener2(object : GuideDialog.OnItemClickListener {
+                        dialog.setItemClickListener2(object :
+                            GuideDialog.OnItemClickListener {
                             override fun onClickStart(flag: Boolean) {
                                 Log.d(TAG, "onClickStart: $flag")
 
@@ -181,11 +192,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     }
 
 
-    //온클릭
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
-        }
-    }
+
 
     //프래그먼트는 뷰보다 더 오래살아남는다.
     //바인딩 클래스는 뷰에 대한 참조를 가지고 있는데
@@ -207,7 +214,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
     fun insertSettingTime(settingTime: Int) {
 //        Log.d(TAG, "insertSettingTime: ")
 
-        val timeStamp:Long = System.currentTimeMillis()
+        val timeStamp: Long = System.currentTimeMillis()
         // 현재 시간을 Date 타입으로 변환
         val dateType = Date(timeStamp)
 
@@ -226,30 +233,17 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         val day = dateFormatDay.format(dateType).toInt()
         val time = dateFormatTime.format(dateType)
 
-        //타이머 데이터 인서트
-//        timerDbHelper = TimerDbHelper(mContext, "timerDb.db", null, 1)
-//        database = timerDbHelper.writableDatabase
-//        timerDbHelper.insert(date, time, settingTime)
-       val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db",null,1)
+
+        val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db", null, 1)
         val database = screenTimeDbHelper.writableDatabase
         //데이터 삽입
         screenTimeDbHelper.insert(year, month, day, time, settingTime)
 
-        //데이터 모두 불러오기
-//        var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
-//        //데이터 확인용 로그
-//        for (data in arr) {
-//            Log.d(TAG,"id:${data.id}, year:${data.year}, month:${data.month}, day:${data.day}, " +
-//                    "time:${data.time}, settingTime:${data.settingTime}, success:${data.success}, flower:${data.flower},")
-//        }
+
         //설정시간 쉐어드에 저장
         TimerSetShared.setDate(mContext, date)
         TimerSetShared.setTime(mContext, time)
         TimerSetShared.setSettingTime(mContext, settingTime)
-        //쉐어드 저장 확인용 로그
-//        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
-//                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
-//                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
     }
 
     //스크린 타임 시작
@@ -262,5 +256,29 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         //액티비티 종료
         activity?.finish()
 
+    }
+
+    // setValueAtIndex () 메서드 호출
+    // 다른 버튼에 대한 적절한 인수 전달
+    //  "this"인수
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.button ->  myModel?.setValueAtIndex(0)
+            R.id.button2 -> myModel?.setValueAtIndex(1)
+            R.id.button3 -> myModel?.setValueAtIndex(2)
+        }
+    }
+
+
+
+    // 모델에 의해 값이 수정 된 후
+    // 뷰를 업데이트하는 함수
+    override fun update(o: Observable?, arg: Any?) {
+        TODO("Not yet implemented")
+        // 업데이트 된 값에 따라
+        // 버튼의 텍스트 변경
+        Button1!!.text = "Count: " + myModel!!.getValueAtIndex(0)
+        Button2!!.text = "Count: " + myModel!!.getValueAtIndex(1)
+        Button3!!.text = "Count: " + myModel!!.getValueAtIndex(2)
     }
 }
