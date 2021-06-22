@@ -82,15 +82,13 @@ class FragmentCalendar : Fragment() {
             val year: Int = date.year
             val month: Int = date.month
             val day: Int = date.day
-
-            dataList = selectDate(year, month, day)
+            val screenTime = ScreenTime(mContext)
+            dataList = screenTime.loadDate(year,month,day)
             if (dataList.size == 0) {//데이터 없을 때
                 binding.linearParent.visibility = View.GONE//8
                 binding.tvNoData.visibility = View.VISIBLE//0
                 binding.linearExplain.visibility = View.GONE
-                if (binding.btnShowDetail.text.toString()
-                        .equals(getString(R.string.calendar_btn_detail_close))
-                ) {
+                if (binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_close))) {
                     binding.calendar.state().edit()
                         .setCalendarDisplayMode(CalendarMode.MONTHS)
                         .commit()
@@ -108,9 +106,7 @@ class FragmentCalendar : Fragment() {
 
         //상세보기버튼 클릭 이벤트. 리사이클러뷰 비저블
         binding.btnShowDetail.setOnClickListener {
-            if (binding.btnShowDetail.text.toString()
-                    .equals(getString(R.string.calendar_btn_detail_show))
-            ) {
+            if (binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_show))) {
                 binding.calendar.state().edit()
                     .setCalendarDisplayMode(CalendarMode.WEEKS)
                     .commit()
@@ -189,8 +185,9 @@ class FragmentCalendar : Fragment() {
     // 도전 기록이 있는 날짜에 점찍기
     //달력 표시 제한
     fun screenTimeDataDeco() {
-        val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db", null, 1)
-        decoList = screenTimeDbHelper.calendarSelect()
+//        val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db", null, 1)
+        val screenTime = ScreenTime(mContext)
+        decoList = screenTime.loadDeco()
 
         //도전 기록이 있는 날짜에 점찍기
         for (item in decoList) {
@@ -308,10 +305,10 @@ class FragmentCalendar : Fragment() {
 
         binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
 
-        val screenTime = ScreenTime(mContext)
 
         //현재날짜 데이터 불러오기
 //        dataList = selectDate(year,month,day)
+        val screenTime = ScreenTime(mContext)
         dataList = screenTime.loadDate(year,month,day)
 
         if (dataList.size == 0) {//데이터 없을 때

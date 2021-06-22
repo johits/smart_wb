@@ -202,9 +202,14 @@ class LockScreenActivity : AppCompatActivity() {
                 if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
                     getDisplayWakeUp() //핸드폰화면 켜짐
                     successUpdate(flower)//성공시//sqlite 업데이트
-
+                    val timeStamp = System.currentTimeMillis()
+                    // 현재 시간을 Date 타입으로 변환
+                    val dateType = Date(timeStamp)
+                    val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+                    val nowTime: String = dateFormatTime.format(dateType)//현재시간
                     showDialog(
-                        getString(R.string.success_dialog_title_success),
+//                        getString(R.string.success_dialog_title_success),
+                        nowTime,
                         setTimeString,
                         flower,
                         missedCall
