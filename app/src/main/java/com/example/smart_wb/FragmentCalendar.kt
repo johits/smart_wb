@@ -130,12 +130,12 @@ class FragmentCalendar : Fragment() {
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
-        binding.calendar.setOnTitleClickListener {
-            binding.calendar.state().edit()
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
-                .commit()
-           decorateToday()
-        }
+//        binding.calendar.setOnTitleClickListener {
+//            binding.calendar.state().edit()
+//                .setCalendarDisplayMode(CalendarMode.MONTHS)
+//                .commit()
+//           decorateToday()
+//        }
 
         return view
     }
@@ -147,7 +147,7 @@ class FragmentCalendar : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //initRecycler()
+//        initRecycler()
     }
 
     private fun initRecycler() {
@@ -316,21 +316,20 @@ class FragmentCalendar : Fragment() {
             binding.linearParent.visibility = View.GONE//8
             binding.tvNoData.visibility = View.VISIBLE//0
             binding.linearExplain.visibility = View.GONE
-            if (binding.btnShowDetail.text.toString()
-                    .equals(getString(R.string.calendar_btn_detail_close))
-            ) {
+            if (binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_close))) {
                 binding.calendar.state().edit()
                     .setCalendarDisplayMode(CalendarMode.MONTHS)
                     .commit()
                 binding.btnShowDetail.text = getString(R.string.calendar_btn_detail_show)
             }
         } else { //데이터 있을 때
+            Log.d(TAG, "decorateToday: ")
             binding.linearParent.visibility = View.VISIBLE
             binding.tvNoData.visibility = View.GONE
             binding.recycler.smoothScrollToPosition(0)
 //                binding.recycler.visibility = View.VISIBLE
+            calendarAdapter.replaceList(dataList)
         }
-        calendarAdapter.replaceList(dataList)
         calculateSum() //날짜에 해당하는 총도전시간, 성공시간, 획득꽃 계산
     }
 }
