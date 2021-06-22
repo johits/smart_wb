@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.text.format.DateFormat.format
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,16 +12,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smart_wb.Model.ScreenTime
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.SQLite.TimerData
 import com.example.smart_wb.databinding.FragmentCalendarBinding
-import com.google.gson.internal.bind.util.ISO8601Utils.format
+import com.example.smart_wb.etc.CalendarDecoratorToday
+import com.example.smart_wb.etc.CalendarDecoratorpDotSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
-import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter
-import kotlinx.android.synthetic.main.fragment_chart.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -310,8 +308,12 @@ class FragmentCalendar : Fragment() {
 
         binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
 
+        val screenTime = ScreenTime(mContext)
+
         //현재날짜 데이터 불러오기
-        dataList = selectDate(year,month,day)
+//        dataList = selectDate(year,month,day)
+        dataList = screenTime.loadDate(year,month,day)
+
         if (dataList.size == 0) {//데이터 없을 때
             binding.linearParent.visibility = View.GONE//8
             binding.tvNoData.visibility = View.VISIBLE//0

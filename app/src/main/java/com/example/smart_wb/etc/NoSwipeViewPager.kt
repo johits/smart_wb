@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.etc
 
 import android.content.Context
 import android.util.AttributeSet
