@@ -1,10 +1,14 @@
 package com.example.smart_wb
 
+import android.annotation.SuppressLint
+import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
 import android.view.*
@@ -12,6 +16,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.smart_wb.Shared.PointItemShared
 
 
@@ -47,21 +53,33 @@ class DrawService : Service() {
     //설정시간
     var settingTime = 0
 
+    lateinit var powerManager: PowerManager
+    lateinit var wakeLock: PowerManager.WakeLock
+
     override fun onBind(p0: Intent?): IBinder {
 //        throw UnsupportedOperationException("Not yet")
         return mMessenger.binder
     }
 
+    @SuppressLint("WakelockTimeout")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         callEvent()
+
+        //절전모드 안 들어가게 함
+        powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "MyApp::smart_wb_tag"
+        )
+        wakeLock.acquire()
 
         //타이머 시작
         handler = Handler()
         thread = StartTimer()
         handler?.post(thread as StartTimer)
 
-        return Service.START_STICKY
+        return Service.START_STICKY //START_STICKY 서비스가 죽어도 시스템에서 재생성
     }
 
 
@@ -107,11 +125,45 @@ class DrawService : Service() {
         bt.setOnClickListener {
             settingTime = -3
             Log.d(TAG, "종료버튼 클릭")
-           // drawServiceStop(false)
+            // drawServiceStop(false)
 
         }
         wm!!.addView(mView, params)
     }
+
+//    fun startForegroundService() {
+//            val CHANNEL_ID = "snwodeer_service_channel"
+//        if (Build.VERSION.SDK_INT >= 26) {
+//            val channel = NotificationChannel(
+//                CHANNEL_ID,
+//                "SnowDeer Service Channel",
+//                NotificationManager.IMPORTANCE_DEFAULT
+//            )
+//            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+//                .createNotificationChannel(channel)
+//        }
+//
+////        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
+////            .setContentTitle("앱")
+////            .setContentIntent(pendingIntent)
+//            var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setSmallIcon(android.R.drawable.ic_dialog_info)
+//                .setContentTitle("서비스 동작중")
+//                .setContentText("사랑한다")
+//                .setAutoCancel(true) //터치시 노티 지우기
+//                .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
+//                .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
+//                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
+//
+//            builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//
+//            //알림 상태 확인
+////            val notificationManager = NotificationManagerCompat.from(this)
+////            notificationManager.notify(1, builder.build())
+//
+//            startForeground(1, builder.build())
+//    } // startForegroundService()..
+
 
     //액티비티 호출 및 서비스 종료 위한 메세지 보냄
     @RequiresApi(Build.VERSION_CODES.M)
@@ -130,9 +182,9 @@ class DrawService : Service() {
         notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
 
         sendMsgToActivity(result);//액티비티에 메세지보내기//result true == 성공, false == 종료버튼터치
-
         stopService(Intent(applicationContext, DrawService::class.java))
 
+        wakeLock.release()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -157,7 +209,7 @@ class DrawService : Service() {
     inner class StartTimer : Thread() {
         @RequiresApi(Build.VERSION_CODES.N)
         override fun run() {
-                val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
+            val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
             if (settingTime >= 0) { //설정시간(초)이 0보다 클떄 동작
                 if (settingTime == 0) {
 //                    watch.text = calTime(settingTime)
@@ -169,13 +221,13 @@ class DrawService : Service() {
                 settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
 
             } else if (settingTime == -1) {
-                watch.text="00초"
+                watch.text = "00초"
                 settingTime--
                 handler?.postDelayed(this, 500)
             } else if (settingTime == -2) {//스크린타임 정상적으로 종료
                 Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
-            }else if (settingTime == -3) {//사용자가 종료버튼 눌렀을때
+            } else if (settingTime == -3) {//사용자가 종료버튼 눌렀을때
                 Log.d(TAG, "스크린타임 강제종료")
                 drawServiceStop(false)
             }

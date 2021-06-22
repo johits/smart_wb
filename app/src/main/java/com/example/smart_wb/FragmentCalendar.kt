@@ -32,13 +32,6 @@ import java.util.*
  * 달력에 스크린타임 성공 실패 표시
  * */
 class FragmentCalendar : Fragment() {
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentCalendar().apply {
-
-            }
-    }
 
     lateinit var calendarAdapter: CalendarAdapter //상세기록 표시 리사이클러뷰 어답터
     var dataList = mutableListOf<ScreenTimeData>() //상세기록 데이터 리스트
@@ -154,7 +147,7 @@ class FragmentCalendar : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+        //initRecycler()
     }
 
     private fun initRecycler() {
@@ -299,7 +292,7 @@ class FragmentCalendar : Fragment() {
         return result
     }
 
-    //오늘날짜 표시
+    //오늘날짜 표시&현재날짜 데이터 불러오기
     @RequiresApi(Build.VERSION_CODES.N)
     private fun decorateToday() {
         val timeStamp = System.currentTimeMillis()
