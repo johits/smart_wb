@@ -32,13 +32,6 @@ import java.util.*
  * 달력에 스크린타임 성공 실패 표시
  * */
 class FragmentCalendar : Fragment() {
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentCalendar().apply {
-
-            }
-    }
 
     lateinit var calendarAdapter: CalendarAdapter //상세기록 표시 리사이클러뷰 어답터
     var dataList = mutableListOf<ScreenTimeData>() //상세기록 데이터 리스트
@@ -137,12 +130,12 @@ class FragmentCalendar : Fragment() {
         }
 
         //타이틀을 누르면 월간단위로 보여지게 변경
-        binding.calendar.setOnTitleClickListener {
-            binding.calendar.state().edit()
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
-                .commit()
-           decorateToday()
-        }
+//        binding.calendar.setOnTitleClickListener {
+//            binding.calendar.state().edit()
+//                .setCalendarDisplayMode(CalendarMode.MONTHS)
+//                .commit()
+//           decorateToday()
+//        }
 
         return view
     }
@@ -154,7 +147,7 @@ class FragmentCalendar : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecycler()
+//        initRecycler()
     }
 
     private fun initRecycler() {
@@ -299,7 +292,7 @@ class FragmentCalendar : Fragment() {
         return result
     }
 
-    //오늘날짜 표시
+    //오늘날짜 표시&현재날짜 데이터 불러오기
     @RequiresApi(Build.VERSION_CODES.N)
     private fun decorateToday() {
         val timeStamp = System.currentTimeMillis()
@@ -323,21 +316,20 @@ class FragmentCalendar : Fragment() {
             binding.linearParent.visibility = View.GONE//8
             binding.tvNoData.visibility = View.VISIBLE//0
             binding.linearExplain.visibility = View.GONE
-            if (binding.btnShowDetail.text.toString()
-                    .equals(getString(R.string.calendar_btn_detail_close))
-            ) {
+            if (binding.btnShowDetail.text.toString().equals(getString(R.string.calendar_btn_detail_close))) {
                 binding.calendar.state().edit()
                     .setCalendarDisplayMode(CalendarMode.MONTHS)
                     .commit()
                 binding.btnShowDetail.text = getString(R.string.calendar_btn_detail_show)
             }
         } else { //데이터 있을 때
+            Log.d(TAG, "decorateToday: ")
             binding.linearParent.visibility = View.VISIBLE
             binding.tvNoData.visibility = View.GONE
             binding.recycler.smoothScrollToPosition(0)
 //                binding.recycler.visibility = View.VISIBLE
+            calendarAdapter.replaceList(dataList)
         }
-        calendarAdapter.replaceList(dataList)
         calculateSum() //날짜에 해당하는 총도전시간, 성공시간, 획득꽃 계산
     }
 }

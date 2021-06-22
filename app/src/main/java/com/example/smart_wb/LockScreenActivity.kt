@@ -123,7 +123,11 @@ class LockScreenActivity : AppCompatActivity() {
     //     서비스 시작 및 Messenger 전달
     private fun setStartService() {
         //드로우서비스 시작
-        startService(Intent(this@LockScreenActivity, DrawService::class.java))
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            startForegroundService(Intent(this@LockScreenActivity, DrawService::class.java))
+//        }else{
+            startService(Intent(this@LockScreenActivity, DrawService::class.java))
+//        }
         //액티비티와 서비스 연결
         bindService(Intent(this, DrawService::class.java), mConnection, BIND_AUTO_CREATE)
         mIsBound = true// 서비스상태 확인용 플래그
