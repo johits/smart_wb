@@ -1,10 +1,9 @@
-package com.example.smart_wb
+package com.example.smart_wb.View_Controller.Fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.text.format.DateFormat.format
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.SQLite.ScreenTimeData
 import com.example.smart_wb.Model.ScreenTime
+import com.example.smart_wb.R
 import com.example.smart_wb.View_Controller.Activity.MainActivity
 import com.example.smart_wb.View_Controller.Adapter.CalendarAdapter
 

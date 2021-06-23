@@ -3,7 +3,7 @@ package com.example.smart_wb.View_Controller.Receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.smart_wb.LockScreenActivity
+import com.example.smart_wb.View_Controller.Activity.LockScreenActivity
 import com.example.smart_wb.Model.Shared.TimerSetShared
 
 

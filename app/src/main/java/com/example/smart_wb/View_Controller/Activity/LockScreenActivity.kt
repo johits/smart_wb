@@ -1,41 +1,34 @@
-package com.example.smart_wb
+package com.example.smart_wb.View_Controller.Activity
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.AlertDialog.Builder
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.*
 import android.media.RingtoneManager
 import android.os.*
-import android.os.VibrationEffect.DEFAULT_AMPLITUDE
-import android.provider.CallLog
-import android.text.format.Time
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.smart_wb.View_Controller.Service.DrawService
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.RemainTime
 import com.example.smart_wb.Model.ScreenTime
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.Model.Shared.TimerSetShared
-import com.example.smart_wb.View_Controller.Activity.MainActivity
-import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.example.smart_wb.R
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**

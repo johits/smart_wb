@@ -1,4 +1,4 @@
-package com.example.smart_wb
+package com.example.smart_wb.View_Controller.Service
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
@@ -15,8 +15,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.RemainTime
-import java.text.SimpleDateFormat
-import java.util.*
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.Model.Shared.TimerSetShared
 import com.example.smart_wb.R
@@ -27,8 +25,6 @@ joker
 다른 앱 위에 표시되는 앱 권한 받기
 타이머 동작
  */
-
-
 class DrawService : Service() {
 
     companion object {
@@ -235,7 +231,7 @@ class DrawService : Service() {
                     settingTime=remainTime.calRemainTime()
 //                    settingTime--
                     watch.text = calculator.changeTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
-                    handler?.postDelayed(this, Companion.timerDelay)
+                    handler?.postDelayed(this, timerDelay)
                 }
 //                Log.d(TAG, "남은시간:$settingTime")
             } else if (settingTime == -1) {

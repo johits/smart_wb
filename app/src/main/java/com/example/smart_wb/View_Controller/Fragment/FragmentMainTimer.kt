@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.smart_wb.LockScreenActivity
+import com.example.smart_wb.View_Controller.Activity.LockScreenActivity
 import com.example.smart_wb.View_Controller.Dialog.GuideDialog
 import com.example.smart_wb.Model.SQLite.ScreenTimeDbHelper
 import com.example.smart_wb.Model.Shared.GuideShowCheckShared
