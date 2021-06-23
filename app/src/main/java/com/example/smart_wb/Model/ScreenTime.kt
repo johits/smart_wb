@@ -3,6 +3,8 @@ package com.example.smart_wb.Model
 import android.content.Context
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
+import com.example.smart_wb.Shared.PointItemShared
+
 /**
  * 2021-06-22 yama 스크린타임관련
  * 데이터 업데이트, 업로드, 불러오기
@@ -19,5 +21,16 @@ class ScreenTime(private val context: Context) {
     fun loadDeco(): MutableList<ScreenTimeData> {
         val screenTimeDbHelper = ScreenTimeDbHelper(context, "screenTimeDb.db", null, 1)
         return screenTimeDbHelper.calendarSelect()
+    }
+
+    //성공시 sqlite screenTimeDb table 에 success 0->1, flower 업데이트
+    // 쉐어드에 받은 꽃 더하기
+    fun successUpdate(flower: Int) {
+        /* 데이터 업데이트 */
+        val screenTimeDbHelper = ScreenTimeDbHelper(context, "screenTimeDb.db", null, 1)
+        screenTimeDbHelper.update(flower)
+
+        //받은 꽃 쉐어드에 더한다.
+        PointItemShared.sumFlower(context, flower)
     }
 }

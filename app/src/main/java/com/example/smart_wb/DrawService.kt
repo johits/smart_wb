@@ -35,7 +35,7 @@ class DrawService : Service() {
         const val MSG_SEND_TO_SERVICE = 3
         const val MSG_SEND_TO_ACTIVITY = 4
 
-        const val timerDelay: Long = 1000 //타이머 속도 상수값
+        const val timerDelay: Long = 10 //타이머 속도 상수값
     }
 
     private var mClient: Messenger? = null //activity 에서 가져온 메신저
@@ -215,6 +215,7 @@ class DrawService : Service() {
                     settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
                 } else {
                     settingTime=calRemainTime()
+//                    settingTime--
                     watch.text = changeTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
                     handler?.postDelayed(this, Companion.timerDelay)
                 }
