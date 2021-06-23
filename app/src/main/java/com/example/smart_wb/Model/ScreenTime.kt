@@ -1,9 +1,10 @@
 package com.example.smart_wb.Model
 
 import android.content.Context
-import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.ScreenTimeDbHelper
-import com.example.smart_wb.Shared.PointItemShared
+import com.example.smart_wb.Model.SQLite.ScreenTimeData
+import com.example.smart_wb.Model.SQLite.ScreenTimeDbHelper
+import com.example.smart_wb.Model.Shared.PointItemSharedModel
+
 
 /**
  * 2021-06-22 yama 스크린타임관련
@@ -31,6 +32,6 @@ class ScreenTime(private val context: Context) {
         screenTimeDbHelper.update(flower)
 
         //받은 꽃 쉐어드에 더한다.
-        PointItemShared.sumFlower(context, flower)
+        PointItemSharedModel.sumFlower(context, flower)
     }
 }

@@ -15,11 +15,10 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.RemainTime
-import com.example.smart_wb.Shared.PointItemShared
-import com.example.smart_wb.Shared.TimerSetShared
 import java.text.SimpleDateFormat
 import java.util.*
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
+import com.example.smart_wb.Model.Shared.TimerSetShared
 import com.example.smart_wb.R
 
 

@@ -9,11 +9,11 @@ import android.widget.TextView
 import com.example.smart_wb.Model.Data.ItemData
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.R
-import com.example.smart_wb.View_Controller.Activity.LockScreenActivity.Companion.TAG
 import java.util.*
 
 
  class PayDialog (context: Context) {
+     private val TAG = "PayDialog"
      private var dialog = Dialog(context)
     var present_flower: Int = 0
     var lockerlist = java.util.ArrayList<String>()

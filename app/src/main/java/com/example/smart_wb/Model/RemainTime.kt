@@ -1,7 +1,6 @@
 package com.example.smart_wb.Model
 
 import android.annotation.SuppressLint
-import com.example.smart_wb.Shared.TimerSetShared
 import java.text.SimpleDateFormat
 import java.util.*
 

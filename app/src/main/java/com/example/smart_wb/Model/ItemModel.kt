@@ -3,10 +3,10 @@ package com.example.smart_wb.Model
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.example.smart_wb.LockScreenActivity
 import com.example.smart_wb.Model.Data.ItemData
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.R
-import com.example.smart_wb.View_Controller.Activity.LockScreenActivity
 
 class ItemModel {
     val itemData= arrayListOf<ItemData>() // 아이템 배열

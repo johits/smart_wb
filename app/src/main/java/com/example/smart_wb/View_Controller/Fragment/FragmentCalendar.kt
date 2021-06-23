@@ -14,10 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.Model.Calculator
+import com.example.smart_wb.Model.SQLite.ScreenTimeData
 import com.example.smart_wb.Model.ScreenTime
-import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.ScreenTimeDbHelper
-import com.example.smart_wb.SQLite.TimerData
+import com.example.smart_wb.View_Controller.Activity.MainActivity
+import com.example.smart_wb.View_Controller.Adapter.CalendarAdapter
+
 import com.example.smart_wb.databinding.FragmentCalendarBinding
 import com.example.smart_wb.etc.CalendarDecoratorToday
 import com.example.smart_wb.etc.CalendarDecoratorpDotSpan

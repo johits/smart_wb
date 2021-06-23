@@ -3,6 +3,7 @@ package com.example.smart_wb.View_Controller.Fragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.example.smart_wb.FragmentCalendar
 
 class AdapterMainFragment(fm : FragmentManager, private val fragmentCount : Int) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int) : Fragment {

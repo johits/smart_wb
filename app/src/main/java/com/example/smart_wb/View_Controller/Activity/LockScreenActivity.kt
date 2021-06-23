@@ -25,12 +25,9 @@ import androidx.core.app.NotificationManagerCompat
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.RemainTime
 import com.example.smart_wb.Model.ScreenTime
-import com.example.smart_wb.SQLite.ScreenTimeData
-import com.example.smart_wb.SQLite.ScreenTimeDbHelper
-import com.example.smart_wb.SQLite.TimerData
-import com.example.smart_wb.SQLite.TimerDbHelper
-import com.example.smart_wb.Shared.PointItemShared
-import com.example.smart_wb.Shared.TimerSetShared
+import com.example.smart_wb.Model.Shared.PointItemSharedModel
+import com.example.smart_wb.Model.Shared.TimerSetShared
+import com.example.smart_wb.View_Controller.Activity.MainActivity
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.coroutines.GlobalScope
