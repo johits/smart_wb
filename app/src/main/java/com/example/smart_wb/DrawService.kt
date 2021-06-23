@@ -199,7 +199,7 @@ class DrawService : Service() {
         sendMsgToActivity(result);//액티비티에 메세지보내기//result true == 성공, false == 종료버튼터치
         stopService(Intent(applicationContext, DrawService::class.java))
 
-        wakeLock.release()
+//        wakeLock.release()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {

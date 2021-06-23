@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.smart_wb.Model.Calculator
+import com.example.smart_wb.Model.RemainTime
 import com.example.smart_wb.Model.ScreenTime
 import com.example.smart_wb.SQLite.ScreenTimeData
 import com.example.smart_wb.SQLite.ScreenTimeDbHelper
@@ -90,8 +91,11 @@ class LockScreenActivity : AppCompatActivity() {
 
             //핸드폰 재시작할 때
         } else if (intent.hasExtra("restart")) {
-            val calculator = Calculator()
-            val remainTime = calculator.calRemainTime(this)//스크린타임 남은 시간계산
+            val setTime = TimerSetShared.getSettingTime(this)
+            val startTime = TimerSetShared.getTime(this)
+            val startDate = TimerSetShared.getDate(this)
+            val remain = RemainTime(startTime,startDate,setTime)
+            val remainTime = remain.calRemainTime()//스크린타임 남은 시간계산
 
             Log.d(TAG, "남은시간:$remainTime")
 

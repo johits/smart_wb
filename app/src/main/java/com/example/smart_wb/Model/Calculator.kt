@@ -32,42 +32,6 @@ class Calculator {
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH)
     }
 
-    //남은시간 계산기 //남은시간 리턴
-    //시작시간+설정시간=종료시간
-    //종료시간-현재시간=남은시간
-    //남은시간 양수 스크린타임 계속
-    //남은시간 0or음수 스크린타임 이미 종료
-    //날짜가 바뀌면 보정을 해야한다.
-    @SuppressLint("SimpleDateFormat")
-    fun calRemainTime(context: Context): Int {
-        var result = 0
-        val timeStamp = System.currentTimeMillis()
-        // 현재 시간을 Date 타입으로 변환
-        val dateType = Date(timeStamp)
-        // 날짜, 시간을 가져오고 싶은 형태 선언
-        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
-        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
-        val nowDate: String = dateFormatDate.format(dateType) //현재 년 월 일
-        val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
-        val startTime: Int = calSec(TimerSetShared.getTime(context)) //시작시간
-        val settingTime: Int = TimerSetShared.getSettingTime(context)//설정시간
-        var endTime = startTime + settingTime// 종료시간
-
-        //종료시간이 하루가 지난 상황 보정
-        if (endTime > 86400) {
-            if (nowDate == TimerSetShared.getDate(context)) {
-                result = endTime - nowTime
-            } else {
-                result = endTime - nowTime - 86400//보정필요하다
-            }
-        } else {
-            result = endTime - nowTime//남은시간
-        }
-
-        return result
-    }
-
     //시간 -> 초 변환 //String->Int //ex 01:01:00 -> 3660
     fun calSec(time: String): Int {
         val parts = time.split(":").toTypedArray()
@@ -94,7 +58,7 @@ class Calculator {
         return result
     }
 
-    //시간변환기
+    //시간변환기 //드로우서비스
     @RequiresApi(Build.VERSION_CODES.N)
     fun changeTime(setTime: Int): String? {
         val result: String?
