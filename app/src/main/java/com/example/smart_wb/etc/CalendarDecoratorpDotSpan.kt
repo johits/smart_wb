@@ -28,7 +28,9 @@ class CalendarDecoratorpDotSpan(context: Context, currentDay: CalendarDay) : Day
         //view.setSelectionDrawable(drawable!!)
 //        view.setBackgroundDrawable(drawable)
 //        view.setDaysDisabled(true)//클릭불가
-        view.addSpan(DotSpan(15f, ContextCompat.getColor(mContext, R.color.colorRed)))
+        view.addSpan(DotSpan(15f, ContextCompat.getColor(mContext,
+            R.color.colorRed
+        )))
     }
 
     init {
