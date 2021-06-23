@@ -93,4 +93,24 @@ class Calculator {
         }
         return result
     }
+
+    //시간변환기
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun changeTime(setTime: Int): String? {
+        val result: String?
+        val hour = Math.floorDiv(setTime, 3600)
+        val min = Math.floorMod(setTime, 3600) / 60
+        val sec = Math.floorMod(setTime, 3600) % 60
+
+        if (hour > 0) {//1시간 초과 남았을떄 ex 02시22분
+            result = "%1$02d시 %2$02d분".format(hour, min)
+        } else if (hour == 0 && min > 0) { //1시간 이하 남았을 때 ex 22분22초
+            result = "%1$02d분 %2$02d초".format(min, sec)
+        } else if (hour == 0 && min == 0) { // 1분 이하 남았을 때 ex 22초
+            result = "%1$02d초".format(sec)
+        } else { //리턴값 있어서 else 넣어야 한다. ex 22초
+            result = "%1$02d초".format(sec)
+        }
+        return result
+    }
 }

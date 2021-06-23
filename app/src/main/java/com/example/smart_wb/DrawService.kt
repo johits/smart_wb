@@ -13,6 +13,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.example.smart_wb.Model.Calculator
+import com.example.smart_wb.Model.RemainTime
 import com.example.smart_wb.Shared.PointItemShared
 import com.example.smart_wb.Shared.TimerSetShared
 import java.text.SimpleDateFormat
@@ -51,6 +53,9 @@ class DrawService : Service() {
     //설정시간
     var settingTime = 0
 
+    val calculator : Calculator = Calculator() //시간변환기
+    private lateinit var remainTime :RemainTime //남은시간계산용변수선언
+    //doze모드 방지 변수
     lateinit var powerManager: PowerManager
     lateinit var wakeLock: PowerManager.WakeLock
 
@@ -65,19 +70,31 @@ class DrawService : Service() {
         callEvent()
 
         //절전모드 안 들어가게 함
-        powerManager = getSystemService(POWER_SERVICE) as PowerManager
-        wakeLock = powerManager.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK,
-            "MyApp::smart_wb_tag"
-        )
-        wakeLock.acquire()
-
+        //noDoze()
+        
+//        val calculator = Calculator()
+//        Log.d(TAG, "기존 남은시간: ${calculator.calRemainTime(this)}")
+        val time = TimerSetShared.getTime(this)
+        val date = TimerSetShared.getDate(this)
+        val setTime = TimerSetShared.getSettingTime(this)
+        remainTime = RemainTime(time,date,setTime)
+        Log.d(TAG, "개선된 남은시간:${remainTime.calRemainTime()}")
         //타이머 시작
         handler = Handler()
         thread = StartTimer()
         handler?.post(thread as StartTimer)
 
         return Service.START_STICKY //START_STICKY 서비스가 죽어도 시스템에서 재생성
+    }
+
+    //Doze모드(절전) 방지
+    fun noDoze(){
+        powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "MyApp::smart_wb_tag"
+        )
+        wakeLock.acquire()
     }
 
 
@@ -214,12 +231,12 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
                     settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
                 } else {
-                    settingTime=calRemainTime()
+                    settingTime=remainTime.calRemainTime()
 //                    settingTime--
-                    watch.text = changeTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
+                    watch.text = calculator.changeTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
                     handler?.postDelayed(this, Companion.timerDelay)
                 }
-                Log.d(TAG, "남은시간:$settingTime")
+//                Log.d(TAG, "남은시간:$settingTime")
             } else if (settingTime == -1) {
                 watch.text = "00초"
                 settingTime--
@@ -243,64 +260,64 @@ class DrawService : Service() {
     //남은시간 양수 스크린타임 계속
     //남은시간 0or음수 스크린타임 이미 종료
     //날짜가 바뀌면 보정을 해야한다. 어떻게?
-    @SuppressLint("SimpleDateFormat")
-    private fun calRemainTime(): Int {
-        var result = 0
-        val timeStamp = System.currentTimeMillis()
-        // 현재 시간을 Date 타입으로 변환
-        val dateType = Date(timeStamp)
-        // 날짜, 시간을 가져오고 싶은 형태 선언
-        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
-        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
-        val nowDate: String = dateFormatDate.format(dateType) //현재 년 월 일
-        val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
-        val startTime: Int = calSec(TimerSetShared.getTime(this)) //시작시간
-        val settingTime: Int = TimerSetShared.getSettingTime(this)//설정시간
-        var endTime = startTime + settingTime// 종료시간
-
-        //종료시간이 하루가 지난 상황 보정
-        if (endTime > 86400) {
-            if (nowDate.equals(TimerSetShared.getDate(this))) {
-                result = endTime - nowTime
-            } else {
-                result = endTime - nowTime - 86400//보정필요하다
-            }
-        } else {
-            result = endTime - nowTime//남은시간
-        }
-
-        return result
-    }
-
-    //시간 -> 초 변환 //String->Int //ex 01:01:00 -> 3660
-    private fun calSec(time: String): Int {
-        val parts = time.split(":").toTypedArray()
-        val hour: Int = parts[0].toInt()
-        val min: Int = parts[1].toInt()
-        val sec: Int = parts[2].toInt()
-        return hour * 3600 + min * 60 + sec
-    }
-
-    //시간변환기
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun changeTime(setTime: Int): String? {
-        val result: String?
-        val hour = Math.floorDiv(setTime, 3600)
-        val min = Math.floorMod(setTime, 3600) / 60
-        val sec = Math.floorMod(setTime, 3600) % 60
-
-        if (hour > 0) {//1시간 초과 남았을떄 ex 02시22분
-            result = "%1$02d시 %2$02d분".format(hour, min)
-        } else if (hour == 0 && min > 0) { //1시간 이하 남았을 때 ex 22분22초
-            result = "%1$02d분 %2$02d초".format(min, sec)
-        } else if (hour == 0 && min == 0) { // 1분 이하 남았을 때 ex 22초
-            result = "%1$02d초".format(sec)
-        } else { //리턴값 있어서 else 넣어야 한다. ex 22초
-            result = "%1$02d초".format(sec)
-        }
-        return result
-    }
+//    @SuppressLint("SimpleDateFormat")
+//    private fun calRemainTime(): Int {
+//        var result = 0
+//        val timeStamp = System.currentTimeMillis()
+//        // 현재 시간을 Date 타입으로 변환
+//        val dateType = Date(timeStamp)
+//        // 날짜, 시간을 가져오고 싶은 형태 선언
+//        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
+//        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+//        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+//        val nowDate: String = dateFormatDate.format(dateType) //현재 년 월 일
+//        val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
+//        val startTime: Int = calSec(TimerSetShared.getTime(this)) //시작시간
+//        val settingTime: Int = TimerSetShared.getSettingTime(this)//설정시간
+//        var endTime = startTime + settingTime// 종료시간
+//
+//        //종료시간이 하루가 지난 상황 보정
+//        if (endTime > 86400) {
+//            if (nowDate.equals(TimerSetShared.getDate(this))) {
+//                result = endTime - nowTime
+//            } else {
+//                result = endTime - nowTime - 86400//보정필요하다
+//            }
+//        } else {
+//            result = endTime - nowTime//남은시간
+//        }
+//
+//        return result
+//    }
+//
+//    //시간 -> 초 변환 //String->Int //ex 01:01:00 -> 3660
+//    private fun calSec(time: String): Int {
+//        val parts = time.split(":").toTypedArray()
+//        val hour: Int = parts[0].toInt()
+//        val min: Int = parts[1].toInt()
+//        val sec: Int = parts[2].toInt()
+//        return hour * 3600 + min * 60 + sec
+//    }
+//
+//    //시간변환기
+//    @RequiresApi(Build.VERSION_CODES.N)
+//    private fun changeTime(setTime: Int): String? {
+//        val result: String?
+//        val hour = Math.floorDiv(setTime, 3600)
+//        val min = Math.floorMod(setTime, 3600) / 60
+//        val sec = Math.floorMod(setTime, 3600) % 60
+//
+//        if (hour > 0) {//1시간 초과 남았을떄 ex 02시22분
+//            result = "%1$02d시 %2$02d분".format(hour, min)
+//        } else if (hour == 0 && min > 0) { //1시간 이하 남았을 때 ex 22분22초
+//            result = "%1$02d분 %2$02d초".format(min, sec)
+//        } else if (hour == 0 && min == 0) { // 1분 이하 남았을 때 ex 22초
+//            result = "%1$02d초".format(sec)
+//        } else { //리턴값 있어서 else 넣어야 한다. ex 22초
+//            result = "%1$02d초".format(sec)
+//        }
+//        return result
+//    }
 
     //     activity로부터 binding 된 Messenger //메시지 받음
     private val mMessenger = Messenger(Handler { msg ->
