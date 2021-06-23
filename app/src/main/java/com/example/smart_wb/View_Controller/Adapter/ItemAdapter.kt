@@ -13,7 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smart_wb.View_Controller.Activity.LockScreenActivity.Companion.TAG
 import com.example.smart_wb.Model.Data.ItemData
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.View_Controller.Dialog.PayDialog
@@ -135,7 +134,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
         holder.check.setOnClickListener {
 //            itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
             if (type.equals("bg") && itemList[position].bcheck) {
-                Log.d(TAG, "아이템:$name 실행ㅇ1" + itemList[position].bcheck)
+//                Log.d(TAG, "아이템:$name 실행ㅇ1" + itemList[position].bcheck)
                 PointItemSharedModel.setBg(context, 0)
                 itemList[position].bcheck = false
                 itemList[position].bg = false
@@ -164,7 +163,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             }
 
 
-            Log.d(TAG, "최종 체크값:$itemList[position].bcheck")
+//            Log.d(TAG, "최종 체크값:$itemList[position].bcheck")
             notifyItemChanged(position)
             itemClickListener.onClick(it, position) //적용버튼 클릭시 미리보기 적용됨
         }
@@ -173,7 +172,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
         //자물쇠 버틀 클릭 시 이벤트
         holder.lock.setOnClickListener {
-            Log.d(TAG, "구매하기" + position + "아이템 이름" + itemList[position].item)
+//            Log.d(TAG, "구매하기" + position + "아이템 이름" + itemList[position].item)
 //            itemClickListener.onClick(it, position)
             //테스트
 //            val dialog = PayDialog(context)
@@ -203,10 +202,10 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
                         } else if (itemList[position].type.equals("timer")) {
                             itemList[position].tcheck = true
                             itemList[position].timer = true
-                            Log.d(
-                                TAG,
-                                "둘다 트루 타이머여야함 ${itemList[position].tcheck} // ${itemList[position].timer}"
-                            )
+//                            Log.d(
+//                                TAG,
+//                                "둘다 트루 타이머여야함 ${itemList[position].tcheck} // ${itemList[position].timer}"
+//                            )
                         }
 
                         for (i in 0 until itemList.size) {
@@ -257,7 +256,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
         //미리보기 적용 이벤트
         holder.product.setOnClickListener {
-            Log.d(TAG, "onBindViewHolder: 리스너 작동")
+//            Log.d(TAG, "onBindViewHolder: 리스너 작동")
 
             if (type.equals("reset")) {
                 for (i in 0 until itemList.size) {
@@ -273,7 +272,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
             loop(type,position)
             itemClickListener.onClick(it, position)
-            Log.d(TAG, "미리보기 어댑터 최종값은 ${itemList[position].bg}")
+//            Log.d(TAG, "미리보기 어댑터 최종값은 ${itemList[position].bg}")
         }
     }
 
@@ -294,7 +293,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
     //아이템 타입별(배경, 타이머) 하나만 선택되게하는 메서드
     fun loop(type:String, position:Int) {
-        Log.d(TAG, "loop: 루프 작동")
+//        Log.d(TAG, "loop: 루프 작동")
         if (type.equals("bg")) {
             if (!itemList[position].bg) {
                 //선택 하나만 되게
@@ -346,7 +345,7 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
 
     //아이템 타입별(배경, 타이머) 하나만 선택되게하는 메서드
     fun ck(type:String, position:Int){
-        Log.d(TAG, "loop: 루프 작동")
+//        Log.d(TAG, "loop: 루프 작동")
         if(type.equals("bg")) {
             //선택 하나만 되게
             for (i in 0 until itemList.size) {

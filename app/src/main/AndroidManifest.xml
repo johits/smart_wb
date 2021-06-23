@@ -18,7 +18,8 @@
     <uses-permission android:name="andorid.permission.GET_TASKS" />
     <!-- 부팅시 앱 자동 실행하기-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
+    <!-- 포크라운드 서비스 권한    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:allowBackup="true"

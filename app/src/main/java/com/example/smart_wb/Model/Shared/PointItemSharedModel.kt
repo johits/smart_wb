@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
-import com.example.smart_wb.View_Controller.Activity.LockScreenActivity.Companion.TAG
+
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.*
@@ -16,7 +16,7 @@ import java.util.*
  * */
 object PointItemSharedModel {
     private val fileName : String = "pointItem" //쉐어드 파일이름
-
+    private val TAG = "PointItemSharedModel"
     //보관함 저장하기
     fun sumLocker(context: Context, values: ArrayList<*>) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
