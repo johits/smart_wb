@@ -10,4 +10,6 @@ data class ItemData(
     var timer : Boolean = false,
     var bcheck :Boolean = false,
     var tcheck : Boolean = false
+
 )
+
