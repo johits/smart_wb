@@ -1,11 +1,8 @@
 package com.example.smart_wb.Model
 
-import android.annotation.SuppressLint
-import android.content.Context
+
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.smart_wb.Shared.TimerSetShared
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -13,7 +10,7 @@ import java.util.*
  * */
 class Calculator {
 
-    //설정시간은 초 -> "HH시간 mm분" 으로 변환
+    //설정시간은 초 -> "HH시간 mm분" 으로 변환 //달력
     @RequiresApi(Build.VERSION_CODES.N)
      fun secToHourMin(settingTime: Int): String {
         val hour = Math.floorDiv(settingTime, 3600)
