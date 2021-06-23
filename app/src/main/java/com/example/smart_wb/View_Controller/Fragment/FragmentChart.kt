@@ -276,8 +276,7 @@ class FragmentChart : Fragment() {
     //그래프 새로고침 메서드
     fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
 
-        lastDayI = chartmodel.calLastDay(year,month)
-        Log.d(TAG, "Refresh: 라스트 데이 뭔데 $lastDayI")
+        lastDayI = chartmodel.calLastDay(year,month) //현재 보고있는 달의 마지막 날짜 구하기
         val monthLabels = Array(lastDayI,{""})
         for(i in 0 until lastDayI){
             monthLabels[i]= (i+1).toString()
@@ -310,7 +309,7 @@ class FragmentChart : Fragment() {
                 }
                 for (sweek in chartmodel.SmonthSelectData(cContext,sYear, sMonth, start)) {
                     var w = sweek.day //날짜
-                    var t = sweek.settingTime?.let { chartmodel.changeTime(it) } //성공시간
+                    var t = sweek.settingTime?.let { chartmodel.changeTime(it) }.toInt() //성공시간
 
                     if (0 < w!! && w < 10) {
                         wd = "0" + w
@@ -318,21 +317,22 @@ class FragmentChart : Fragment() {
                         wd = w.toString()
                     }
 
-                    if (chartmodel.whatDay("$sYear$sm$wd").equals("월")) {
-                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("화")) {
-                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("수")) {
-                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("목")) {
-                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("금")) {
-                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("토")) {
-                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("일")) {
-                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    }
+                    weekSame(sm,wd,t)
+//                    if (chartmodel.whatDay("$sYear$sm$wd").equals("월")) {
+//                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("화")) {
+//                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("수")) {
+//                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("목")) {
+//                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("금")) {
+//                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("토")) {
+//                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$sYear$sm$wd").equals("일")) {
+//                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    }
 
                 }
 
@@ -352,21 +352,22 @@ class FragmentChart : Fragment() {
                         wd = w.toString()
                     }
 
-                    if (chartmodel.whatDay("$eYear$em$wd").equals("월")) {
-                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("화")) {
-                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("수")) {
-                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("목")) {
-                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("금")) {
-                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("토")) {
-                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("일")) {
-                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    }
+                    weekSame(em,wd,t) //날짜별 요일 매치 메서드
+//                    if (chartmodel.whatDay("$eYear$em$wd").equals("월")) {
+//                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("화")) {
+//                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("수")) {
+//                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("목")) {
+//                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("금")) {
+//                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("토")) {
+//                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$eYear$em$wd").equals("일")) {
+//                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    }
 
                 }
 
@@ -388,22 +389,22 @@ class FragmentChart : Fragment() {
                         wd = w.toString()
                     }
 
-
-                    if (chartmodel.whatDay("$year$md$wd").equals("월")) {
-                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$year$md$wd").equals("화")) {
-                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$year$md$wd").equals("수")) {
-                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$year$md$wd").equals("목")) {
-                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$year$md$wd").equals("금")) {
-                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$year$md$wd").equals("토")) {
-                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    } else if (chartmodel.whatDay("$year$md$wd").equals("일")) {
-                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
-                    }
+                    weekSame(md,wd) //날짜별 요일 매치 메서드
+//                    if (chartmodel.whatDay("$year$md$wd").equals("월")) {
+//                        entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$year$md$wd").equals("화")) {
+//                        entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$year$md$wd").equals("수")) {
+//                        entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$year$md$wd").equals("목")) {
+//                        entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$year$md$wd").equals("금")) {
+//                        entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$year$md$wd").equals("토")) {
+//                        entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    } else if (chartmodel.whatDay("$year$md$wd").equals("일")) {
+//                        entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+//                    }
 
                 }
 
@@ -668,6 +669,26 @@ fun Weekparse(){
     sDay = chartmodel.weekParse(date.text.toString(),"sDay")
     eDay = chartmodel.weekParse(date.text.toString(),"eDay")
 }
+
+    //날짜별 요일에 분배해주는 메서드
+    fun weekSame(sm: String, wd: String, t: Int){
+        if (chartmodel.whatDay("$sYear$sm$wd").equals("월")) {
+            entries.add(BarEntry(0f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        } else if (chartmodel.whatDay("$sYear$sm$wd").equals("화")) {
+            entries.add(BarEntry(1f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        } else if (chartmodel.whatDay("$sYear$sm$wd").equals("수")) {
+            entries.add(BarEntry(2f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        } else if (chartmodel.whatDay("$sYear$sm$wd").equals("목")) {
+            entries.add(BarEntry(3f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        } else if (chartmodel.whatDay("$sYear$sm$wd").equals("금")) {
+            entries.add(BarEntry(4f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        } else if (chartmodel.whatDay("$sYear$sm$wd").equals("토")) {
+            entries.add(BarEntry(5f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        } else if (chartmodel.whatDay("$sYear$sm$wd").equals("일")) {
+            entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
+        }
+
+    }
 
     companion object {
         @JvmStatic
