@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.Model.Data.ItemData
+import com.example.smart_wb.Model.ItemModel
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.R
 import com.example.smart_wb.View_Controller.Activity.LockScreenActivity.Companion.TAG
@@ -37,7 +37,7 @@ class FragmentItem : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    var itemModel = ItemModel()
     private lateinit var iContext: Context
 
     //아이템 어댑터 및 데이터 연결
@@ -190,12 +190,10 @@ class FragmentItem : Fragment() {
         itemAdapter.setItemClickListener(object:
             ItemAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-
                 if(itemData[position].name.equals("reset")){
                     i_back.setImageResource(0)
                     i_timer.setImageResource(0)
                 }
-
                 if(itemData[position].type.equals("bg")&&itemData[position].bg){
                     i_back.setImageResource(itemData[position].item)
                 }else if(itemData[position].type.equals("bg")&&!itemData[position].bg){
@@ -206,8 +204,6 @@ class FragmentItem : Fragment() {
                 }else if(itemData[position].type.equals("timer")&&!itemData[position].timer){
                     i_timer.setImageResource(0)
                 }
-
-
                 if(itemData[position].lock){
                     point.text =  PointItemSharedModel.getFlower(iContext).toString()
                 }
@@ -217,17 +213,18 @@ class FragmentItem : Fragment() {
 
         //아이템 모든 적용 초기화
         reset.setOnClickListener {
-            for (i in 0 until itemData.size) {
-                i_back.setImageResource(0)
-                i_timer.setImageResource(0)
-                itemData[i].bg = false
-                itemData[i].bcheck = false
-                itemData[i].timer = false
-                itemData[i].tcheck = false
-                PointItemSharedModel.setBg(iContext, 0)
-                PointItemSharedModel.setTimer(iContext, 0)
-                Toast.makeText(context, "모든 적용이 해제되었습니다.", Toast.LENGTH_SHORT).show()
-            }
+            itemModel.reset()
+//            for (i in 0 until itemData.size) {
+//                i_back.setImageResource(0)
+//                i_timer.setImageResource(0)
+//                itemData[i].bg = false
+//                itemData[i].bcheck = false
+//                itemData[i].timer = false
+//                itemData[i].tcheck = false
+//                PointItemSharedModel.setBg(iContext, 0)
+//                PointItemSharedModel.setTimer(iContext, 0)
+//                Toast.makeText(context, "모든 적용이 해제되었습니다.", Toast.LENGTH_SHORT).show()
+//            }
             itemAdapter.notifyDataSetChanged()
         }
 
