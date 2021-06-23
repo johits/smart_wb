@@ -48,13 +48,19 @@ class ChartModel {
 
 
     //달 마지막날 구하기
-    fun calLastDay(year: Int, month: Int): String {
+    fun calLastDay(year: Int, month: Int): Int {
         Log.d(TAG, "calLastDay: 작동 완료")
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, 15, 0, 0, 0)//month는 -1해줘야 해당월로 인식
-        var lastDay: String = cal.getActualMaximum(Calendar.DAY_OF_MONTH).toString() + "f"
-//        var lastDayI = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        return lastDay
+//        var lastDay: String = cal.getActualMaximum(Calendar.DAY_OF_MONTH).toString() + "f"
+//        var lastDay: String = cal.getActualMaximum(Calendar.DAY_OF_MONTH).toString() + "f"
+        var lastDayI = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        return lastDayI
+//        return when(value){
+//            "lastDay" -> return lastDay
+//            "lastDayI" -> return lastDayI
+//        }
     }
 
     //첫번째행 년,월,일 , 마지막행 년,월,일 불러오기

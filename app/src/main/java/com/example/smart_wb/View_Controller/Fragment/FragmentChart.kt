@@ -140,13 +140,10 @@ class FragmentChart : Fragment() {
             chart_month.setTextColor(Color.parseColor("#000000"))
             chart_year.setTextColor(Color.parseColor("#000000"))
             type = "week"
-//            chartmodel.toDays()?.let {chartmodel.calWeek(it)} //이번 주 시작일자 끝일자 구해주는 메서드
             startDt = chartmodel.toDays()?.let { chartmodel.calWeek(it,"startDt") }.toString()
             endDt = chartmodel.toDays()?.let { chartmodel.calWeek(it,"endDt") }.toString()
             date.text = startDt + " ~ " + endDt
-//            weekParse() // 주 날짜 파싱
-            Weekparse()
-//            Refresh(type, year, month, start, end) //그래프 새로고침
+            Weekparse() //주 날짜 파싱한 변수 불러오기
             Refresh(type, year, month,start,end) //그래프 새로고침
             leftVisible()
             rightVisible()
@@ -170,7 +167,7 @@ class FragmentChart : Fragment() {
             year = chartmodel.monthParse(date.text.toString(),"year")
             month = chartmodel.monthParse(date.text.toString(),"month")
 //            val value = calLastDay(year, month)
-            val value = chartmodel.calLastDay(year, month)
+            val value = chartmodel.calLastDay(year, month).toString()+"f"
             lastDayF = value.toFloat()
             Log.d(TAG, "lastDay:$lastDayF")
             Refresh(type, year, month, 0, 0) // 그래프 새로고침
@@ -192,7 +189,6 @@ class FragmentChart : Fragment() {
             chart_week.setTextColor(Color.parseColor("#000000"))
             type = "year"
             date.text = chartmodel.Year(0)
-//            yearParse() // 년 날짜 파싱
             chartmodel.yearParse(date.text.toString())
             Refresh(type, year, 0,0,0) // 그래프 새로고침
             leftVisible()
@@ -208,12 +204,10 @@ class FragmentChart : Fragment() {
         left.setOnClickListener {
             if (type.equals("week")) {
                 i -= 1
-//                chartmodel.Days7(i)?.let { it1 -> chartmodel.calWeek(it1) }
 
                 startDt = chartmodel.Days7(i)?.let { chartmodel.calWeek(it,"startDt") }.toString()
                 endDt = chartmodel.Days7(i)?.let { chartmodel.calWeek(it,"endDt") }.toString()
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
-//                weekParse() // 주 날짜 파싱
                 Weekparse()
                 Refresh(type, year, month, start, end) //그래프 새로고침
 
@@ -221,10 +215,9 @@ class FragmentChart : Fragment() {
             } else if (type.equals("month")) {
                 m -= 1
                 date.text = chartmodel.Month(m)
-//                monthParse()
                 year = chartmodel.monthParse(date.text.toString(),"year")
                 month = chartmodel.monthParse(date.text.toString(),"month")
-                val value = chartmodel.calLastDay(year, month)
+                val value = chartmodel.calLastDay(year, month).toString()+"f"
                 lastDayF = value.toFloat()
                 Refresh(type, year, month, 0, 0)
                 leftVisible() //이전 데이터 없으면 왼쪽 버튼 비활성화
@@ -233,7 +226,6 @@ class FragmentChart : Fragment() {
             } else if (type.equals("year")) {
                 y -= 1
                 date.text = chartmodel.Year(y)
-//                yearParse()
                 year = chartmodel.yearParse(date.text.toString())
                 Refresh(type, year, 0,0,0)
             }
@@ -245,11 +237,9 @@ class FragmentChart : Fragment() {
         right.setOnClickListener {
             if (type == "week") {
                 i += 1
-//                chartmodel.Days7(i)?.let { it1 -> chartmodel.calWeek(it1) }
                 startDt = chartmodel.Days7(i)?.let { chartmodel.calWeek(it,"startDt") }.toString()
                 endDt = chartmodel.Days7(i)?.let { chartmodel.calWeek(it,"endDt") }.toString()
                 date.text = startDt + " ~ " + endDt //기본 날짜 세팅 (주)
-//                weekParse() // 주 날짜 파싱
                 Weekparse()
                 Refresh(type, year, month,start,end) // 그래프 새로고침
 
@@ -260,7 +250,7 @@ class FragmentChart : Fragment() {
 //                monthParse()
                 year = chartmodel.monthParse(date.text.toString(),"year")
                 month = chartmodel.monthParse(date.text.toString(),"month")
-                val value = chartmodel.calLastDay(year, month)
+                val value = chartmodel.calLastDay(year, month).toString()+"f"
                 lastDayF = value.toFloat()
                 Refresh(type, year, month, 0, 0)
 
@@ -285,13 +275,9 @@ class FragmentChart : Fragment() {
 
     //그래프 새로고침 메서드
     fun Refresh(type: String, year: Int, month: Int, start:Int, end:Int) {
-//        chartmodel.Refresh(cContext, type,year,month,start,end,lastDayI,lastDayF,sYear,eYear,sMonth,eMonth)
-//        val weeklabels = arrayOf(
-//           "월", "화","수","목","금","토","일"
-//        )
-//        val yearlabels = arrayOf(
-//            "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"
-//        )
+
+        lastDayI = chartmodel.calLastDay(year,month)
+        Log.d(TAG, "Refresh: 라스트 데이 뭔데 $lastDayI")
         val monthLabels = Array(lastDayI,{""})
         for(i in 0 until lastDayI){
             monthLabels[i]= (i+1).toString()
@@ -382,7 +368,6 @@ class FragmentChart : Fragment() {
                         entries.add(BarEntry(6f, 1f * t!!)) //x:x축 값 놓이는 위치 y:성공시간량
                     }
 
-                    Log.d(TAG, "Refresh: 이게 제일 중요 $entries")
                 }
 
 
