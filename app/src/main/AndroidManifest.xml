@@ -27,10 +27,10 @@
         android:roundIcon="@mipmap/ic_launcher2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Permission2"></activity>
-        <activity android:name=".LockScreenActivity" />
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".Permission">
+        <activity android:name=".View_Controller.Activity.Permission2"></activity>
+        <activity android:name=".View_Controller.Activity.LockScreenActivity" />
+        <activity android:name=".View_Controller.Activity.MainActivity"/>
+        <activity android:name=".View_Controller.Activity.Permission">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,16 +38,16 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".DrawService" />
+        <service android:name=".View_Controller.Service.DrawService" />
         <!-- 부팅 이벤트 받기-->
-        <receiver android:name=".Restart" android:exported="false" android:enabled="true">
+        <receiver android:name=".View_Controller.Receiver.Restart" android:exported="false" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <!-- 전화 관련 리시버-->
-        <receiver android:name=".CallReceiver">
+        <receiver android:name=".View_Controller.Receiver.CallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
                 <action android:name="android.intent.action.BATTERY_LOW"/>
