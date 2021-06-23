@@ -262,7 +262,7 @@ class FragmentCalendar : Fragment() {
                 flowerSum += data.flower!!
             }
         }
-        Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
+//        Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
 //        binding.tvSettingTimeSum.text = changeTime(settingTimeSum)
 //        binding.tvSuccessTimeSum.text = changeTime(successTimeSum)
         val calculator = Calculator()

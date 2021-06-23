@@ -83,12 +83,6 @@ class LockScreenActivity : AppCompatActivity() {
             if (time != null) {
                 settingTime = time
 
-                //노티피 초기화
-                val notificationManager =
-                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                //방해금지모드작동
-                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
-
                 setStartService() //드로우서비스 시작
             }
 
@@ -104,11 +98,7 @@ class LockScreenActivity : AppCompatActivity() {
             } else {
                 settingTime = 0 //스크린타임 이미 종료
             }
-            //노티피 초기화
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            //방해금지모드작동
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+
 
             setStartService()//드로우서비스 시작
         }
@@ -121,14 +111,16 @@ class LockScreenActivity : AppCompatActivity() {
 //    }
 
     //     서비스 시작 및 Messenger 전달
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setStartService() {
+        //노티피 초기화
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        //방해금지모드작동
+        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
         //드로우서비스 시작
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            startForegroundService(Intent(this@LockScreenActivity, DrawService::class.java))
-//        }else{
-            startService(Intent(this@LockScreenActivity, DrawService::class.java))
-//        }
-        //액티비티와 서비스 연결
+        startService(Intent(this@LockScreenActivity, DrawService::class.java))
+//        액티비티와 서비스 연결
         bindService(Intent(this, DrawService::class.java), mConnection, BIND_AUTO_CREATE)
         mIsBound = true// 서비스상태 확인용 플래그
     }
@@ -170,87 +162,142 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
 
-                val callLog = CallLog.Calls.CONTENT_URI
+//                val callLog = CallLog.Calls.CONTENT_URI
+//
+//                var proj = arrayOf(
+//                    CallLog.Calls.PHONE_ACCOUNT_ID,
+//                    CallLog.Calls.CACHED_NAME,
+//                    CallLog.Calls.NUMBER,
+//                    CallLog.Calls.DATE
+//                )
+//
+//                this.run {
+//                    val cursor = contentResolver.query(callLog, proj, null, null, null)
+//                    if (cursor != null) {
+//                        while (cursor.moveToNext()) {
+//                            val id = cursor.getString(0)
+//                            val name = cursor.getString(1)
+//                            val number = cursor.getString(2)
+//                            val date = cursor.getString(3)
+//
+//                            Log.d(TAG, "id:$id , name:$name , number:$number , date:$date")
+//                        }
+//                    }
+//                }
 
-                var proj = arrayOf(
-                    CallLog.Calls.PHONE_ACCOUNT_ID,
-                    CallLog.Calls.CACHED_NAME,
-                    CallLog.Calls.NUMBER,
-                    CallLog.Calls.DATE
-                )
 
-                this.run {
-                    val cursor=contentResolver.query(callLog,proj,null,null,null)
-                    if (cursor != null) {
-                        while(cursor.moveToNext()){
-                            val id = cursor.getString(0)
-                            val name = cursor.getString(1)
-                            val number = cursor.getString(2)
-                            val date = cursor.getString(3)
+//                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
+//                val setTime = TimerSetShared.getSettingTime(this)//설정시간
+//                val setTimeString: String = calTime(setTime)//설정시간 초 -> 시간 변환
+//                val flower = setTime / 600 //획득한 꽃 갯수
+//
+//                if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
+//                    getDisplayWakeUp() //핸드폰화면 켜짐
+//                    successUpdate(flower)//성공시//sqlite 업데이트
+//                    val timeStamp = System.currentTimeMillis()
+//                    // 현재 시간을 Date 타입으로 변환
+//                    val dateType = Date(timeStamp)
+//                    val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+//                    //테스트용 현재 시간 가져오기
+//                    val nowTime: String = dateFormatTime.format(dateType)//현재시간
+//                    showDialog(
+////                        getString(R.string.success_dialog_title_success),
+//                        nowTime,
+//                        setTimeString,
+//                        flower,
+//                        missedCall
+//                    )//결과 다이얼로그
+//
+//                    //성공 노티피케이션
+//                    val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
+//                    val successText = "꽃 $flower 송이 획득."
+//                    showNotification(
+//                        notificationId_success,
+//                        CHANNEL_ID_SUCCESS,
+//                        successTitle,
+//                        successText
+//                    )
+//                    //부재중 전화가 있으면 노티피게이션
+//                    if (missedCall != 0) {
+//                        missedCallNoti(missedCall, 4500) //성공 노티 뜨고 4.5초 딜레이 후 부재중전화 노티 생성
+//                    }
+//
+//                } else {//스크린타임 사용자 종료시
+//                    showDialog(
+//                        getString(R.string.success_dialog_title_fail),
+//                        setTimeString,
+//                        0,
+//                        missedCall
+//                    )
+//                    //부재중 전화가 있으면 노티피케이션
+//                    if (missedCall != 0) {
+//                        missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
+//                    }
+//                }
 
-                            Log.d(TAG, "id:$id , name:$name , number:$number , date:$date")
-                        }
-                    }
-                }
-
-
-                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
-                val setTime = TimerSetShared.getSettingTime(this)//설정시간
-                val setTimeString: String = calTime(setTime)//설정시간 초 -> 시간 변환
-                val flower = setTime / 600 //획득한 꽃 갯수
-
-                if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음//쉐어드 클리어
-                    getDisplayWakeUp() //핸드폰화면 켜짐
-                    successUpdate(flower)//성공시//sqlite 업데이트
-                    val timeStamp = System.currentTimeMillis()
-                    // 현재 시간을 Date 타입으로 변환
-                    val dateType = Date(timeStamp)
-                    val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-                    val nowTime: String = dateFormatTime.format(dateType)//현재시간
-                    showDialog(
-//                        getString(R.string.success_dialog_title_success),
-                        nowTime,
-                        setTimeString,
-                        flower,
-                        missedCall
-                    )//결과 다이얼로그
-
-                    //성공 노티피케이션
-                    val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
-                    val successText = "꽃 $flower 송이 획득."
-                    showNotification(
-                        notificationId_success,
-                        CHANNEL_ID_SUCCESS,
-                        successTitle,
-                        successText
-                    )
-                    //부재중 전화가 있으면 노티피게이션
-                    if (missedCall != 0) {
-                        missedCallNoti(missedCall, 4500) //성공 노티 뜨고 4.5초 딜레이 후 부재중전화 노티 생성
-                    }
-
-                } else {//스크린타임 사용자 종료시
-                    showDialog(
-                        getString(R.string.success_dialog_title_fail),
-                        setTimeString,
-                        0,
-                        missedCall
-                    )
-                    //부재중 전화가 있으면 노티피케이션
-                    if (missedCall != 0) {
-                        missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
-                    }
-                }
+                resultScreenTime(result)
 
                 //타이머쉐어드 데이터 클리어
                 TimerSetShared.clearTimerSet(this)
-
                 setStopService() //서비스 종료
 
             }
         }
         false
     })
+
+    //스크린타임 결과에 따른 다이얼로그, 노티피케이션
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun resultScreenTime(result: Boolean) {
+        val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
+        val setTime = TimerSetShared.getSettingTime(this)//설정시간
+        val setTimeString: String = calTime(setTime)//설정시간 초 -> 시간 변환
+        val flower = setTime / 600 //획득한 꽃 갯수
+        if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음
+            getDisplayWakeUp() //핸드폰화면 켜짐
+            successUpdate(flower)//성공시//sqlite 업데이트
+            val timeStamp = System.currentTimeMillis()
+            // 현재 시간을 Date 타입으로 변환
+            val dateType = Date(timeStamp)
+            val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+            //테스트용 현재 시간 가져오기
+            val nowTime: String = dateFormatTime.format(dateType)//현재시간
+            showDialog(
+//                        getString(R.string.success_dialog_title_success),
+                nowTime,
+                setTimeString,
+                flower,
+                missedCall
+            )//결과 다이얼로그
+
+            //성공 노티피케이션
+            val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
+            val successText = "꽃 $flower 송이 획득."
+            showNotification(
+                notificationId_success,
+                CHANNEL_ID_SUCCESS,
+                successTitle,
+                successText
+            )
+            //부재중 전화가 있으면 노티피게이션
+            if (missedCall != 0) {
+                missedCallNoti(missedCall, 4500) //성공 노티 뜨고 4.5초 딜레이 후 부재중전화 노티 생성
+            }
+
+        } else {//스크린타임 사용자 종료시
+            showDialog(
+                getString(R.string.success_dialog_title_fail),
+                setTimeString,
+                0,
+                missedCall
+            )
+            //부재중 전화가 있으면 노티피케이션
+            if (missedCall != 0) {
+                missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
+            }
+        }
+    }
+
 
     //스크린타임 종료시 다이얼로그
     private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
@@ -270,15 +317,15 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvTitle.text = title
         tvSettingTime.text = setTime //설정시간표시
-        if(flower==0){
-            tvFlower.text="X"
-        }else{
-            tvFlower.text = flower.toString() +"송이"//얻은 꽃 표시
+        if (flower == 0) {
+            tvFlower.text = "X"
+        } else {
+            tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
         }
-        if(missedCall==0){
-            tvMissedCall.text="X"
-        }else{
-            tvMissedCall.text = missedCall.toString()+ "통화"// 부재중 전화 표시
+        if (missedCall == 0) {
+            tvMissedCall.text = "X"
+        } else {
+            tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
         }
 
         btnConfirm.setOnClickListener {
@@ -392,32 +439,32 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //성공시 sqlite screenTimeDb table 에 success 0->1, flower 업데이트
-    // 쉐어드에 받은 꽃 더하기
+// 쉐어드에 받은 꽃 더하기
     private fun successUpdate(flower: Int) {
         //데이터 업데이트
         val screenTimeDbHelper = ScreenTimeDbHelper(this, "screenTimeDb.db", null, 1)
         screenTimeDbHelper.update(flower)
 
         //   데이터 불러오기
-        var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
-        // 데이터 확인용 로그
-        for (data in arr) {
-            Log.d(
-                TAG,
-                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
-            )
-        }
+//        var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
+//        // 데이터 확인용 로그
+//        for (data in arr) {
+//            Log.d(
+//                TAG,
+//                "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}"
+//            )
+//        }
 
         //받은 꽃 쉐어드에 더한다.
         PointItemShared.sumFlower(this, flower)
     }
 
     //남은시간 계산기 //남은시간 리턴
-    //시작시간+설정시간=종료시간
-    //종료시간-현재시간=남은시간
-    //남은시간 양수 스크린타임 계속
-    //남은시간 0or음수 스크린타임 이미 종료
-    //날짜가 바뀌면 보정을 해야한다. 어떻게?
+//시작시간+설정시간=종료시간
+//종료시간-현재시간=남은시간
+//남은시간 양수 스크린타임 계속
+//남은시간 0or음수 스크린타임 이미 종료
+//날짜가 바뀌면 보정을 해야한다. 어떻게?
     @SuppressLint("SimpleDateFormat")
     private fun calRemainTime(): Int {
         var result = 0
