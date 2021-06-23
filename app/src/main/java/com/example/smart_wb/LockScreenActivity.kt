@@ -42,7 +42,8 @@ import kotlin.collections.ArrayList
 
 /**
  * 20/05/31 yama 잠금화면 액티비티
- * 서비스에서 성공 메세지 받으면 노티피케이션 발생
+ * 드로우서비스 시작&종료시 데이터를 주고 받아
+ * 결과 다이얼로그&노티피케이션  실행
  * */
 class LockScreenActivity : AppCompatActivity() {
     companion object {
@@ -55,7 +56,6 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
-    //    private var dialog: CustomDialog? = null
     private var alertDialog: AlertDialog? = null //스크린타임 결과표시용 다이얼로그
 
     private var mServiceMessenger: Messenger? = null //서비스에 데이터 보내기 위한 변수
@@ -91,10 +91,7 @@ class LockScreenActivity : AppCompatActivity() {
             //핸드폰 재시작할 때
         } else if (intent.hasExtra("restart")) {
             val calculator = Calculator()
-            val startDate = TimerSetShared.getDate(this)
-            val setTime = TimerSetShared.getSettingTime(this)
-            val startTime = TimerSetShared.getTime(this)
-            val remainTime = calculator.calRemainTime(startDate,startTime,setTime)//스크린타임 남은 시간계산
+            val remainTime = calculator.calRemainTime(this)//스크린타임 남은 시간계산
 
             Log.d(TAG, "남은시간:$remainTime")
 
@@ -111,11 +108,6 @@ class LockScreenActivity : AppCompatActivity() {
         }
 
     }
-
-//    override fun onBackPressed() {
-//        // 뒤로가기 버튼 클릭
-//        Log.d(TAG, "onBackPressed: 뒤로가기 버튼 제어")
-//    }
 
     //     서비스 시작 및 Messenger 전달
     @RequiresApi(Build.VERSION_CODES.M)
@@ -181,18 +173,21 @@ class LockScreenActivity : AppCompatActivity() {
         false
     })
 
-    //스크린타임 결과에 따른 다이얼로그, 노티피케이션
+    //스크린타임 결과에 따른 데이터업데이트 다이얼로그, 노티피케이션
     @RequiresApi(Build.VERSION_CODES.O)
     private fun resultScreenTime(result: Boolean) {
         val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
         val setTime = TimerSetShared.getSettingTime(this)//설정시간
-        val setTimeString: String = calTime(setTime)//설정시간 초 -> 시간 변환
+        val calculator = Calculator()
+        val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
         val flower = setTime / 600 //획득한 꽃 갯수
-        val screenTime = ScreenTime(this)
-        if (result) { //스크린타임 성공시 노티활성화 //데이터 업데이트//꽃받음
+        if (result) { //스크린타임 성공시
             getDisplayWakeUp() //핸드폰화면 켜짐
-//            successUpdate(flower)//성공시//sqlite 업데이트
+
+            //테이블 스크린타임 성공, 받은 꽃 업데이트
+            val screenTime = ScreenTime(this)
             screenTime.successUpdate(flower)
+
             //테스트용 현재 시간 가져오기
             val timeStamp = System.currentTimeMillis()
             // 현재 시간을 Date 타입으로 변환
@@ -261,7 +256,7 @@ class LockScreenActivity : AppCompatActivity() {
 //        }
 //    }
 
-    //스크린타임 종료시 다이얼로그
+    //스크린타임 결과 다이얼로그
     @SuppressLint("SetTextI18n")
     private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
         Log.d(TAG, "showDialog: ")
@@ -291,6 +286,7 @@ class LockScreenActivity : AppCompatActivity() {
             tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
         }
 
+        //확인버튼 클릭 이벤트
         btnConfirm.setOnClickListener {
             alertDialog!!.dismiss()
             startMainActivity()
@@ -401,6 +397,8 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
+
+    //사용안함
     //성공시 sqlite screenTimeDb table 에 success 0->1, flower 업데이트
 // 쉐어드에 받은 꽃 더하기
 //    private fun successUpdate(flower: Int) {
@@ -428,61 +426,61 @@ class LockScreenActivity : AppCompatActivity() {
 //남은시간 양수 스크린타임 계속
 //남은시간 0or음수 스크린타임 이미 종료
 //날짜가 바뀌면 보정을 해야한다. 어떻게?
-    @SuppressLint("SimpleDateFormat")
-    private fun calRemainTime(): Int {
-        var result = 0
-        val timeStamp = System.currentTimeMillis()
-        // 현재 시간을 Date 타입으로 변환
-        val dateType = Date(timeStamp)
-        // 날짜, 시간을 가져오고 싶은 형태 선언
-        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
-        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
-        val nowDate: String = dateFormatDate.format(dateType) //현재 년 월 일
-        val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
-        val startTime: Int = calSec(TimerSetShared.getTime(this)) //시작시간
-        val settingTime: Int = TimerSetShared.getSettingTime(this)//설정시간
-        var endTime = startTime + settingTime// 종료시간
-
-        //종료시간이 하루가 지난 상황 보정
-        if (endTime > 86400) {
-            if (nowDate.equals(TimerSetShared.getDate(this))) {
-                result = endTime - nowTime
-            } else {
-                result = endTime - nowTime - 86400//보정필요하다
-            }
-        } else {
-            result = endTime - nowTime//남은시간
-        }
-
-        return result
-    }
-
-    //시간 -> 초 변환 //String->Int //ex 01:01:00 -> 3660
-    private fun calSec(time: String): Int {
-        val parts = time.split(":").toTypedArray()
-        val hour: Int = parts[0].toInt()
-        val min: Int = parts[1].toInt()
-        val sec: Int = parts[2].toInt()
-        return hour * 3600 + min * 60 + sec
-    }
+//    @SuppressLint("SimpleDateFormat")
+//    private fun calRemainTime(): Int {
+//        var result = 0
+//        val timeStamp = System.currentTimeMillis()
+//        // 현재 시간을 Date 타입으로 변환
+//        val dateType = Date(timeStamp)
+//        // 날짜, 시간을 가져오고 싶은 형태 선언
+//        val dateFormatDate = SimpleDateFormat("yyyy-MM-dd")
+//        val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+//        // 현재 시간을 dateFormat 에 선언한 형태의 String 으로 변환
+//        val nowDate: String = dateFormatDate.format(dateType) //현재 년 월 일
+//        val nowTime: Int = calSec(dateFormatTime.format(dateType))//현재시간
+//        val startTime: Int = calSec(TimerSetShared.getTime(this)) //시작시간
+//        val settingTime: Int = TimerSetShared.getSettingTime(this)//설정시간
+//        var endTime = startTime + settingTime// 종료시간
+//
+//        //종료시간이 하루가 지난 상황 보정
+//        if (endTime > 86400) {
+//            if (nowDate.equals(TimerSetShared.getDate(this))) {
+//                result = endTime - nowTime
+//            } else {
+//                result = endTime - nowTime - 86400//보정필요하다
+//            }
+//        } else {
+//            result = endTime - nowTime//남은시간
+//        }
+//
+//        return result
+//    }
+//
+//    //시간 -> 초 변환 //String->Int //ex 01:01:00 -> 3660
+//    private fun calSec(time: String): Int {
+//        val parts = time.split(":").toTypedArray()
+//        val hour: Int = parts[0].toInt()
+//        val min: Int = parts[1].toInt()
+//        val sec: Int = parts[2].toInt()
+//        return hour * 3600 + min * 60 + sec
+//    }
 
     //초-> 시간 변환 //ex 3660 -> 01:01
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun calTime(setTime: Int): String {
-        val result: String?
-        val hour = Math.floorDiv(setTime, 3600)
-        val min = Math.floorMod(setTime, 3600) / 60
-        //  val sec = Math.floorMod(setTime, 3600) % 60
-        if (hour > 0 && min > 0) {
-            result = "%1$2d시간%2$2d분".format(hour, min)
-        } else if (hour > 0 && min == 0) {
-            result = "%1$2d시간".format(hour)
-        } else {
-            result = "%1$2d분".format(min)
-        }
-        return result
-    }
+//    @RequiresApi(Build.VERSION_CODES.N)
+//    private fun calTime(setTime: Int): String {
+//        val result: String?
+//        val hour = Math.floorDiv(setTime, 3600)
+//        val min = Math.floorMod(setTime, 3600) / 60
+//        //  val sec = Math.floorMod(setTime, 3600) % 60
+//        if (hour > 0 && min > 0) {
+//            result = "%1$2d시간%2$2d분".format(hour, min)
+//        } else if (hour > 0 && min == 0) {
+//            result = "%1$2d시간".format(hour)
+//        } else {
+//            result = "%1$2d분".format(min)
+//        }
+//        return result
+//    }
 }
 
 
