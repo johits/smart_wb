@@ -375,6 +375,20 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onPause() {
+        super.onPause()
+
+        startActivity(Intent(this, LockScreenActivity::class.java)
+            .setAction(Intent.ACTION_MAIN)
+            .addCategory(Intent.CATEGORY_LAUNCHER)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+//        val activityManager: ActivityManager = applicationContext
+//            .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+//        activityManager.moveTaskToFront(taskId, 0)
+        Log.d(TAG, "onPause: 온포즈")
+    }
+
     override fun onStop() {
         super.onStop()
 
@@ -389,6 +403,11 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
+
+
+    override fun onBackPressed() {
+        Log.d(TAG, "락 스크린 뒤로가기 제어")
+    }
 
     //사용안함
     //성공시 sqlite screenTimeDb table 에 success 0->1, flower 업데이트
