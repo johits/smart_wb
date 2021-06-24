@@ -8,6 +8,14 @@ import android.content.SharedPreferences
  * */
 object TimerSetShared {
     private val fileName : String = "timerSet" //쉐어드 파일이름
+//
+//    //시작날짜 저장
+//    fun setDate(context: Context, input: String) {
+//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+//        val editor : SharedPreferences.Editor = prefs.edit()
+//        editor.putString("date", input)
+//        editor.commit()
+//    }
 
     //시작날짜 저장
     fun setDate(context: Context, input: String) {
