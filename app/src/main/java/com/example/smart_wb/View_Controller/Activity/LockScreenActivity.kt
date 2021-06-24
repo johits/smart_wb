@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.*
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,7 +38,7 @@ import java.util.*
 /**
  * 20/05/31 yama 잠금화면 액티비티
  * 드로우서비스 시작&종료시 데이터를 주고 받아
- * 결과 다이얼로그&노티피케이션  실행
+ * 결과 다이얼로그&노티피케이션(사용안함)  생성  -> 메인액티비티에서 다이얼로그 생성
  * */
 class LockScreenActivity : AppCompatActivity() {
     companion object {
@@ -64,7 +65,6 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvWatch.visibility = View.GONE
         btStop.visibility = View.GONE
-        Log.d(TAG, "onCreate: 여기로들어와지나${TimerSetShared.getRunning(this)}")
 
 
         //쉐어드 적용된 아이템 불러오기(배경, 타이머)
@@ -106,9 +106,12 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
+    //스크린타임중 홈버튼 클릭시 액티비티 다시 불러오는데 시간이 소요
+    //그 부분 예외처리용
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume: ")
+        //스크린타임이 동작중이 아니면 락스크린 액티비티 finish
         if(!TimerSetShared.getRunning(this)){
             finish()
         }
@@ -196,111 +199,48 @@ class LockScreenActivity : AppCompatActivity() {
             val screenTime = ScreenTime(this)
             screenTime.successUpdate(flower)
 
-            //테스트용 현재 시간 가져오기
-//            val timeStamp = System.currentTimeMillis()
-//            // 현재 시간을 Date 타입으로 변환
-//            val dateType = Date(timeStamp)
-//            val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-//            val nowTime: String = dateFormatTime.format(dateType)//현재시간
 
-//            showDialog(
-//                getString(R.string.success_dialog_title_success),
-//                setTimeString,
-//                flower,
-//                missedCall
-            //)//결과 다이얼로그
-
-           // startMainActivity(getString(R.string.success_dialog_title_success),setTimeString,flower,missedCall)
-            //성공 노티피케이션
-
-            val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
-            val successText = "꽃 $flower 송이 획득."
-            showNotification(
-                notificationId_success,
-                CHANNEL_ID_SUCCESS,
-                successTitle,
-                successText
-            )
+//            val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
+//            val successText = "꽃 $flower 송이 획득."
+//            showNotification(
+//                notificationId_success,
+//                CHANNEL_ID_SUCCESS,
+//                successTitle,
+//                successText
+//            )
             //부재중 전화가 있으면 노티피게이션
-            if (missedCall != 0) {
-                missedCallNoti(missedCall, 4500) //성공 노티 뜨고 4.5초 딜레이 후 부재중전화 노티 생성
-            }
+//            if (missedCall != 0) {
+//                missedCallNoti(missedCall, 4500) //성공 노티 뜨고 4.5초 딜레이 후 부재중전화 노티 생성
+//            }
 
         } else {//스크린타임 사용자 종료시
-            //startMainActivity(getString(R.string.success_dialog_title_fail),setTimeString,0,missedCall)
-//            showDialog(
-//                getString(R.string.success_dialog_title_fail),
-//                setTimeString,
-//                0,
-//                missedCall
-//            )
+
             //부재중 전화가 있으면 노티피케이션
-            if (missedCall != 0) {
-                missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
-            }
+//            if (missedCall != 0) {
+//                missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
+//            }
         }
         finish()
 
     }
 
 
-    //스크린타임 결과 다이얼로그
-//    @SuppressLint("SetTextI18n")
-//    private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
-//        Log.d(TAG, "showDialog: ")
-//        val layoutInflater = LayoutInflater.from(this)
-//        val view = layoutInflater.inflate(R.layout.success_dialog, null)
-//
-//        val alertDialog = AlertDialog.Builder(this)
-//            .setView(view)
-//            .setCancelable(false)
-//            .create()
-//        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
-//        val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
-//        val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
-//        val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
-//        val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
-//
-//        tvTitle.text = title
-//        tvSettingTime.text = setTime //설정시간표시
-////        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) //소리 알람
-//        if (flower == 0) {
-//            tvFlower.text = "X"
-//        } else {
-//            tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
-//        }
-//        if (missedCall == 0) {
-//            tvMissedCall.text = "X"
-//        } else {
-//            tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
-//        }
-//
-//        //확인버튼 클릭 이벤트
-//        btnConfirm.setOnClickListener {
-////          RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-//            alertDialog!!.dismiss()
-//            startMainActivity()
-//        }
-//        alertDialog!!.show()
-//
-//    }
-
     //부재중전화 노티 호출
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun missedCallNoti(call: Int, delay: Long) {
-        val missedCallText: String = "부재중 전화 $call 건이 있습니다."
-
-        //코루틴//비동기처리
-        GlobalScope.launch {
-            delay(delay)
-            showNotification(
-                notificationId_call,
-                CHANNEL_ID_MISSEDCALL,
-                missedCallText,
-                ""
-            )
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun missedCallNoti(call: Int, delay: Long) {
+//        val missedCallText: String = "부재중 전화 $call 건이 있습니다."
+//
+//        //코루틴//비동기처리
+//        GlobalScope.launch {
+//            delay(delay)
+//            showNotification(
+//                notificationId_call,
+//                CHANNEL_ID_MISSEDCALL,
+//                missedCallText,
+//                ""
+//            )
+//        }
+//    }
 
     //메인액티비티 호출
     private fun startMainActivity(title: String, setTime: String, flower: Int, missedCall: Int) {
@@ -339,25 +279,25 @@ class LockScreenActivity : AppCompatActivity() {
 
 
     //노티피케이션 발생
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotification(notiId: Int, chanelId: String, title: String, text: String) {
-
-        var builder = NotificationCompat.Builder(this, chanelId)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(title)
-            .setContentText(text)
-            .setAutoCancel(true) //터치시 노티 지우기
-            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
-            .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
-
-        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))//노티피케이션 소리설정
-
-        //알림 상태 확인
-        val notificationManager = NotificationManagerCompat.from(this)
-        notificationManager.notify(notiId, builder.build())
-
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun showNotification(notiId: Int, chanelId: String, title: String, text: String) {
+//
+//        var builder = NotificationCompat.Builder(this, chanelId)
+//            .setSmallIcon(android.R.drawable.ic_dialog_info)
+//            .setContentTitle(title)
+//            .setContentText(text)
+//            .setAutoCancel(true) //터치시 노티 지우기
+//            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
+//            .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
+//            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
+//
+////        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))//노티피케이션 소리설정
+//        builder.setSound(Uri.EMPTY)
+//
+//        //알림 상태 확인
+//        val notificationManager = NotificationManagerCompat.from(this)
+//        notificationManager.notify(notiId, builder.build())
+//    }
 
 
     //화면 기상
