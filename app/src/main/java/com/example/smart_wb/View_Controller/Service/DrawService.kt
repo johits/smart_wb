@@ -67,10 +67,8 @@ class DrawService : Service() {
         callEvent()
 
         //절전모드 안 들어가게 함
-        //noDoze()
+        noDoze()
 
-//        val calculator = Calculator()
-//        Log.d(TAG, "기존 남은시간: ${calculator.calRemainTime(this)}")
         val time = TimerSetShared.getTime(this)
         val date = TimerSetShared.getDate(this)
         val setTime = TimerSetShared.getSettingTime(this)
@@ -196,7 +194,7 @@ class DrawService : Service() {
         sendMsgToActivity(result);//액티비티에 메세지보내기//result true == 성공, false == 종료버튼터치
         stopService(Intent(applicationContext, DrawService::class.java))
 
-//        wakeLock.release()
+        wakeLock.release()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -224,16 +222,14 @@ class DrawService : Service() {
             val watch = mView!!.findViewById<View>(R.id.tvWatch) as TextView
             if (settingTime >= 0) { //설정시간(초)이 0보다 클떄 동작
                 if (settingTime == 0) {
-//                    watch.text = calTime(settingTime)
                     handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
-                    settingTime-- //스레드가 동작할 때마다 1초씩 빼준다
+                    settingTime-- //설정시간(초) -1
                 } else {
-                    settingTime=remainTime.calRemainTime()
-//                    settingTime--
+                    settingTime=remainTime.calRemainTime()//남은시간 계산로직
+//                    settingTime-- //설정시간(초) -1
                     watch.text = calculator.changeTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
-                    handler?.postDelayed(this, timerDelay)
+                    handler?.postDelayed(this, timerDelay) //타이머 딜레이 속도
                 }
-//                Log.d(TAG, "남은시간:$settingTime")
             } else if (settingTime == -1) {
                 watch.text = "00초"
                 settingTime--

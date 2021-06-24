@@ -335,9 +335,6 @@ class LockScreenActivity : AppCompatActivity() {
     //노티피케이션 발생
     @RequiresApi(Build.VERSION_CODES.O)
     fun showNotification(notiId: Int, chanelId: String, title: String, text: String) {
-        //진동패턴 위한 변수
-//        val arr = arrayListOf(0, 1, 2)
-//        var a = longArrayOf(1000)
 
         var builder = NotificationCompat.Builder(this, chanelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
@@ -348,16 +345,12 @@ class LockScreenActivity : AppCompatActivity() {
             .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
-        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))//노티피케이션 소리설정
 
         //알림 상태 확인
         val notificationManager = NotificationManagerCompat.from(this)
         notificationManager.notify(notiId, builder.build())
 
-        //누가에선 터진다.
-//        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator;
-//        val vibrationEffect = VibrationEffect.createOneShot(1000, DEFAULT_AMPLITUDE)
-//        vibrator.vibrate(vibrationEffect);
     }
 
 
