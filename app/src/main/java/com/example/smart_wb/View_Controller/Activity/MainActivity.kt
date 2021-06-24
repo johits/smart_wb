@@ -1,10 +1,21 @@
 package com.example.smart_wb.View_Controller.Activity
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioManager
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Vibrator
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -36,11 +47,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Log.d(TAG, "onCreate: ")
 
 //        _binding = ActivityMainBinding.inflate(layoutInflater)
 //        setContentView(binding.root)
 //        configureBottomNavigation()
+
+        //스크린타임 결과에 따라 다이얼로그 생성
+        if(intent.hasExtra("title")&&intent.hasExtra("setTime")){
+            val title = intent.getStringExtra("title")
+            val setTime = intent.getStringExtra("setTime")
+            val flower = intent.getIntExtra("flower", 0)
+            val missedCall = intent.getIntExtra("missedCall",0)
+
+            if (title != null&&setTime != null) {
+                    showDialog(title,setTime, flower,missedCall)
+            }
+        }
 
         stack = Stack<Int>()
         stack.push(0)//FragmentMainTimer 가 처음 화면 이므로 값을 넣는다.
@@ -138,6 +161,72 @@ class MainActivity : AppCompatActivity() {
             stack.push(position)
         }
     }
+
+
+    //스크린타임 결과 다이얼로그
+    @SuppressLint("SetTextI18n")
+    private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
+        Log.d(LockScreenActivity.TAG, "showDialog: ")
+        val layoutInflater = LayoutInflater.from(this)
+        val view = layoutInflater.inflate(R.layout.success_dialog, null)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .setCancelable(false)
+            .create()
+        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
+        val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
+        val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
+        val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
+        val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
+
+        tvTitle.text = title
+        tvSettingTime.text = setTime //설정시간표시
+
+        //알림 상태 확인
+        val audioManager =
+            applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val alarm: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        val vib = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val rt: Ringtone = RingtoneManager.getRingtone(applicationContext, alarm)
+
+        if(!title.equals("종료되었습니다.")){ //종료버튼 누른 게 아니라면 알림 소리 남
+            Log.d(TAG, "showDialog: 여기로 들어와")
+            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                //소리 알람
+                rt.play()
+            } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                //진동 알람
+                vib.vibrate(longArrayOf(500, 300, 500, 300), 0) //repeat: 0 = 무한반복 , -1 = 한번만 실행
+            }
+        }
+
+
+        if (flower == 0) {
+            tvFlower.text = "없음"
+        } else {
+            tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
+        }
+        if (missedCall == 0) {
+            tvMissedCall.text = "없음"
+        } else {
+            tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
+        }
+
+        //확인버튼 클릭 이벤트
+        btnConfirm.setOnClickListener {
+            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                //소리 알람
+                rt.stop()
+            } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                //진동 알람
+                vib.cancel()
+            }
+            alertDialog!!.dismiss()
+        }
+        alertDialog!!.show()
+    }
+
 }
 //
 //        binding = ActivityMainBinding.inflate(layoutInflater)

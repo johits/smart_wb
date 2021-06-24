@@ -8,14 +8,6 @@ import android.content.SharedPreferences
  * */
 object TimerSetShared {
     private val fileName : String = "timerSet" //쉐어드 파일이름
-//
-//    //시작날짜 저장
-//    fun setDate(context: Context, input: String) {
-//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-//        val editor : SharedPreferences.Editor = prefs.edit()
-//        editor.putString("date", input)
-//        editor.commit()
-//    }
 
     //시작날짜 저장
     fun setDate(context: Context, input: String) {
@@ -72,26 +64,37 @@ object TimerSetShared {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         return prefs.getInt("missedCall", 0)
     }
-    //안내 다시보지 않기 체크하기
-    // 불린값 저장은 잘 됨. 불러오면 false 값만 불러옴. 일단 인트로 대체
-    //스크린타임 종료되면 쉐어드 클리어 한다. 젠장
-    //GuidShowCheckShared 생성
-//    fun setNoDialCheck(context: Context){
-//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-//        var editor : SharedPreferences.Editor = prefs.edit()
-//        editor.putInt("noDialCheck", 1)
-//        editor.apply()
-//    }
-//    //안내 다시보지 않기 체크유무 불러오기
-//    fun getNoDialCheck(context: Context):Int{
-//        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-//        return prefs.getInt("noDialCheck", 0)
-//    }
+
     //데이터 초기화 //스크린타임이 끝나면 호출한다.
     fun clearTimerSet(context: Context) {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         editor.clear()
         editor.commit()
+    }
+
+    //스크린타임 동작 유무
+    fun setRunning(context: Context, flag:Boolean){
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = prefs.edit()
+        editor.putBoolean("running", flag)
+        editor.apply()
+    }
+
+    fun getRunning(context: Context):Boolean{
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        return prefs.getBoolean("running", false)
+    }
+
+    fun setResult(context: Context, flag:Boolean){
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = prefs.edit()
+        editor.putBoolean("result", flag)
+        editor.apply()
+    }
+
+    fun getResult(context: Context):Boolean{
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        return prefs.getBoolean("result", false)
     }
 }

@@ -195,7 +195,6 @@ class FragmentCalendar : Fragment() {
 
         //달력표시제한
         if(decoList.size>0){
-             Log.d(TAG, "달력크기제한")
             val firstYear: Int? = decoList[0].year
             val firstMonth: Int? = decoList[0].month
             val firstDay: Int = 1
@@ -204,6 +203,7 @@ class FragmentCalendar : Fragment() {
 //            val lastDay: Int = calLastDay(lastYear, lastMonth)
             val calculator = Calculator()
             val lastDay:Int =calculator.calLastDay(lastYear,lastMonth)
+             Log.d(TAG, "달력크기제한$lastYear , $lastMonth , $firstYear , $firstMonth")
             //첫번쨰 데이터 기준 최소 날짜 제한한다
             binding.calendar.state().edit()
                 .setMinimumDate(
