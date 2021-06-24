@@ -105,6 +105,10 @@ class LockScreenActivity : AppCompatActivity() {
         }
 
     }
+    override fun onBackPressed() {
+        Log.d(TAG, "락 스크린 뒤로가기 제어")
+    }
+
 
     //     서비스 시작 및 Messenger 전달
     @RequiresApi(Build.VERSION_CODES.M)
@@ -187,19 +191,19 @@ class LockScreenActivity : AppCompatActivity() {
             screenTime.successUpdate(flower)
 
             //테스트용 현재 시간 가져오기
-            val timeStamp = System.currentTimeMillis()
-            // 현재 시간을 Date 타입으로 변환
-            val dateType = Date(timeStamp)
-            val dateFormatTime = SimpleDateFormat("HH:mm:ss")
-            val nowTime: String = dateFormatTime.format(dateType)//현재시간
-            showDialog(
-//                        getString(R.string.success_dialog_title_success),
-                nowTime,
-                setTimeString,
-                flower,
-                missedCall
-            )//결과 다이얼로그
+//            val timeStamp = System.currentTimeMillis()
+//            // 현재 시간을 Date 타입으로 변환
+//            val dateType = Date(timeStamp)
+//            val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+//            val nowTime: String = dateFormatTime.format(dateType)//현재시간
 
+//            showDialog(
+//                getString(R.string.success_dialog_title_success),
+//                setTimeString,
+//                flower,
+//                missedCall
+//            )//결과 다이얼로그
+            startMainActivity(getString(R.string.success_dialog_title_success),setTimeString,flower,missedCall)
             //성공 노티피케이션
             val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
             val successText = "꽃 $flower 송이 획득."
@@ -215,12 +219,13 @@ class LockScreenActivity : AppCompatActivity() {
             }
 
         } else {//스크린타임 사용자 종료시
-            showDialog(
-                getString(R.string.success_dialog_title_fail),
-                setTimeString,
-                0,
-                missedCall
-            )
+            startMainActivity(getString(R.string.success_dialog_title_fail),setTimeString,0,missedCall)
+//            showDialog(
+//                getString(R.string.success_dialog_title_fail),
+//                setTimeString,
+//                0,
+//                missedCall
+//            )
             //부재중 전화가 있으면 노티피케이션
             if (missedCall != 0) {
                 missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
@@ -228,76 +233,48 @@ class LockScreenActivity : AppCompatActivity() {
         }
     }
 
-    //전화로그//사용안함함
-//    private fun allLog(){
-//        val callLog = CallLog.Calls.CONTENT_URI
-//
-//        var proj = arrayOf(
-//            CallLog.Calls.PHONE_ACCOUNT_ID,
-//            CallLog.Calls.CACHED_NAME,
-//            CallLog.Calls.NUMBER,
-//            CallLog.Calls.DATE
-//        )
-//
-//        this.run {
-//            val cursor = contentResolver.query(callLog, proj, null, null, null)
-//            if (cursor != null) {
-//                while (cursor.moveToNext()) {
-//                    val id = cursor.getString(0)
-//                    val name = cursor.getString(1)
-//                    val number = cursor.getString(2)
-//                    val date = cursor.getString(3)
-//
-//                    Log.d(TAG, "id:$id , name:$name , number:$number , date:$date")
-//                }
-//            }
-//        }
-//    }
+
 
     //스크린타임 결과 다이얼로그
-    @SuppressLint("SetTextI18n")
-    private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
-        Log.d(TAG, "showDialog: ")
-        val layoutInflater = LayoutInflater.from(this)
-        val view = layoutInflater.inflate(R.layout.success_dialog, null)
-
-        val alertDialog = AlertDialog.Builder(this)
-            .setView(view)
-            .setCancelable(false)
-            .create()
-        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
-        val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
-        val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
-        val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
-        val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
-
-        tvTitle.text = title
-        tvSettingTime.text = setTime //설정시간표시
-//        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) //소리 알람
-        if (flower == 0) {
-            tvFlower.text = "X"
-        } else {
-            tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
-        }
-        if (missedCall == 0) {
-            tvMissedCall.text = "X"
-        } else {
-            tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
-        }
-
-        //확인버튼 클릭 이벤트
-        btnConfirm.setOnClickListener {
-//          RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            alertDialog!!.dismiss()
-            startMainActivity()
-        }
-
-        //코루틴//비동기처리
-        GlobalScope.launch {
-            delay(100)
-            alertDialog!!.show()
-        }
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
+//        Log.d(TAG, "showDialog: ")
+//        val layoutInflater = LayoutInflater.from(this)
+//        val view = layoutInflater.inflate(R.layout.success_dialog, null)
+//
+//        val alertDialog = AlertDialog.Builder(this)
+//            .setView(view)
+//            .setCancelable(false)
+//            .create()
+//        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
+//        val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
+//        val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
+//        val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
+//        val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
+//
+//        tvTitle.text = title
+//        tvSettingTime.text = setTime //설정시간표시
+////        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) //소리 알람
+//        if (flower == 0) {
+//            tvFlower.text = "X"
+//        } else {
+//            tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
+//        }
+//        if (missedCall == 0) {
+//            tvMissedCall.text = "X"
+//        } else {
+//            tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
+//        }
+//
+//        //확인버튼 클릭 이벤트
+//        btnConfirm.setOnClickListener {
+////          RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+//            alertDialog!!.dismiss()
+//            startMainActivity()
+//        }
+//        alertDialog!!.show()
+//
+//    }
 
     //부재중전화 노티 호출
     @RequiresApi(Build.VERSION_CODES.O)
@@ -317,8 +294,12 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     //메인액티비티 호출
-    private fun startMainActivity() {
+    private fun startMainActivity(title: String, setTime: String, flower: Int, missedCall: Int) {
         val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.putExtra("title",title)
+        intent.putExtra("setTime",setTime)
+        intent.putExtra("flower",flower)
+        intent.putExtra("missedCall",missedCall)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
 

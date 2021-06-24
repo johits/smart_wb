@@ -1,10 +1,15 @@
 package com.example.smart_wb.View_Controller.Activity
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -138,6 +143,48 @@ class MainActivity : AppCompatActivity() {
             stack.push(position)
         }
     }
+
+
+    //스크린타임 결과 다이얼로그
+    @SuppressLint("SetTextI18n")
+    private fun showDialog(title: String, setTime: String, flower: Int, missedCall: Int) {
+        Log.d(LockScreenActivity.TAG, "showDialog: ")
+        val layoutInflater = LayoutInflater.from(this)
+        val view = layoutInflater.inflate(R.layout.success_dialog, null)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .setCancelable(false)
+            .create()
+        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
+        val btnConfirm = view.findViewById<Button>(R.id.btnConfirm)
+        val tvFlower = view.findViewById<TextView>(R.id.tvFlower)
+        val tvMissedCall = view.findViewById<TextView>(R.id.tvMissedCall)
+        val tvSettingTime = view.findViewById<TextView>(R.id.tvSettingTime)
+
+        tvTitle.text = title
+        tvSettingTime.text = setTime //설정시간표시
+//        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) //소리 알람
+        if (flower == 0) {
+            tvFlower.text = "X"
+        } else {
+            tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
+        }
+        if (missedCall == 0) {
+            tvMissedCall.text = "X"
+        } else {
+            tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
+        }
+
+        //확인버튼 클릭 이벤트
+        btnConfirm.setOnClickListener {
+//          RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            alertDialog!!.dismiss()
+        }
+        alertDialog!!.show()
+
+    }
+
 }
 //
 //        binding = ActivityMainBinding.inflate(layoutInflater)
