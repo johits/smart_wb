@@ -2,14 +2,17 @@ package com.example.smart_wb.View_Controller.Fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_wb.Model.Data.ItemData
 import com.example.smart_wb.Model.ItemModel
+import com.example.smart_wb.Model.SQLite.ScreenTimeDbHelper.Companion.TAG
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.R
 import com.example.smart_wb.View_Controller.Activity.MainActivity
@@ -154,28 +157,28 @@ class FragmentItem : Fragment() {
 
 
         //자물쇠 구매여부에 따른 세팅
-        itemModel.lockSet(iContext)
-//        for(i in 0 until  locker.size){
-//            Log.d(TAG, "나열1: "+locker[i])
-//            for(j in 0 until itemData.size){
-//                if(locker[i].equals(itemData[j].name)|| "reset".equals(itemData[j].name)){
-//                    Log.d(TAG, "나열2: "+locker[i]+"  "+itemData[j].name)
-//                    itemData[j].lock =true
-//                }
-//            }
-//        }
+//        itemModel.lockSet(iContext)
+        for(i in 0 until  locker.size){
+            Log.d(TAG, "나열1: "+locker[i])
+            for(j in 0 until itemData.size){
+                if(locker[i].equals(itemData[j].name)|| "reset".equals(itemData[j].name)){
+                    Log.d(TAG, "나열2: "+locker[i]+"  "+itemData[j].name)
+                    itemData[j].lock =true
+                }
+            }
+        }
 
         //적용 아이템에 따른 체크 표시 세팅
-        itemModel.itemSet(iContext)
-//            for(j in 0 until itemData.size){
-//                if(PointItemSharedModel.getBg(iContext)==(itemData[j].item)){
-//                    itemData[j].bcheck =true
-//                    itemData[j].bg =true
-//                }else if(PointItemSharedModel.getTimer(iContext)==(itemData[j].item)){
-//                    itemData[j].tcheck =true
-//                    itemData[j].timer =true
-//                }
-//            }
+//        itemModel.itemSet(iContext)
+            for(j in 0 until itemData.size){
+                if(PointItemSharedModel.getBg(iContext)==(itemData[j].item)){
+                    itemData[j].bcheck =true
+                    itemData[j].bg =true
+                }else if(PointItemSharedModel.getTimer(iContext)==(itemData[j].item)){
+                    itemData[j].tcheck =true
+                    itemData[j].timer =true
+                }
+            }
 
 
 
@@ -215,17 +218,17 @@ class FragmentItem : Fragment() {
         //아이템 모든 적용 초기화
         reset.setOnClickListener {
             itemModel.reset(iContext)
-//            for (i in 0 until itemData.size) {
-//                i_back.setImageResource(0)
-//                i_timer.setImageResource(0)
-//                itemData[i].bg = false
-//                itemData[i].bcheck = false
-//                itemData[i].timer = false
-//                itemData[i].tcheck = false
-//                PointItemSharedModel.setBg(iContext, 0)
-//                PointItemSharedModel.setTimer(iContext, 0)
-//                Toast.makeText(context, "모든 적용이 해제되었습니다.", Toast.LENGTH_SHORT).show()
-//            }
+            for (i in 0 until itemData.size) {
+                i_back.setImageResource(0)
+                i_timer.setImageResource(0)
+                itemData[i].bg = false
+                itemData[i].bcheck = false
+                itemData[i].timer = false
+                itemData[i].tcheck = false
+                PointItemSharedModel.setBg(iContext, 0)
+                PointItemSharedModel.setTimer(iContext, 0)
+                Toast.makeText(context, "모든 적용이 해제되었습니다.", Toast.LENGTH_SHORT).show()
+            }
             itemAdapter.notifyDataSetChanged()
         }
 
