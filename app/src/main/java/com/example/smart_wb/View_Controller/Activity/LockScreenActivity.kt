@@ -162,7 +162,7 @@ class LockScreenActivity : AppCompatActivity() {
                 resultScreenTime(result)
 
                 //타이머쉐어드 데이터 클리어
-                TimerSetShared.clearTimerSet(this)
+                TimerSetShared.setRunning(this, false)
                 setStopService() //서비스 종료
 
             }

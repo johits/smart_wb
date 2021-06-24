@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="toast_time_set_blank_warning">시간 설정을 해주세요.</string>
+    <string name="toast_screenTime_already_start_warning">스크린 타임이 이미 동작중입니다.</string>
     <string name="screen_time_success_noti_title">스크린타임 성공</string>
     <string name="screen_time_success_noti_text">축하합니다.</string>
     <string name="calendar_time_success">성공</string>

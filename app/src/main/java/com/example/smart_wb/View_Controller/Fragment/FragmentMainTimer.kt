@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import android.text.format.Time
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -240,32 +241,28 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         //데이터 삽입
         screenTimeDbHelper.insert(year, month, day, time, settingTime)
 
-        //데이터 모두 불러오기
-//        var arr: ArrayList<ScreenTimeData> = screenTimeDbHelper.select()
-//        //데이터 확인용 로그
-//        for (data in arr) {
-//            Log.d(TAG,"id:${data.id}, year:${data.year}, month:${data.month}, day:${data.day}, " +
-//                    "time:${data.time}, settingTime:${data.settingTime}, success:${data.success}, flower:${data.flower},")
-//        }
         //설정시간 쉐어드에 저장
         TimerSetShared.setDate(mContext, date)
         TimerSetShared.setTime(mContext, time)
         TimerSetShared.setSettingTime(mContext, settingTime)
-        //쉐어드 저장 확인용 로그
-//        Log.d(TAG, "시작날짜:"+TimerSetShared.getDate(mContext)+" " +
-//                    "시작시간:"+TimerSetShared.getTime(mContext)+" " +
-//                    "설정시간:"+TimerSetShared.getSettingTime(mContext))
     }
 
     //스크린 타임 시작
     private fun startScreenTime(settingTime: Int) {
-        val intent = Intent(mContext, LockScreenActivity::class.java)
-        intent.putExtra("settingTime", settingTime.toString())
-        startActivity(intent)
-        //설정시간 데이터 삽입
-        insertSettingTime(settingTime)
-        //액티비티 종료
-        activity?.finish()
+        //스크린타임 동작유무 확인
+        if(TimerSetShared.getRunning(mContext)){
+            toastCenter(R.string.toast_screenTime_already_start_warning)
+        }else{
+            TimerSetShared.setRunning(mContext, true)
+            val intent = Intent(mContext, LockScreenActivity::class.java)
+            intent.putExtra("settingTime", settingTime.toString())
+            startActivity(intent)
+            //설정시간 데이터 삽입
+            insertSettingTime(settingTime)
+            //액티비티 종료
+            activity?.finish()
+
+        }
 
     }
 }
