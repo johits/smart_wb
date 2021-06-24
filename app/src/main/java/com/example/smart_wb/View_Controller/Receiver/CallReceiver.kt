@@ -65,7 +65,7 @@ class CallReceiver : BroadcastReceiver() {
                     }
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            if(activityName.equals("LockScreenActivity")){
+                            if(activityName.equals("View_Controller.Activity.LockScreenActivity")){
                                 telephonyManager.endCall()
                                 Log.d("CallReceiver", "전화끊기, 거절")
                                 Log.d("CallReceiver", "보고 있는 액티비티:"+activityName)
@@ -74,7 +74,7 @@ class CallReceiver : BroadcastReceiver() {
 
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d("CallReceiver", "통화종료 혹은 통화벨 종료")
-
+                    Log.d("전화", "onReceive: 현재 액티비티 네임 $activityName")
                 }
                 Log.d("CallReceiver", "phone state : $state")
             }

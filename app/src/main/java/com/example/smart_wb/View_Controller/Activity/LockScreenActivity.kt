@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.media.RingtoneManager
 import android.os.*
 import android.util.Log
@@ -16,13 +19,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.smart_wb.View_Controller.Service.DrawService
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.RemainTime
 import com.example.smart_wb.Model.ScreenTime
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.Model.Shared.TimerSetShared
 import com.example.smart_wb.R
+import com.example.smart_wb.View_Controller.Service.DrawService
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -269,6 +272,7 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvTitle.text = title
         tvSettingTime.text = setTime //설정시간표시
+//        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) //소리 알람
         if (flower == 0) {
             tvFlower.text = "X"
         } else {
@@ -282,6 +286,7 @@ class LockScreenActivity : AppCompatActivity() {
 
         //확인버튼 클릭 이벤트
         btnConfirm.setOnClickListener {
+//          RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             alertDialog!!.dismiss()
             startMainActivity()
         }
