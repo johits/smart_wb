@@ -74,7 +74,6 @@ class CallReceiver : BroadcastReceiver() {
 
                 } else if (state == TelephonyManager.EXTRA_STATE_IDLE) {
                     Log.d("CallReceiver", "통화종료 혹은 통화벨 종료")
-                    Log.d("전화", "onReceive: 현재 액티비티 네임 $activityName")
                 }
                 Log.d("CallReceiver", "phone state : $state")
             }
