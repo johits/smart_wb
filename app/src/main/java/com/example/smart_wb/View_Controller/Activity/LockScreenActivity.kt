@@ -54,7 +54,6 @@ class LockScreenActivity : AppCompatActivity() {
 
     private var mServiceMessenger: Messenger? = null //서비스에 데이터 보내기 위한 변수
     private var mIsBound = false //서비스 동작 유무 확인용 플래그
-    private var screenTimeResult = false //스크린타임 동작 성공 유무 플래그
     private var settingTime = 0 //설정시간
 
 
@@ -65,7 +64,8 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvWatch.visibility = View.GONE
         btStop.visibility = View.GONE
-        Log.d(TAG, "onCreate: 여기로들어와지나")
+        Log.d(TAG, "onCreate: 여기로들어와지나${TimerSetShared.getRunning(this)}")
+
 
         //쉐어드 적용된 아이템 불러오기(배경, 타이머)
         l_back.setImageResource(PointItemSharedModel.getBg(this))
@@ -106,6 +106,13 @@ class LockScreenActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume: ")
+        if(!TimerSetShared.getRunning(this)){
+            finish()
+        }
+    }
 
     //     서비스 시작 및 Messenger 전달
     @RequiresApi(Build.VERSION_CODES.M)
@@ -161,8 +168,6 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " message : $message")
 
                 setStopService() //서비스 종료
-
-                screenTimeResult = result
 
                 //타이머쉐어드 running -> false
                 TimerSetShared.setRunning(this, false)
@@ -390,7 +395,7 @@ class LockScreenActivity : AppCompatActivity() {
             val calculator = Calculator()
             val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
             val flower = setTime / 600 //획득한 꽃 갯수
-            if (screenTimeResult) {
+            if (TimerSetShared.getResult(this)) {
                 startMainActivity(
                     getString(R.string.success_dialog_title_success),
                     setTimeString,

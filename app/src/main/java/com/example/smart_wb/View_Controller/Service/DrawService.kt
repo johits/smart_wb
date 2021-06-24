@@ -36,6 +36,7 @@ class DrawService : Service() {
 
         const val timerDelay: Long = 1000 //타이머 속도 상수값
     }
+    val mContext:Context = this
 
     private var mClient: Messenger? = null //activity 에서 가져온 메신저
 
@@ -236,6 +237,7 @@ class DrawService : Service() {
                 settingTime--
                 handler?.postDelayed(this, 500)
             } else if (settingTime == -2) {//스크린타임 정상적으로 종료
+                TimerSetShared.setResult(mContext, true)
                 Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
             } else if (settingTime == -3) {//사용자가 종료버튼 눌렀을때

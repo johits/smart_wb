@@ -85,4 +85,16 @@ object TimerSetShared {
         val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         return prefs.getBoolean("running", false)
     }
+
+    fun setResult(context: Context, flag:Boolean){
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = prefs.edit()
+        editor.putBoolean("result", flag)
+        editor.apply()
+    }
+
+    fun getResult(context: Context):Boolean{
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        return prefs.getBoolean("result", false)
+    }
 }
