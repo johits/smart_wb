@@ -1,5 +1,6 @@
 package com.smartwb.smart_wb.View_Controller.Fragment
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
@@ -12,18 +13,17 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smart_wb.databinding.FragmentCalendarBinding
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.smartwb.smart_wb.Model.Calculator
 import com.smartwb.smart_wb.Model.SQLite.ScreenTimeData
 import com.smartwb.smart_wb.Model.ScreenTime
 import com.smartwb.smart_wb.R
 import com.smartwb.smart_wb.View_Controller.Activity.MainActivity
 import com.smartwb.smart_wb.View_Controller.Adapter.CalendarAdapter
-
+import com.smartwb.smart_wb.databinding.FragmentCalendarBinding
 
 import com.smartwb.smart_wb.etc.CalendarDecoratorpDotSpan
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.CalendarMode
 import java.text.SimpleDateFormat
 import java.util.*
 

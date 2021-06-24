@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.smartwb.smart_wb.databinding.FragmentMainTimerBinding
 import com.smartwb.smart_wb.Model.SQLite.ScreenTimeDbHelper
 import com.smartwb.smart_wb.Model.Shared.GuideShowCheckShared
 import com.smartwb.smart_wb.Model.Shared.PointItemSharedModel
@@ -22,7 +23,7 @@ import com.smartwb.smart_wb.R
 import com.smartwb.smart_wb.View_Controller.Activity.LockScreenActivity
 import com.smartwb.smart_wb.View_Controller.Activity.MainActivity
 import com.smartwb.smart_wb.View_Controller.Dialog.GuideDialog
-import com.smartwb.smart_wb.databinding.FragmentMainTimerBinding
+import kotlinx.android.synthetic.main.fragment_main_timer.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
