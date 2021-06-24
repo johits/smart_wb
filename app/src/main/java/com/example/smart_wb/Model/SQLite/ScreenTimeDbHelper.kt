@@ -116,7 +116,7 @@ class ScreenTimeDbHelper(
             val month:Int = cursor.getInt(1)
             val day:Int = cursor.getInt(2)
             val data = ScreenTimeData(null,year,month,day,null,null,null,null)
-           // Log.d("chart", "year:$year , month:$month , day:$day")
+            Log.d("chart", "year:$year , month:$month , day:$day")
             result.add(data)
 //            val day:Int = cursor.getInt(0)
 //            Log.d("cal", "day:$day")
