@@ -3,9 +3,15 @@ package com.example.smart_wb.View_Controller.Activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioManager
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
@@ -176,25 +182,50 @@ class MainActivity : AppCompatActivity() {
 
         tvTitle.text = title
         tvSettingTime.text = setTime //설정시간표시
-//        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) //소리 알람
+
+        //알림 상태 확인
+        val audioManager =
+            applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val alarm: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        val vib = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val rt: Ringtone = RingtoneManager.getRingtone(applicationContext, alarm)
+
+//        if(!title.equals("종료되었습니다.")){ //종료버튼 누른 게 아니라면 알림 소리 남
+//            Log.d(TAG, "showDialog: 여기로 들어와")
+//            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+//                //소리 알람
+//                rt.play()
+//            } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+//                //진동 알람
+//                vib.vibrate(longArrayOf(500, 300, 500, 300), 0) //repeat: 0 = 무한반복 , -1 = 한번만 실행
+//            }
+//        }
+//
+
+
         if (flower == 0) {
-            tvFlower.text = "X"
+            tvFlower.text = "없음"
         } else {
             tvFlower.text = flower.toString() + "송이"//얻은 꽃 표시
         }
         if (missedCall == 0) {
-            tvMissedCall.text = "X"
+            tvMissedCall.text = "없음"
         } else {
             tvMissedCall.text = missedCall.toString() + "통화"// 부재중 전화 표시
         }
 
         //확인버튼 클릭 이벤트
         btnConfirm.setOnClickListener {
-//          RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                //소리 알람
+                rt.stop()
+            } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                //진동 알람
+                vib.cancel()
+            }
             alertDialog!!.dismiss()
         }
         alertDialog!!.show()
-
     }
 
 }
