@@ -13,29 +13,36 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_wb.R
 import com.example.smart_wb.Model.SQLite.ScreenTimeData
 
-class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(private val context: Context) :
+    RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     val TAG = "CalendarAdapter"
     var dataList = mutableListOf<ScreenTimeData>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-       // Log.d(TAG, "onCreateViewHolder: ")
-            val view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false)
-            return ViewHolder(
-                view
-            )
+        // Log.d(TAG, "onCreateViewHolder: ")
+        val view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false)
+        return ViewHolder(
+            view
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       // Log.d(TAG, "onBindViewHolder: ")
+        // Log.d(TAG, "onBindViewHolder: ")
         holder.bind(dataList[position])
-        if(dataList[position].success==0){
-            holder.tvSuccess.setTextColor(ContextCompat.getColor(context,
-                R.color.colorRed
-            ))
-        }else{
-            holder.tvSuccess.setTextColor(ContextCompat.getColor(context,
-                R.color.colorBlue
-            ))
+        if (dataList[position].success == 0) {
+            holder.tvSuccess.setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.colorRed
+                )
+            )
+        } else {
+            holder.tvSuccess.setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.colorBlue
+                )
+            )
         }
     }
 
@@ -46,13 +53,13 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int{
+    override fun getItemCount(): Int {
         //Log.d(TAG, "getItemCount: "+dataList.size)
         return dataList.size
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-         val tvStartTime: TextView = itemView.findViewById(R.id.tvStartTime)
+        val tvStartTime: TextView = itemView.findViewById(R.id.tvStartTime)
         val tvSettingTime: TextView = itemView.findViewById(R.id.tvSettingTime)
         val tvSuccess: TextView = itemView.findViewById(R.id.tvSuccess)
         val tvFlower: TextView = itemView.findViewById(R.id.tvFlower)
@@ -72,18 +79,20 @@ class CalendarAdapter(private val context: Context) : RecyclerView.Adapter<Calen
             tvFlower.text = item.flower.toString()
         }
 
-//        //설정시간은 초 -> HH:mm:ss 로 변환
+        //        //설정시간은 초 -> HH:mm:ss 로 변환
         @RequiresApi(Build.VERSION_CODES.N)
         fun changeTime(settingTime: Int): String {
             val result: String?
             val hour = Math.floorDiv(settingTime, 3600)
             val min = Math.floorMod(settingTime, 3600) / 60
             val sec = Math.floorMod(settingTime, 3600) % 60
-//            if (hour > 0) {
-                result = "%1$02d시간 %2$02d분".format(hour, min)
-//            } else {
-//                result = "%1$02d:%2$02d".format(min, sec)
-//            }
+            if (hour > 0 && min > 0) {
+                result = "%1$2d시간%2$2d분".format(hour, min)
+            } else if (hour > 0 && min == 0) {
+                result = "%1$2d시간".format(hour)
+            } else {
+                result = "%1$2d분".format(min)
+            }
             return result
         }
     }

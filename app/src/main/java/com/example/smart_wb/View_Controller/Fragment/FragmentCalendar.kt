@@ -268,9 +268,9 @@ class FragmentCalendar : Fragment() {
 //        binding.tvSettingTimeSum.text = changeTime(settingTimeSum)
 //        binding.tvSuccessTimeSum.text = changeTime(successTimeSum)
         val calculator = Calculator()
-        binding.tvSettingTimeSum.text=calculator.secToHourMin(settingTimeSum)
-        binding.tvSuccessTimeSum.text=calculator.secToHourMin(successTimeSum)
-        binding.tvFlowerSum.text = flowerSum.toString()
+        binding.tvSettingTimeSum.text=calculator.calTime(settingTimeSum)
+        binding.tvSuccessTimeSum.text=calculator.calTime(successTimeSum)
+        binding.tvFlowerSum.text = flowerSum.toString()+"송이"
     }
 
     //설정시간은 초 -> "HH시간 mm분" 으로 변환//사용안함
@@ -301,7 +301,7 @@ class FragmentCalendar : Fragment() {
         val calDay = CalendarDay.from(year, month, day)
 
         //오늘날짜 데코레이션
-        binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
+//        binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
 
         //현재날짜 데이터 불러오기
         val screenTime = ScreenTime(mContext)
