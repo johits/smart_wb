@@ -267,4 +267,7 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
         activity?.finish()
 
     }
+
+
+
 }
