@@ -129,10 +129,10 @@ class FragmentChart : Fragment() {
         rightVisible() //이후 버튼 활성화
 
 
-        //출시 전까지 더미데이터 쌓는 버튼으로 사용
-        chart_text.setOnClickListener {
-        chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
-        }
+//        //출시 전까지 더미데이터 쌓는 버튼으로 사용
+//        chart_text.setOnClickListener {
+//        chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
+//        }
 
         //주 버튼 클릭 이벤트
         chart_week.setOnClickListener(View.OnClickListener {
