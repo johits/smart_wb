@@ -67,7 +67,7 @@ class DrawService : Service() {
         callEvent()
 
         //절전모드 안 들어가게 함
-        noDoze()
+       // noDoze()
 
         val time = TimerSetShared.getTime(this)
         val date = TimerSetShared.getDate(this)
@@ -194,7 +194,7 @@ class DrawService : Service() {
         sendMsgToActivity(result);//액티비티에 메세지보내기//result true == 성공, false == 종료버튼터치
         stopService(Intent(applicationContext, DrawService::class.java))
 
-        wakeLock.release()
+        //wakeLock.release()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
