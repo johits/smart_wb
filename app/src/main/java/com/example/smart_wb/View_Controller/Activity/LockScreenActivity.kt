@@ -87,7 +87,7 @@ class LockScreenActivity : AppCompatActivity() {
             val setTime = TimerSetShared.getSettingTime(this)
             val startTime = TimerSetShared.getTime(this)
             val startDate = TimerSetShared.getDate(this)
-            val remain = RemainTime(startTime,startDate,setTime)
+            val remain = RemainTime(startTime, startDate, setTime)
             val remainTime = remain.calRemainTime()//스크린타임 남은 시간계산
 
             Log.d(TAG, "남은시간:$remainTime")
@@ -158,11 +158,12 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
 
+                //타이머쉐어드 running -> false
+                TimerSetShared.setRunning(this, false)
+
                 //스크린타임 결과에 따른 다이얼로그, 노티피케이션
                 resultScreenTime(result)
 
-                //타이머쉐어드 데이터 클리어
-                TimerSetShared.setRunning(this, false)
                 setStopService() //서비스 종료
 
             }
@@ -290,7 +291,12 @@ class LockScreenActivity : AppCompatActivity() {
             alertDialog!!.dismiss()
             startMainActivity()
         }
-        alertDialog!!.show()
+
+        //코루틴//비동기처리
+        GlobalScope.launch {
+            delay(100)
+            alertDialog!!.show()
+        }
     }
 
     //부재중전화 노티 호출

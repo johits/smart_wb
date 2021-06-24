@@ -116,7 +116,7 @@ class ScreenTimeDbHelper(
             val month:Int = cursor.getInt(1)
             val day:Int = cursor.getInt(2)
             val data = ScreenTimeData(null,year,month,day,null,null,null,null)
-            Log.d("chart", "year:$year , month:$month , day:$day")
+//            Log.d("chart", "year:$year , month:$month , day:$day")
             result.add(data)
 //            val day:Int = cursor.getInt(0)
 //            Log.d("cal", "day:$day")
@@ -168,7 +168,7 @@ class ScreenTimeDbHelper(
             val flower:Int =cursor.getInt(7) //디폴트가 0
             val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
             result.add(data)
-            Log.d("첫번째 행 가져오기 // chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+//            Log.d("첫번째 행 가져오기 // chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result
@@ -192,7 +192,7 @@ class ScreenTimeDbHelper(
             val flower:Int =cursor.getInt(7) //디폴트가 0
             val data: ScreenTimeData = ScreenTimeData(id, year, month, day, time, settingTime, success, flower)
             result.add(data)
-            Log.d("마지막행 가져오기 //chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
+//            Log.d("마지막행 가져오기 //chart", "id:${data.id} , year:${data.year} , month:${data.month} , day:${data.day} , time:${data.time} , settingTime:${data.settingTime} , success:${data.success} , flower:${data.flower}")
         }
         db.close()
         return result
