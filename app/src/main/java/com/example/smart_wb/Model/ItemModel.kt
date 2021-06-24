@@ -59,7 +59,7 @@ class ItemModel {
             ItemData(
                 name = "bg1",
                 item = R.drawable.bg1,
-                price = 100,
+                price = 200,
                 type = "bg"
             )
         )
@@ -75,7 +75,7 @@ class ItemModel {
             ItemData(
                 name = "timer1",
                 item = R.drawable.timer1,
-                price = 300,
+                price = 150,
                 type = "timer"
             )
         )
@@ -83,7 +83,7 @@ class ItemModel {
             ItemData(
                 name = "timer2",
                 item = R.drawable.timer2,
-                price = 400,
+                price = 150,
                 type = "timer"
             )
         )
