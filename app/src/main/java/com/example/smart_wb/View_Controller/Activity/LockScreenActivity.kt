@@ -21,6 +21,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.smart_wb.Model.Calculator
 import com.example.smart_wb.Model.RemainTime
 import com.example.smart_wb.Model.ScreenTime
@@ -283,17 +284,17 @@ class LockScreenActivity : AppCompatActivity() {
         val vib = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         val rt: Ringtone = RingtoneManager.getRingtone(applicationContext, alarm)
 
-        if(!title.equals("종료되었습니다.")){ //종료버튼 누른 게 아니라면 알림 소리 남
-            Log.d(TAG, "showDialog: 여기로 들어와")
-            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                //소리 알람
-                rt.play()
-            } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                //진동 알람
-                vib.vibrate(longArrayOf(500, 300, 500, 300), 0) //repeat: 0 = 무한반복 , -1 = 한번만 실행
-            }
-        }
-      
+//        if(!title.equals("종료되었습니다.")){ //종료버튼 누른 게 아니라면 알림 소리 남
+//            Log.d(TAG, "showDialog: 여기로 들어와")
+//            if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+//                //소리 알람
+//                rt.play()
+//            } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+//                //진동 알람
+//                vib.vibrate(longArrayOf(500, 300, 500, 300), 0) //repeat: 0 = 무한반복 , -1 = 한번만 실행
+//            }
+//        }
+//
 
         
         if (flower == 0) {
@@ -380,10 +381,12 @@ class LockScreenActivity : AppCompatActivity() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
 
 //        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))//노티피케이션 소리설정
+        builder.setSound(Uri.EMPTY)//노티피케이션 소리설정
 
-//        //알림 상태 확인
-//        val notificationManager = NotificationManagerCompat.from(this)
-//        notificationManager.notify(notiId, builder.build())
+        //알림 상태 확인
+        val notificationManager = NotificationManagerCompat.from(this)
+        notificationManager.notify(notiId, builder.build())
+
 
     }
 

@@ -28,7 +28,7 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="20dp"
             android:layout_marginTop="24dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +42,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:paddingVertical="5dp"
                 android:text="주"
-                android:textColor="#2FA9FF"
-                android:textSize="18sp" />
+                android:background="@drawable/week1"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/chart_month"
@@ -52,9 +54,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:paddingVertical="5dp"
                 android:text="월"
+                android:background="@drawable/month0"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/chart_year"
@@ -62,9 +66,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:background="@drawable/year0"
+                android:paddingVertical="5dp"
                 android:text="년"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
 
         </LinearLayout>

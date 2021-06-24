@@ -136,9 +136,14 @@ class FragmentChart : Fragment() {
 
         //주 버튼 클릭 이벤트
         chart_week.setOnClickListener(View.OnClickListener {
-            chart_week.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
+            chart_month.setBackgroundResource(R.drawable.month0)
+            chart_week.setTextColor(Color.parseColor("#FFFFFF"))
+            chart_week.setBackgroundResource(R.drawable.week1)
             chart_year.setTextColor(Color.parseColor("#000000"))
+            chart_year.setBackgroundResource(R.drawable.year0)
+
+
             type = "week"
             startDt = chartmodel.toDays()?.let { chartmodel.calWeek(it,"startDt") }.toString()
             endDt = chartmodel.toDays()?.let { chartmodel.calWeek(it,"endDt") }.toString()
@@ -158,9 +163,15 @@ class FragmentChart : Fragment() {
 
 
         chart_month.setOnClickListener(View.OnClickListener {
-            chart_month.setTextColor(Color.parseColor("#2FA9FF"))
+            chart_month.setTextColor(Color.parseColor("#FFFFFF"))
+            chart_month.setBackgroundResource(R.drawable.month1)
             chart_week.setTextColor(Color.parseColor("#000000"))
+            chart_week.setBackgroundResource(R.drawable.week0)
             chart_year.setTextColor(Color.parseColor("#000000"))
+            chart_year.setBackgroundResource(R.drawable.year0)
+
+
+
             type = "month"
             date.text = chartmodel.Month(0)
 //            monthParse() // 월 날짜 파싱
@@ -184,12 +195,17 @@ class FragmentChart : Fragment() {
         })
 
         chart_year.setOnClickListener(View.OnClickListener {
-            chart_year.setTextColor(Color.parseColor("#2FA9FF"))
             chart_month.setTextColor(Color.parseColor("#000000"))
+            chart_month.setBackgroundResource(R.drawable.month0)
             chart_week.setTextColor(Color.parseColor("#000000"))
+            chart_week.setBackgroundResource(R.drawable.week0)
+            chart_year.setTextColor(Color.parseColor("#FFFFFF"))
+            chart_year.setBackgroundResource(R.drawable.year1)
+
+
             type = "year"
             date.text = chartmodel.Year(0)
-            chartmodel.yearParse(date.text.toString())
+            year = chartmodel.yearParse(date.text.toString())
             Refresh(type, year, 0,0,0) // 그래프 새로고침
             leftVisible()
             rightVisible()
@@ -539,20 +555,25 @@ class FragmentChart : Fragment() {
                 left.visibility = View.VISIBLE
                 left2.visibility = View.INVISIBLE
                         if (firstRowMonth == sMonth) {
+                            Log.d(TAG, "leftVisible: 로그3")
                             if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
+                                Log.d(TAG, "leftVisible: 로그4")
                                 left.visibility = View.VISIBLE
                                 left2.visibility = View.INVISIBLE
                                 value=1
                             }else if(firstRowDay>sDay&& value==1){
+                                Log.d(TAG, "leftVisible: 로그5")
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                                 value=0
                             } else if(firstRowDay==sDay){
+                                Log.d(TAG, "leftVisible: 로그6")
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                             }
                         }
             }else{
+                Log.d(TAG, "leftVisible: 로그7")
                 left.visibility = View.INVISIBLE
                 left2.visibility = View.VISIBLE
             }
@@ -624,9 +645,11 @@ class FragmentChart : Fragment() {
         }else if(type.equals("year")){
             if (lastRowYear != 0) {
                 if (lastRowYear == year) {
+                    Log.d(TAG, "rightVisible: 오른쪽1 // $lastRowYear // $year")
                     right.visibility = View.INVISIBLE
                     right2.visibility = View.VISIBLE
                 }else{
+                    Log.d(TAG, "rightVisible: 오른쪽2 // $lastRowYear // $year")
                     right.visibility = View.VISIBLE
                     right2.visibility = View.INVISIBLE
                 }
