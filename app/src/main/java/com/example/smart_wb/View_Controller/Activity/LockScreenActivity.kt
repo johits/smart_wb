@@ -54,7 +54,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     private var mServiceMessenger: Messenger? = null //서비스에 데이터 보내기 위한 변수
     private var mIsBound = false //서비스 동작 유무 확인용 플래그
-
+    private var screenTimeResult = false //스크린타임 동작 성공 유무 플래그
     private var settingTime = 0 //설정시간
 
 
@@ -65,7 +65,7 @@ class LockScreenActivity : AppCompatActivity() {
 
         tvWatch.visibility = View.GONE
         btStop.visibility = View.GONE
-        Log.d("락스크린액티비티", "onCreate: 여기로들어와지나")
+        Log.d(TAG, "onCreate: 여기로들어와지나")
 
         //쉐어드 적용된 아이템 불러오기(배경, 타이머)
         l_back.setImageResource(PointItemSharedModel.getBg(this))
@@ -105,9 +105,6 @@ class LockScreenActivity : AppCompatActivity() {
         }
 
     }
-    override fun onBackPressed() {
-        Log.d(TAG, "락 스크린 뒤로가기 제어")
-    }
 
 
     //     서비스 시작 및 Messenger 전달
@@ -127,6 +124,7 @@ class LockScreenActivity : AppCompatActivity() {
 
     //     서비스 정지
     private fun setStopService() {
+        Log.d(TAG, "setStopService: $mIsBound")
         if (mIsBound) {
             unbindService(mConnection)
             mIsBound = false
@@ -162,13 +160,16 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
 
+                setStopService() //서비스 종료
+
+                screenTimeResult = result
+
                 //타이머쉐어드 running -> false
                 TimerSetShared.setRunning(this, false)
-
+                finish()
                 //스크린타임 결과에 따른 다이얼로그, 노티피케이션
                 resultScreenTime(result)
 
-                setStopService() //서비스 종료
 
             }
         }
@@ -202,9 +203,11 @@ class LockScreenActivity : AppCompatActivity() {
 //                setTimeString,
 //                flower,
 //                missedCall
-//            )//결과 다이얼로그
-            startMainActivity(getString(R.string.success_dialog_title_success),setTimeString,flower,missedCall)
+            //)//결과 다이얼로그
+
+           // startMainActivity(getString(R.string.success_dialog_title_success),setTimeString,flower,missedCall)
             //성공 노티피케이션
+
             val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
             val successText = "꽃 $flower 송이 획득."
             showNotification(
@@ -219,7 +222,7 @@ class LockScreenActivity : AppCompatActivity() {
             }
 
         } else {//스크린타임 사용자 종료시
-            startMainActivity(getString(R.string.success_dialog_title_fail),setTimeString,0,missedCall)
+            //startMainActivity(getString(R.string.success_dialog_title_fail),setTimeString,0,missedCall)
 //            showDialog(
 //                getString(R.string.success_dialog_title_fail),
 //                setTimeString,
@@ -231,8 +234,9 @@ class LockScreenActivity : AppCompatActivity() {
                 missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
             }
         }
-    }
+        finish()
 
+    }
 
 
     //스크린타임 결과 다이얼로그
@@ -296,14 +300,19 @@ class LockScreenActivity : AppCompatActivity() {
     //메인액티비티 호출
     private fun startMainActivity(title: String, setTime: String, flower: Int, missedCall: Int) {
         val intent = Intent(applicationContext, MainActivity::class.java)
-        intent.putExtra("title",title)
-        intent.putExtra("setTime",setTime)
-        intent.putExtra("flower",flower)
-        intent.putExtra("missedCall",missedCall)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
 
-        finish()
+        intent.putExtra("title", title)
+        intent.putExtra("setTime", setTime)
+        intent.putExtra("flower", flower)
+        intent.putExtra("missedCall", missedCall)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(
+            intent
+                .setAction(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+        )
+
+        // finish()
     }
 
     //     Service 로 메시지를 보냄
@@ -363,17 +372,41 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onPause() {
         super.onPause()
+        Log.d(TAG, "onPause: ${TimerSetShared.getRunning(this)}")
+        if (TimerSetShared.getRunning(this)) {
+            startActivity(
+                Intent(this, LockScreenActivity::class.java)
+                    .setAction(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_LAUNCHER)
+//                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            )
+        } else {
+            val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
+            val setTime = TimerSetShared.getSettingTime(this)//설정시간
+            val calculator = Calculator()
+            val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
+            val flower = setTime / 600 //획득한 꽃 갯수
+            if (screenTimeResult) {
+                startMainActivity(
+                    getString(R.string.success_dialog_title_success),
+                    setTimeString,
+                    flower,
+                    missedCall
+                )
+            } else {
+                startMainActivity(
+                    getString(R.string.success_dialog_title_fail),
+                    setTimeString,
+                    0,
+                    missedCall
+                )
+            }
 
-        startActivity(Intent(this, LockScreenActivity::class.java)
-            .setAction(Intent.ACTION_MAIN)
-            .addCategory(Intent.CATEGORY_LAUNCHER)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-//        val activityManager: ActivityManager = applicationContext
-//            .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-//        activityManager.moveTaskToFront(taskId, 0)
-        Log.d(TAG, "onPause: 온포즈")
+        }
     }
 
     override fun onStop() {
@@ -389,7 +422,6 @@ class LockScreenActivity : AppCompatActivity() {
             alertDialog = null
         }
     }
-
 
 
     override fun onBackPressed() {

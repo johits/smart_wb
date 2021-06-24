@@ -225,11 +225,11 @@ class DrawService : Service() {
                     handler?.postDelayed(this, 100)//액티비티와 서비스 연결 위한 딜레이
                     settingTime-- //설정시간(초) -1
                 } else {
-//                    settingTime=remainTime.calRemainTime()//남은시간 계산로직
-                    settingTime-- //설정시간(초) -1
+                    settingTime=remainTime.calRemainTime()//남은시간 계산로직
+//                    settingTime-- //설정시간(초) -1
                     watch.text = calculator.changeTime(settingTime) //초->시간 변환되서 표시//ex 3660->01시01분
-//                    handler?.postDelayed(this, timerDelay) //타이머 딜레이 속도 실제코드
-                    handler?.postDelayed(this, 10) //타이머 딜레이 속도 테스트
+                    handler?.postDelayed(this, timerDelay) //타이머 딜레이 속도 실제코드
+//                    handler?.postDelayed(this, 10) //타이머 딜레이 속도 테스트
                 }
             } else if (settingTime == -1) {
                 watch.text = "00초"

@@ -41,11 +41,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Log.d(TAG, "onCreate: ")
 
 //        _binding = ActivityMainBinding.inflate(layoutInflater)
 //        setContentView(binding.root)
 //        configureBottomNavigation()
+
+        //스크린타임 결과에 따라 다이얼로그 생성
+        if(intent.hasExtra("title")&&intent.hasExtra("setTime")){
+            val title = intent.getStringExtra("title")
+            val setTime = intent.getStringExtra("setTime")
+            val flower = intent.getIntExtra("flower", 0)
+            val missedCall = intent.getIntExtra("missedCall",0)
+
+            if (title != null&&setTime != null) {
+                    showDialog(title,setTime, flower,missedCall)
+            }
+        }
 
         stack = Stack<Int>()
         stack.push(0)//FragmentMainTimer 가 처음 화면 이므로 값을 넣는다.
