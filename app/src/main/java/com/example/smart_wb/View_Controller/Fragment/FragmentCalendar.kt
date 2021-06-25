@@ -20,8 +20,7 @@ import com.example.smart_wb.View_Controller.Activity.MainActivity
 import com.example.smart_wb.View_Controller.Adapter.CalendarAdapter
 
 import com.example.smart_wb.databinding.FragmentCalendarBinding
-import com.example.smart_wb.etc.CalendarDecoratorToday
-import com.example.smart_wb.etc.CalendarDecoratorpDotSpan
+import com.example.smart_wb.View_Controller.etc.CalendarDecoratorpDotSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import java.text.SimpleDateFormat

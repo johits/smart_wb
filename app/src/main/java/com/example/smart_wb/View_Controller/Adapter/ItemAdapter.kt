@@ -14,9 +14,10 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_wb.Model.Data.ItemData
+import com.example.smart_wb.Model.SQLite.ScreenTimeDbHelper.Companion.TAG
 import com.example.smart_wb.Model.Shared.PointItemSharedModel
-import com.example.smart_wb.View_Controller.Dialog.PayDialog
 import com.example.smart_wb.R
+import com.example.smart_wb.View_Controller.Dialog.PayDialog
 
 
 /**
@@ -177,9 +178,10 @@ class ItemAdapter(private val context: Context, val itemList: ArrayList<ItemData
             //테스트
 //            val dialog = PayDialog(context)
 //                dialog.myDig(itemList[position].item, itemList[position].price, flower, itemList[position].name,context)
-
+            Log.d(TAG, "꽃 로그 $flower")
+            Log.d(TAG, "꽃 로그 2222222222 ${PointItemSharedModel.getFlower(context)}")
             //실제코드
-            if (flower >= itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
+            if (PointItemSharedModel.getFlower(context) >= itemList[position].price) { //현재 보유 꽃송이와 구매하려는 아이템 꽃송이 비교
                 val dialog =
                     PayDialog(context)
                 dialog.myDig(
