@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".View_Controller.Activity.MainActivity">
 
-    <com.example.smart_wb.etc.NoSwipeViewPager
+    <com.example.smart_wb.View_Controller.etc.NoSwipeViewPager
         android:id="@+id/xml_main_viewpaper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/xml_main_tablayout"
         >
-    </com.example.smart_wb.etc.NoSwipeViewPager>
+    </com.example.smart_wb.View_Controller.etc.NoSwipeViewPager>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/xml_main_tablayout"
