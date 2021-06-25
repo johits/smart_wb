@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smart_wb.Model.ChartModel
 import com.example.smart_wb.Model.Data.ChartData
+import com.example.smart_wb.Model.Shared.PointItemSharedModel
 import com.example.smart_wb.R
 import com.example.smart_wb.View_Controller.Activity.MainActivity
 import com.example.smart_wb.databinding.FragmentChartBinding
@@ -132,6 +133,7 @@ class FragmentChart : Fragment() {
         //출시 전까지 더미데이터 쌓는 버튼으로 사용
         chart_text.setOnClickListener {
         chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
+            PointItemSharedModel.sumFlower(requireContext(),2222)
         }
 
         //주 버튼 클릭 이벤트

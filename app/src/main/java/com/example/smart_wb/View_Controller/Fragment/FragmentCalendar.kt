@@ -301,7 +301,7 @@ class FragmentCalendar : Fragment() {
         val calDay = CalendarDay.from(year, month, day)
 
         //오늘날짜 데코레이션
-//        binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
+        binding.calendar.addDecorator(CalendarDecoratorToday(requireActivity(), calDay))
 
         //현재날짜 데이터 불러오기
         val screenTime = ScreenTime(mContext)
