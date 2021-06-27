@@ -59,7 +59,7 @@ class LockScreenActivity : AppCompatActivity() {
     private var mIsBound = false //서비스 동작 유무 확인용 플래그
     private var settingTime = 0 //설정시간
 
-    private var onPauseFlag = false
+//    private var onPauseFlag = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {

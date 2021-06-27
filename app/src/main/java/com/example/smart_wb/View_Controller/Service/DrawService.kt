@@ -68,7 +68,7 @@ class DrawService : Service() {
         callEvent()
 
         //절전모드 안 들어가게 함
-        //noDoze()
+        noDoze()
 
         val time = TimerSetShared.getTime(this)
         val date = TimerSetShared.getDate(this)
