@@ -23,6 +23,7 @@ import com.smartlock.smart_wb.databinding.FragmentCalendarBinding
 import com.smartlock.smart_wb.View_Controller.etc.CalendarDecoratorpDotSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
+import com.smartlock.smart_wb.View_Controller.etc.CalendarDecoratorToday
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -228,27 +229,6 @@ class FragmentCalendar : Fragment() {
 
     }
 
-    //그 달의 마지막 날짜 구하기 //사용안함
-//    fun calLastDay(year: Int?, month: Int?):Int{
-//        val cal = Calendar.getInstance()
-//        if (year != null&&month!=null) {
-//            cal.set(year,month-1, 15, 0,0,0)
-//        }//month는 -1해줘야 해당월로 인식
-//        var lastDay:Int= cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-//
-//        return lastDay
-//    }
-
-    //선택한 날짜 데이터 불러오기//사용안함
-//    private fun selectDate(year: Int, month: Int, day: Int): MutableList<ScreenTimeData> {
-//        Log.d(TAG, "selectDate: ")
-//        dataList.clear()
-//        val screenTimeDbHelper = ScreenTimeDbHelper(mContext, "screenTimeDb.db", null, 1)
-//
-//        var result: MutableList<ScreenTimeData> =
-//            screenTimeDbHelper.calendarSelect(year, month, day)
-//        return result;
-//    }
 
     //날짜에 해당하는 총도전시간,성공시간,꽃 계산기 및 setText
     @RequiresApi(Build.VERSION_CODES.N)
@@ -263,25 +243,13 @@ class FragmentCalendar : Fragment() {
                 flowerSum += data.flower!!
             }
         }
-//        Log.d(TAG, "총도전시간:$settingTimeSum 총성공시간:$successTimeSum 획득꽃:$flowerSum")
-//        binding.tvSettingTimeSum.text = changeTime(settingTimeSum)
-//        binding.tvSuccessTimeSum.text = changeTime(successTimeSum)
+
         val calculator = Calculator()
         binding.tvSettingTimeSum.text=calculator.calTime(settingTimeSum)
         binding.tvSuccessTimeSum.text=calculator.calTime(successTimeSum)
         binding.tvFlowerSum.text = flowerSum.toString()+"송이"
     }
 
-    //설정시간은 초 -> "HH시간 mm분" 으로 변환//사용안함
-//    @RequiresApi(Build.VERSION_CODES.N)
-//    private fun changeTime(settingTime: Int): String {
-//        val result: String?
-//        val hour = Math.floorDiv(settingTime, 3600)
-//        val min = Math.floorMod(settingTime, 3600) / 60
-//        result = "%1$02d시간 %2$02d분".format(hour, min)
-//
-//        return result
-//    }
 
     //오늘날짜 표시&현재날짜 데이터 불러오기
     @RequiresApi(Build.VERSION_CODES.N)

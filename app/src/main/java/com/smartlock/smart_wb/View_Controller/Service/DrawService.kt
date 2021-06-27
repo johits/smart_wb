@@ -143,39 +143,6 @@ class DrawService : Service() {
         wm!!.addView(mView, params)
     }
 
-//    fun startForegroundService() {
-//            val CHANNEL_ID = "snwodeer_service_channel"
-//        if (Build.VERSION.SDK_INT >= 26) {
-//            val channel = NotificationChannel(
-//                CHANNEL_ID,
-//                "SnowDeer Service Channel",
-//                NotificationManager.IMPORTANCE_DEFAULT
-//            )
-//            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
-//                .createNotificationChannel(channel)
-//        }
-//
-////        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-////            .setContentTitle("앱")
-////            .setContentIntent(pendingIntent)
-//            var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(android.R.drawable.ic_dialog_info)
-//                .setContentTitle("서비스 동작중")
-//                .setContentText("사랑한다")
-//                .setAutoCancel(true) //터치시 노티 지우기
-//                .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0)) //setAutoCancel 동작안해서
-//                .setPriority(NotificationCompat.PRIORITY_MAX) //오레오 이하 버전에서는 high 이상이어야 헤드업 알림
-//                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//잠금화면에서 보여주기
-//
-//            builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//
-//            //알림 상태 확인
-////            val notificationManager = NotificationManagerCompat.from(this)
-////            notificationManager.notify(1, builder.build())
-//
-//            startForeground(1, builder.build())
-//    } // startForegroundService()..
-
 
     //액티비티 호출 및 서비스 종료 위한 메세지 보냄
     @RequiresApi(Build.VERSION_CODES.M)
@@ -196,7 +163,7 @@ class DrawService : Service() {
         sendMsgToActivity(result);//액티비티에 메세지보내기//result true == 성공, false == 종료버튼터치
         stopService(Intent(applicationContext, DrawService::class.java))
 
-        //wakeLock.release()
+        wakeLock.release()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
