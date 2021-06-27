@@ -59,7 +59,7 @@ class LockScreenActivity : AppCompatActivity() {
         l_back.setImageResource(PointItemSharedModel.getBg(this))
         l_timer.setImageResource(PointItemSharedModel.getTimer(this))
 
-        //스크린타임 시작
+        //스크린타임 시작//프래그먼트메인타임에서 값을 받아옴
         if (intent.hasExtra("settingTime")) {
             TimerSetShared.clearMissedCall(this)
             var time = intent.getStringExtra("settingTime")?.toInt()
@@ -70,7 +70,7 @@ class LockScreenActivity : AppCompatActivity() {
                 setStartService() //드로우서비스 시작
             }
 
-            //핸드폰 재시작할 때
+            //핸드폰 재시작할 때 //리스타트리시버에서 값을 받아옴
         } else if (intent.hasExtra("restart")) {
             val setTime = TimerSetShared.getSettingTime(this)
             val startTime = TimerSetShared.getTime(this)
@@ -148,7 +148,7 @@ class LockScreenActivity : AppCompatActivity() {
                 Log.d(TAG, " result : $result")
                 Log.d(TAG, " message : $message")
 
-                TimerSetShared.setRunning(this, false)
+                TimerSetShared.setRunning(this, false) //드로우서비스 동작 여부 true 동작중, false 동작끝
                 getDisplayWakeUp() //핸드폰화면 켜짐
                 setStopService() //서비스 종료
 

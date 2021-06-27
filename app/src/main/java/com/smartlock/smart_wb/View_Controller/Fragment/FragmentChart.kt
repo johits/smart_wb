@@ -550,7 +550,7 @@ class FragmentChart : Fragment() {
     fun leftVisible() {
 
         if(type.equals("week")){
-//            Log.d(TAG, "leftVisible: 버튼왼쪽1 // $firstRowMonth // $firstRowDay // $sMonth // $sDay // $eDay")
+            Log.d(TAG, "leftVisible: 버튼왼쪽1 // $firstRowMonth // $firstRowDay // $sMonth // $sDay // $eDay")
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
                 left.visibility = View.VISIBLE
                 left2.visibility = View.INVISIBLE
