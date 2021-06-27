@@ -32,6 +32,6 @@ class ScreenTime(private val context: Context) {
         screenTimeDbHelper.update(flower)
 
         //받은 꽃 쉐어드에 더한다.
-        PointItemSharedModel.sumFlower(context, 500)
+        PointItemSharedModel.sumFlower(context, flower)
     }
 }

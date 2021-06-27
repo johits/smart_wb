@@ -192,29 +192,21 @@ class LockScreenActivity : AppCompatActivity() {
             val screenTime = ScreenTime(this)
             screenTime.successUpdate(flower)
 
+            startMainActivity(
+                getString(R.string.success_dialog_title_success),
+                setTimeString,
+                flower,
+                missedCall
+            )
 
-//            val successTitle = "목표하신 $setTimeString 동안 휴대폰을 사용하지 않으셨군요!"
-//            val successText = "꽃 $flower 송이 획득."
-//            showNotification(
-//                notificationId_success,
-//                CHANNEL_ID_SUCCESS,
-//                successTitle,
-//                successText
-//            )
-            //부재중 전화가 있으면 노티피게이션
-//            if (missedCall != 0) {
-//                missedCallNoti(missedCall, 4500) //성공 노티 뜨고 4.5초 딜레이 후 부재중전화 노티 생성
-//            }
-
-//        } else {//스크린타임 사용자 종료시
-
-            //부재중 전화가 있으면 노티피케이션
-//            if (missedCall != 0) {
-//                missedCallNoti(missedCall, 0) //딜레이 없이 노티 생성
-//            }
+        }else{ //스크린타임 실패
+            startMainActivity(
+                getString(R.string.success_dialog_title_fail),
+                setTimeString,
+                0,
+                missedCall
+            )
         }
-        //finish() //중요한 피니시
-
     }
 
 
@@ -334,54 +326,28 @@ class LockScreenActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onPause() {
         super.onPause()
-//        //스크린 on off 체크 위한 변수 선언
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (pm.isInteractive) {
-            // screen on
-            if (TimerSetShared.getRunning(this)) {
-                startActivity(
-                    Intent(this, LockScreenActivity::class.java)
-                        .setAction(Intent.ACTION_MAIN)
-                        .addCategory(Intent.CATEGORY_LAUNCHER)
-//                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                )
-            } else {
-                onPauseFlag = true
-                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
-                val setTime = TimerSetShared.getSettingTime(this)//설정시간
-                val calculator = Calculator()
-                val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
-                val flower = setTime / 600 //획득한 꽃 갯수
-                if (TimerSetShared.getResult(this)) {
-                    Log.d(TAG, "pause성공:${TimerSetShared.getResult(this)}")
-                    startMainActivity(
-                        getString(R.string.success_dialog_title_success),
-                        setTimeString,
-                        flower,
-                        missedCall
-                    )
-                } else {
-                    Log.d(TAG, "pause실패:${TimerSetShared.getResult(this)}")
-                    startMainActivity(
-                        getString(R.string.success_dialog_title_fail),
-                        setTimeString,
-                        0,
-                        missedCall
-                    )
-                }
-                finish()
-            }
-        } else {
-            // screen off
-//            if(!TimerSetShared.getRunning(this)){
+        Log.d(TAG, "onPause: ")
+////        //스크린 on off 체크 위한 변수 선언
+//        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+//        if (pm.isInteractive) {
+//            // screen on
+//            if (TimerSetShared.getRunning(this)) {
+//                startActivity(
+//                    Intent(this, LockScreenActivity::class.java)
+//                        .setAction(Intent.ACTION_MAIN)
+//                        .addCategory(Intent.CATEGORY_LAUNCHER)
+////                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+////                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//                )
+//            } else {
+//                onPauseFlag = true
 //                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
 //                val setTime = TimerSetShared.getSettingTime(this)//설정시간
 //                val calculator = Calculator()
 //                val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
 //                val flower = setTime / 600 //획득한 꽃 갯수
 //                if (TimerSetShared.getResult(this)) {
-//                    Log.d(TAG, "성공:${TimerSetShared.getResult(this)}")
+//                    Log.d(TAG, "pause성공:${TimerSetShared.getResult(this)}")
 //                    startMainActivity(
 //                        getString(R.string.success_dialog_title_success),
 //                        setTimeString,
@@ -389,7 +355,7 @@ class LockScreenActivity : AppCompatActivity() {
 //                        missedCall
 //                    )
 //                } else {
-//                    Log.d(TAG, "실패:${TimerSetShared.getResult(this)}")
+//                    Log.d(TAG, "pause실패:${TimerSetShared.getResult(this)}")
 //                    startMainActivity(
 //                        getString(R.string.success_dialog_title_fail),
 //                        setTimeString,
@@ -399,55 +365,81 @@ class LockScreenActivity : AppCompatActivity() {
 //                }
 //                finish()
 //            }
-        }
-        Log.d(TAG, "onPause: ${TimerSetShared.getRunning(this)}")
+//        } else {
+//            // screen off
+////            if(!TimerSetShared.getRunning(this)){
+////                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
+////                val setTime = TimerSetShared.getSettingTime(this)//설정시간
+////                val calculator = Calculator()
+////                val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
+////                val flower = setTime / 600 //획득한 꽃 갯수
+////                if (TimerSetShared.getResult(this)) {
+////                    Log.d(TAG, "성공:${TimerSetShared.getResult(this)}")
+////                    startMainActivity(
+////                        getString(R.string.success_dialog_title_success),
+////                        setTimeString,
+////                        flower,
+////                        missedCall
+////                    )
+////                } else {
+////                    Log.d(TAG, "실패:${TimerSetShared.getResult(this)}")
+////                    startMainActivity(
+////                        getString(R.string.success_dialog_title_fail),
+////                        setTimeString,
+////                        0,
+////                        missedCall
+////                    )
+////                }
+////                finish()
+////            }
+//        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop: $onPauseFlag")
+        Log.d(TAG, "onStop:")
         //스크린 on off 체크 위한 변수 선언
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        if (pm.isInteractive) {
-            // screen on
-//            if (TimerSetShared.getRunning(this)) {
-//                startActivity(
-//                    Intent(this, LockScreenActivity::class.java)
-//                        .setAction(Intent.ACTION_MAIN)
-//                        .addCategory(Intent.CATEGORY_LAUNCHER)
-////                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-////                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                )
+//        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+//        if (pm.isInteractive) {
+//            // screen on
+////            if (TimerSetShared.getRunning(this)) {
+////                startActivity(
+////                    Intent(this, LockScreenActivity::class.java)
+////                        .setAction(Intent.ACTION_MAIN)
+////                        .addCategory(Intent.CATEGORY_LAUNCHER)
+//////                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//////                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+////                )
+////            }
+//            if (!TimerSetShared.getRunning(this) && !onPauseFlag) {
+//                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
+//                val setTime = TimerSetShared.getSettingTime(this)//설정시간
+//                val calculator = Calculator()
+//                val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
+//                val flower = setTime / 600 //획득한 꽃 갯수
+//                if (TimerSetShared.getResult(this)) {
+//                    Log.d(TAG, "stop성공:${TimerSetShared.getResult(this)}")
+//                    startMainActivity(
+//                        getString(R.string.success_dialog_title_success),
+//                        setTimeString,
+//                        flower,
+//                        missedCall
+//                    )
+//                } else {
+//                    Log.d(TAG, "stop실패:${TimerSetShared.getResult(this)}")
+//                    startMainActivity(
+//                        getString(R.string.success_dialog_title_fail),
+//                        setTimeString,
+//                        0,
+//                        missedCall
+//                    )
+//                }
+//                finish()
 //            }
-            if (!TimerSetShared.getRunning(this) && !onPauseFlag) {
-                val missedCall = TimerSetShared.getMissedCall(this)//부재중 전화 수
-                val setTime = TimerSetShared.getSettingTime(this)//설정시간
-                val calculator = Calculator()
-                val setTimeString: String = calculator.calTime(setTime)//설정시간 초 -> 시간 변환
-                val flower = setTime / 600 //획득한 꽃 갯수
-                if (TimerSetShared.getResult(this)) {
-                    Log.d(TAG, "stop성공:${TimerSetShared.getResult(this)}")
-                    startMainActivity(
-                        getString(R.string.success_dialog_title_success),
-                        setTimeString,
-                        flower,
-                        missedCall
-                    )
-                } else {
-                    Log.d(TAG, "stop실패:${TimerSetShared.getResult(this)}")
-                    startMainActivity(
-                        getString(R.string.success_dialog_title_fail),
-                        setTimeString,
-                        0,
-                        missedCall
-                    )
-                }
-                finish()
-            }
-        } else {
-            // screen off
-        }
+//        } else {
+//            // screen off
+//        }
 
     }
 
