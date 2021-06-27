@@ -55,7 +55,8 @@ class Permission2 : AppCompatActivity() {
         // if user granted access else ask for permission
         if (notificationManager.isNotificationPolicyAccessGranted) {
             Log.d(TAG, "onActivityResult: 권한 허락했으면")
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, PrivacyConsent::class.java))
             finish()
         } else {
             Log.d(TAG, "onActivityResult: 권한 허락 안 했으면")
@@ -104,7 +105,8 @@ class Permission2 : AppCompatActivity() {
             }
         }else{
             Log.d(TAG, "NotifiPermission: 이미 허용 되었다면")
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, PrivacyConsent::class.java))
             finish()
         }
     }
