@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.smart_wb">
+    package="com.smartlock.smart_wb">
     <!-- 다른 앱 위에 표시되는 앱 권한 -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!--    방해모드 금지 권한-->
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <!--   잠금화면 깨우기 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!--    진동권한-->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <!-- 전화 권한-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 방해모드 금지 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" /> <!-- 잠금화면 깨우기 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 진동권한 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 전화 권한 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <!--최상단 액티비티 정보 가져오기-->
-    <uses-permission android:name="andorid.permission.GET_TASKS" />
-    <!-- 부팅시 앱 자동 실행하기-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- 포크라운드 서비스 권한    -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG" /> <!-- 최상단 액티비티 정보 가져오기 -->
+    <uses-permission android:name="andorid.permission.GET_TASKS" /> <!-- 부팅시 앱 자동 실행하기 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 포크라운드 서비스 권한 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -29,10 +22,12 @@
         android:roundIcon="@mipmap/ic_launcher2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View_Controller.Activity.Permission2"></activity>
-        <activity android:name=".View_Controller.Activity.LockScreenActivity"
-                  android:launchMode="singleInstance"/>
-        <activity android:name=".View_Controller.Activity.MainActivity"/>
+        <activity android:name=".View_Controller.Activity.PrivacyConsent"></activity>
+        <activity android:name=".View_Controller.Activity.Permission2" />
+        <activity
+            android:name=".View_Controller.Activity.LockScreenActivity"
+            android:launchMode="singleInstance" />
+        <activity android:name=".View_Controller.Activity.MainActivity" />
         <activity android:name=".View_Controller.Activity.Permission">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,19 +36,19 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".View_Controller.Service.DrawService" />
-        <!-- 부팅 이벤트 받기-->
-        <receiver android:name=".View_Controller.Receiver.Restart" android:exported="false" android:enabled="true">
+        <service android:name=".View_Controller.Service.DrawService" /> <!-- 부팅 이벤트 받기 -->
+        <receiver
+            android:name=".View_Controller.Receiver.Restart"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
-
-        <!-- 전화 관련 리시버-->
+        </receiver> <!-- 전화 관련 리시버 -->
         <receiver android:name=".View_Controller.Receiver.CallReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="android.intent.action.BATTERY_LOW"/>
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
             </intent-filter>
         </receiver>
     </application>

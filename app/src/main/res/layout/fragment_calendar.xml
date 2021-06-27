@@ -51,61 +51,67 @@
                 <TableRow android:padding="4dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="도전시간 합"
+                        android:text="총 도전 시간"
                         android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvSettingTimeSum"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="20:00"
                         android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </TableRow>
 
                 <TableRow android:padding="4dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="성공시간 합"
-                        android:textColor="@color/colorBlue"
-                        android:textSize="18sp" />
+                        android:text="총 성공 시간"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvSuccessTimeSum"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="10:00"
-                        android:textColor="@color/colorBlue"
-                        android:textSize="18sp" />
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
                 </TableRow>
 
                 <TableRow android:padding="4dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="획득한꽃 합 "
-                        android:textColor="@color/colorBlue"
-                        android:textSize="18sp" />
+                        android:textColor="@color/colorBlack"
+                        android:text=" 총 획득한 꽃 "
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvFlowerSum"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:textColor="@color/colorBlack"
                         android:text="0"
-                        android:textColor="@color/colorBlue"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </TableRow>
             </TableLayout>
 
