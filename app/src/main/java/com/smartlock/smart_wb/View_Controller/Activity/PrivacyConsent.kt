@@ -27,6 +27,7 @@ class PrivacyConsent : AppCompatActivity() {
         if(GuideShowCheckShared.getPrivacy(this)){
             //화면 이동
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
         privacy.text = readTxt()
         privacy_ok.setOnClickListener {
@@ -37,7 +38,7 @@ class PrivacyConsent : AppCompatActivity() {
                 val toast = Toast.makeText(this, "반갑습니다! 스마트락을 시작합니다.", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.CENTER_VERTICAL,0,0)
                 toast.show()
-
+                finish()
             }else{
                 val toast = Toast.makeText(this, "개인정보처리방침 약관에 동의 후 이용 가능합니다.", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.CENTER_VERTICAL,0,600)
