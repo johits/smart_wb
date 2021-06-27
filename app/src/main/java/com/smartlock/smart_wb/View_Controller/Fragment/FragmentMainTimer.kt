@@ -137,7 +137,6 @@ class FragmentMainTimer : Fragment(), View.OnClickListener {
 
         var settingTime = 0
         view.start.setOnClickListener {
-            TimerSetShared.setResult(mContext, false)//결과 초기화해야한다.
             //액티비티에 따라 동작을 달리한다.
             if (context is MainActivity) {
                 settingTime =

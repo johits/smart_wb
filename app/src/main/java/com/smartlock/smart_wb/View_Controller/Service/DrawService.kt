@@ -205,7 +205,6 @@ class DrawService : Service() {
                 settingTime--
                 handler?.postDelayed(this, 500)
             } else if (settingTime == -2) {//스크린타임 정상적으로 종료
-                TimerSetShared.setResult(mContext, true)
                 Log.d(TAG, "스크린타임 성공")
                 drawServiceStop(true)
             } else if (settingTime == -3) {//사용자가 종료버튼 눌렀을때

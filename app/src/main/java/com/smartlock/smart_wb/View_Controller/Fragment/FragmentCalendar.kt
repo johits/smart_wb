@@ -200,7 +200,6 @@ class FragmentCalendar : Fragment() {
             val firstDay: Int = 1
             val lastYear: Int? = decoList[decoList.size-1].year
             val lastMonth: Int? = decoList[decoList.size-1].month
-//            val lastDay: Int = calLastDay(lastYear, lastMonth)
             val calculator = Calculator()
             val lastDay:Int =calculator.calLastDay(lastYear,lastMonth)
              Log.d(TAG, "달력크기제한$lastYear , $lastMonth , $firstYear , $firstMonth")
