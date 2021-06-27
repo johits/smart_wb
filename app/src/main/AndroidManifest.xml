@@ -13,7 +13,7 @@
     <!-- 전화 권한-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <!--최상단 액티비티 정보 가져오기-->
     <uses-permission android:name="andorid.permission.GET_TASKS" />
