@@ -12,17 +12,17 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.smartlock.smart_wb.Model.ChartModel
-import com.smartlock.smart_wb.Model.Data.ChartData
-import com.smartlock.smart_wb.R
-import com.smartlock.smart_wb.View_Controller.Activity.MainActivity
-import com.smartlock.smart_wb.databinding.FragmentChartBinding
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.smartlock.smart_wb.Model.ChartModel
+import com.smartlock.smart_wb.Model.Data.ChartData
+import com.smartlock.smart_wb.R
+import com.smartlock.smart_wb.View_Controller.Activity.MainActivity
+import com.smartlock.smart_wb.databinding.FragmentChartBinding
 import kotlinx.android.synthetic.main.fragment_chart.*
 
 
@@ -549,31 +549,26 @@ class FragmentChart : Fragment() {
     fun leftVisible() {
 
         if(type.equals("week")){
-            Log.d(TAG, "leftVisible: 버튼왼쪽1")
+//            Log.d(TAG, "leftVisible: 버튼왼쪽1 // $firstRowMonth // $firstRowDay // $sMonth // $sDay // $eDay")
             if (firstRowYear != 0 && firstRowDay != 0 && firstRowMonth != 0) {
-                Log.d(TAG, "leftVisible: 버튼왼쪽2")
                 left.visibility = View.VISIBLE
                 left2.visibility = View.INVISIBLE
                         if (firstRowMonth == sMonth) {
-                            Log.d(TAG, "leftVisible: 로그3")
                             if(firstRowDay>sDay-7 &&firstRowDay<sDay&& value==0){ //fRD=28일 sDAY-7= 24 sDay=31
-                                Log.d(TAG, "leftVisible: 로그4")
                                 left.visibility = View.VISIBLE
                                 left2.visibility = View.INVISIBLE
                                 value=1
                             }else if(firstRowDay>sDay&& value==1){
-                                Log.d(TAG, "leftVisible: 로그5")
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                                 value=0
-                            } else if(firstRowDay==sDay){
-                                Log.d(TAG, "leftVisible: 로그6")
+                            } else if(firstRowDay==eDay){
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                             }
                         }
             }else{
-                Log.d(TAG, "leftVisible: 로그7")
+                Log.d(TAG, "leftVisible: 로그7// $firstRowMonth // $firstRowDay // $sMonth // $sDay")
                 left.visibility = View.INVISIBLE
                 left2.visibility = View.VISIBLE
             }
