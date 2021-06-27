@@ -28,4 +28,17 @@ object GuideShowCheckShared {
         editor.clear()
         editor.commit()
     }
+
+    //개인정보처리지침 약관 동의 체크여부
+    fun setPrivacy(context: Context, flag:Boolean){
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        var editor : SharedPreferences.Editor = prefs.edit()
+        editor.putBoolean("privacyCheck", flag)
+        editor.apply()
+    }
+    //개인정보처리지침 약관 동의 체크여부 불러오기
+    fun getPrivacy(context: Context):Boolean{
+        val prefs : SharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        return prefs.getBoolean("privacyCheck", false)
+    }
 }
