@@ -130,10 +130,10 @@ class FragmentChart : Fragment() {
 
 
         //출시 전까지 더미데이터 쌓는 버튼으로 사용
-//        chart_text.setOnClickListener {
-//        chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
+        chart_text.setOnClickListener {
+        chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
 //            PointItemSharedModel.sumFlower(requireContext(),900)
-//        }
+        }
 
         //주 버튼 클릭 이벤트
         chart_week.setOnClickListener(View.OnClickListener {
