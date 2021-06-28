@@ -128,12 +128,12 @@ class FragmentChart : Fragment() {
         leftVisible() //이전 버튼 활성화
         rightVisible() //이후 버튼 활성화
 
-
-        //출시 전까지 더미데이터 쌓는 버튼으로 사용
-        chart_text.setOnClickListener {
-        chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
-//            PointItemSharedModel.sumFlower(requireContext(),900)
-        }
+//
+//        //출시 전까지 더미데이터 쌓는 버튼으로 사용
+//        chart_text.setOnClickListener {
+//        chartmodel.dummy(cContext) //더미데이터 쌓는 메서드
+////            PointItemSharedModel.sumFlower(requireContext(),900)
+//        }
 
         //주 버튼 클릭 이벤트
         chart_week.setOnClickListener(View.OnClickListener {
@@ -563,7 +563,7 @@ class FragmentChart : Fragment() {
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                                 value=0
-                            } else if(firstRowDay==eDay){
+                            } else if(firstRowDay==eDay||firstRowDay==sDay){
                                 left.visibility = View.INVISIBLE
                                 left2.visibility = View.VISIBLE
                             }
@@ -616,15 +616,18 @@ class FragmentChart : Fragment() {
     fun rightVisible() {
 
         if(type.equals("week")){
+            Log.d(TAG, "rightVisible: 오른쪽버튼 // $lastRowMonth // $lastRowDay // $eMonth // $sDay // $eDay")
             if (lastRowYear != 0 && lastRowDay != 0 && lastRowMonth != 0) {
                 right.visibility = View.VISIBLE
                 right2.visibility = View.INVISIBLE
                 if (lastRowYear == eYear) {
                     if (lastRowMonth < eMonth) {
-                        right.visibility = View.VISIBLE
-                        right2.visibility = View.INVISIBLE
+                        Log.d(TAG, "rightVisible: 들어옴11111111 //$lastRowMonth // $eMonth")
+                        right.visibility = View.INVISIBLE
+                        right2.visibility = View.VISIBLE
                     } else if (lastRowMonth == eMonth) {
                         if (lastRowDay < eDay||lastRowDay==eDay) { //ex eDay =11일 eDay+7 = 18일 lRD= 14일
+                            Log.d(TAG, "rightVisible: 들어옴1")
                             right.visibility = View.INVISIBLE
                             right2.visibility = View.VISIBLE
                         }else{
