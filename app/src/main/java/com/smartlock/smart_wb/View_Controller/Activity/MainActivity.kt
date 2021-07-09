@@ -20,8 +20,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
-import com.smartlock.smart_wb.View_Controller.Fragment.AdapterMainFragment
 import com.smartlock.smart_wb.R
+import com.smartlock.smart_wb.View_Controller.Fragment.AdapterMainFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -228,61 +228,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-//
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-////        var start = findViewById(R.id.start) as Button
-//        // 생성된 뷰를 액티비티에 표시합니다.
-//        setContentView(binding.root)
-//        configureBottomNavigation()
-//
-//
-//        //전화 제어 퍼미션 얻어오기
-//        if (checkSelfPermission(Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(
-//                Manifest.permission.ANSWER_PHONE_CALLS
-//            ) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(
-//                Manifest.permission.CALL_PHONE
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(
-//                this@MainActivity,
-//                arrayOf(
-//                    Manifest.permission.READ_CALL_LOG,
-//                    Manifest.permission.ANSWER_PHONE_CALLS,
-//                    Manifest.permission.READ_PHONE_STATE,
-//                    Manifest.permission.CALL_PHONE,
-//                    Manifest.permission.SYSTEM_ALERT_WINDOW
-//                ),
-//                1
-//            )
-//        }
-//
-//    }
-//        @SuppressLint("ResourceType")
-//        private fun configureBottomNavigation(){
-//
-//            xml_main_viewpaper.adapter = AdapterMainFragment(supportFragmentManager, 5)
-//            xml_main_tablayout.setupWithViewPager(xml_main_viewpaper)
-//
-//            val viewBtmNaviMain : View = this.layoutInflater.inflate(R.layout.bottom_navigation, null, false)
-//
-//            xml_main_tablayout.getTabAt(0)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_timer)  as RelativeLayout
-//            xml_main_tablayout.getTabAt(1)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_calendar)  as RelativeLayout
-//            xml_main_tablayout.getTabAt(2)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_chart)   as RelativeLayout
-//            xml_main_tablayout.getTabAt(3)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_item)     as RelativeLayout
-//            xml_main_tablayout.getTabAt(4)!!.customView = viewBtmNaviMain.findViewById(R.id.xml_btmnv_btn_setting)  as RelativeLayout
-//
-//            xml_main_tablayout.setSelectedTabIndicatorColor(Color.parseColor("#2FA9FF"));
-//
-//
-////            xml_main_tablayout.setSelectedTabIndicatorHeight((int) (5 * getResources().getDisplayMetrics().density));
-//
-//
-//        }
-//
-//
-//
-//
-//}
-//
-//
-//

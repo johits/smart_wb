@@ -12,7 +12,7 @@ import java.util.*
 
 /**
  * 2021-06-07 yama 아이템 flower, bg, timer, lock
- * 꽃 총 갯수, 배경화면, 타이머, 잠금화면?
+ * 꽃 총 갯수, 배경화면, 타이머, 잠금화면
  * */
 object PointItemSharedModel {
     private val fileName : String = "pointItem" //쉐어드 파일이름
